@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Mitnk's Links{% endblock %}
+
+{% block content %}
+    {% for link in links %}
+        <a href="{{ link.url }}">{{ link.name }} -- {{ link.url }}</a><br><br>
+    {% endfor %}
+{% endblock %}

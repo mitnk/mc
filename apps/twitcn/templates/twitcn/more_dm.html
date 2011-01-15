@@ -1,0 +1,35 @@
+{% load twitcn_filters %}
+
+{% for message in messages %}
+<li id="tweet-item-{{ message.id }}" class="hentry status{% ifequal forloop.counter 1 %} first-status{% endifequal %}">
+    <span class="thumb"><a href="{{ ROOT_PATH }}/{{ message.sender_screen_name }}/">
+        <img width="48" height="48" src="{{ message.sender.profile_image_url }}" title="{{ message.sender_screen_name }}" alt="{{ message.sender_screen_name }}"/></a>
+    </span>
+    <span class="status-body">
+        <a title="" href="{{ ROOT_PATH }}/{{ message.sender_screen_name }}/"><b>{{ message.sender_screen_name }}</b></a> 
+        <span class="entry-content">{{ message.text|ParseStatusText|safe }}</span>
+        <span class="meta entry-meta">
+            <span class="published timestamp">{{ message.created_at }}</span>
+        </span>
+        
+        <ul class="actions-hover">
+          <li>
+            <span class="reply">
+              <span class="del-icon icon"/>
+                <a href="#" onclick="javascript:destroy_dm({{ message.id }});return false;" title="delete this tweet">Delete</a>
+            </span>
+          </li>
+          <li>
+            <span class="reply">
+              <span class="reply-icon icon"/>
+              <a title="reply" onclick="javascript:setTweetText('d {{ message.sender_screen_name }} ');return false;" href="#">Reply</a>
+            </span>
+          </li>
+        </ul>
+    </span>
+  </li>
+{% endfor %}
+
+<div id="pagination">
+    <a id="more" class="round more" onclick="javascript:loadMoreStatus({{ more_data_json }});return false;" href="#">more</a>
+</div>

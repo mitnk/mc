@@ -1,0 +1,56 @@
+{% load twitcn_filters %}
+
+{% for status in messages %}
+  <li id="tweet-item-{{ status.id }}" class="hentry status{% ifequal forloop.counter 1 %} first-status{% if the_first_time %} latest-status{% endif %}{% endifequal %}">
+    <span class="status-body" style="margin-left:0;">
+
+    <span class="actions">
+    {% if status.favorited %}
+      <div><a title="remove favorite" id="favo-action-{{ status.id }}" onclick="javascript:destroy_favorite('{{ status.id }}');return false;" class="fav-action this-is-favo"> </a></div>
+    {% else %}
+      <div><a title="favorite this tweet" id="favo-action-{{ status.id }}" onclick="javascript:create_favorite('{{ status.id }}');return false;" class="fav-action"> </a></div>
+    {% endif %}
+    </span>
+
+    <span class="entry-content">{% if status.user.protected %}<img src="/twitcn_media/images/lock_icon_small.png" title="tweets have been protected"> {% endif %}{{ status.text|ParseStatusText|safe }}</span>
+    <span class="meta entry-meta">
+      <span>
+        <a rel="bookmark" class="entry-date" href="{{ ROOT_PATH }}/status/{{ status.id }}/"><span class="published timestamp">{{ status.relative_created_at }}</span></a>
+          {% ifnotequal status.source "web" %}via {{ status.source|safe }}{% endifnotequal %}</span> 
+          {% if status.retweeted_by %}<br/>Retweeted by <a href="{{ ROOT_PATH }}/{{ status.retweeted_by.screen_name }}/">{{ status.retweeted_by.screen_name }}</a>{% endif %}
+        </span>
+        <ul class="actions-hover">
+          <li>
+          {% ifequal status.user.screen_name current_user.screen_name %}
+            <span class="reply">
+              <span class="del-icon icon"/>
+              <a href="#" onclick="javascript:destroy_tweet({{ status.id }});return false;" title="delete this tweet">Delete</a>
+            </span>
+          {% else %}
+            <span class="reply">
+              <span class="rt-icon icon"/>
+              <a title="retweet this tweet" onclick="javascript:retweet({{ status.id }});return false;" href="#">ReTweet</a>
+            </span>
+
+            <span class="reply">
+              <span class="reply-icon icon"/>
+              <a title="reply to {{ status.user.screen_name }}" onclick="javascript:setTweetText('@{{ status.user.screen_name }} ');return false;" href="#">Reply</a>
+            </span>
+
+            <span class="reply">
+              <span class="rt-icon icon"/>
+              <a title="old RT" onclick="javascript:setTweetText('RT @{{ status.user.screen_name }}: {{ status.text }}');return false;" href="#">RT</a>
+            </span>
+
+          {% endifequal %}
+          </li>
+        </ul>
+    </span>
+  </li>
+{% endfor %}
+
+{% if not protected %}
+    <div id="pagination">
+        <a id="more" class="round more" onclick="javascript:loadMoreStatus({{ more_data_json }});return false;" href="#">more</a>
+    </div>
+{% endif %}

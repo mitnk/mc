@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% if not categories.count %}
+    <h2>No available categories.</h2>
+  {% endif %}
+
+  {% for category in categories %}
+    <h2>{{ category.title }} ({{ category.count }})</h2>
+    {% if category.articles.count %}
+      <ul>
+      {% for article in category.articles %}
+        <li class='entry-title'><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta content="A twitter-like Twitter Clinet, Made for Esenihc!" name="description" /> 
+
+<link href="/twitcn_media/images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="/twitcn_media/css/default.css" rel="stylesheet" type="text/css" />
+
+{% block stylesheets %}{% endblock %}
+<title>{% block title %}Twitcn{% endblock %}</title>
+</head>
+
+<body>
+
+<div id="container">
+  <div id="header">
+    <a id="logo" accesskey="1" title="TwitCN / Home" href="{{ ROOT_PATH }}/">
+      <img width="155" height="36" src="/twitcn_media/images/twitcn_logo_header.png" alt="TwitCN"/>    
+    </a>
+    
+    <ul class="top-navigation round">
+          <li><a href="{{ ROOT_PATH }}/">Home</a></li>
+          <li><a href="{{ ROOT_PATH }}/profile">Profile</a></li>
+          <li><a href="#help" onclick="javascript:loadMoreStatus({{ more_data_help_json }});">Help</a></li>
+          <li><a href="{{ ROOT_PATH }}/logout/" id="sign_out_link">Sign out</a></li>
+        </ul>
+  </div> <!-- end of header -->
+    
+  <div class="content-bubble-arrow"/>
+  
+  <table cellspacing="0" class="columns">
+    <tr>
+      <td id="content">
+        <div class="wrapper">
+        {% block content %}{% endblock %}
+        </div> <!-- end of .wrapper -->
+      </td>
+      
+      <td id="side_base">
+        {% block right_side %}{% endblock %}
+      </td> <!-- end of side_base -->
+    </tr>
+  </table>
+	
+  <div id="footer" class="round">
+    &copy; 2009 powered by <a href="{{ ROOT_PATH }}/mitnk/">@mitnk</a>, website design by <a href="http://twitter.com" target="_blank">twitter.com</a>
+  </div>
+
+  <div style="clear:both;"></div>
+</div> <!-- end container -->
+
+<script type="text/javascript" src="/twitcn_media/js/jquery.js"></script>
+<script type="text/javascript" src="/twitcn_media/js/utils.js"></script>
+
+<script type="text/javascript">
+function loadSearches(q) {if(q == '')return false;return loadMoreStatus({'asker': 'search', 'first_time': true, 'q': q, 'page_name': 'Real-time result for ' + q});}
+</script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

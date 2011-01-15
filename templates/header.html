@@ -1,0 +1,17 @@
+{% load common_tags %}
+
+<div id="header">
+  <div id="logo">
+    <a href="{{ request.META.PATH_INFO|get_first_path }}">Thinking Critically</a>
+  </div>
+
+  {% ifequal request.META.PATH_INFO|get_first_path "/wiki/" %}
+  <div id="header-search">
+    <form id="cse-form" action="http://www.google.com/cse">
+      <input type="hidden" name="siteurl" value="mitnk.com" />
+      <input type="hidden" value="001178881884595255196:zxbbdpwksnw" name="cx" />
+      <input type="text" id="cse-input" name='q' onblur="javascript:set_cse_bkimg();" onclick="javascript:clear_cse_bkimg();" class="cse-bgimg" />
+    </form>
+  </div>
+  {% endifequal %}
+</div>

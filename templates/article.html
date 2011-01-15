@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load common_tags %}
+{% load comments %}
+
+{% block extra_css %}
+    <link type="text/css" rel="stylesheet" href="/site_media/css/comments.css" />
+{% endblock %}
+{% block extra_js %}
+    <script type="text/javascript">
+    function insert_next_url() {
+        var next = document.createElement('input');
+        next.setAttribute('type', 'hidden');
+        next.setAttribute('name', 'next');
+        next.setAttribute('value', '{{ article.get_absolute_url|safe }}');
+        var form = document.getElementById("comment-container").getElementsByTagName("form")[0];
+        form.appendChild(next);
+    }
+    </script>
+{% endblock %}
+
+{% block title %}{{ article.title }}{% endblock %}
+{% block body_event %} onload="insert_next_url()"{% endblock %}
+
+{% block content %}
+<div class="entry" style="margin-left:0;">
+  <h1 class="entry-title">{{ article.title|safe }}</h1>
+  <div class="entry-content">
+      {{ article.content|safe|linebreaks }}<br/>
+
+  </div>
+  <div class="entry-meta">
+    Created at: {{ article.added|date }}<br/>
+    Category: <a href="{{ article.category.get_absolute_url }}">{{ article.category }}</a> 
+    {% get_comment_count for article as comment_count %}
+    &nbsp;&nbsp;&nbsp;&nbsp;Comments: ({{ comment_count }})
+  </div>
+
+  {% ifnotequal request.META.PATH_INFO|get_first_path "/wiki/" %}
+  <div id="comment-container">
+  <a name="comments"></a>
+      {% if comment_count %}{% render_comment_list for article %}{% endif %}
+      {% render_comment_form for article %}
+  </div>
+  {% endifnotequal %}
+</div>
+
+{% endblock %}
+

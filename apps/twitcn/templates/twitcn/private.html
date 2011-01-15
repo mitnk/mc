@@ -1,0 +1,18 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Twitcn</title>
+</head>
+<body>
+<form method="POST" action=".">
+<textarea name="tweet-text" tabindex="1" style="width:95%;"></textarea><br/>
+<input type="submit" value="Tweet"/>
+</form>
+{% for status in messages %}
+<hr />
+<p><b style="color:red;">{{ status.user.screen_name }}</b>: {{ status.text }}<br/>
+{{ status.relative_created_at }}
+</p>
+{% endfor %}
+</body>
+</html>
