@@ -1,0 +1,4 @@
+{% load comments %}
+{% get_comment_count for obj as comment_count %}
+{{ obj.content|safe|linebreaks }}
+评论: <a href="{{ obj.get_absolute_url }}#comments">({{ comment_count }})</a>

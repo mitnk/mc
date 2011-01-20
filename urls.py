@@ -2,6 +2,7 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.conf import settings
 from common.sitemap import sitemaps
+from apps.public.feeds import LatestEntriesFeed
 
 admin.autodiscover()
 
@@ -15,6 +16,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'^sitemap\.xml', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     (r'^links/$', include('apps.links.urls')),
+    (r'^feed/$', LatestEntriesFeed()),
 )
 
 if settings.DEBUG:
