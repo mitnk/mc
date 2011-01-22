@@ -7,7 +7,8 @@
     <div style="height:50px;"><br/><strong>Update your Twitter profile information!</strong></div>
     <div>
 	    Update my name:<br/>
-	    <form method="POST" action=".">
+	    <form method="POST" action=".">{% csrf_token %}
+
 	    <input type="text" value="{{ current_user.name }}" maxlength="40" name="profile_name" style="width:50%;"/>
 	    <input type="submit" value="update" /><br/><br/>
 	    </form>
@@ -15,7 +16,7 @@
     
     <div>
         Update my location:<br/>
-        <form method="POST" action=".">
+        <form method="POST" action=".">{% csrf_token %}
         <input type="text" value="{{ current_user.location }}" maxlength="40" name="profile_location" style="width:50%;"/>
         <input type="submit" value="update" /><br/><br/>
         </form>
@@ -23,7 +24,7 @@
     
     <div>
         Update my Url:<br/>
-        <form method="POST" action=".">
+        <form method="POST" action=".">{% csrf_token %}
         <input type="text" value="{{ current_user.url }}" name="profile_url" style="width:50%;"/>
         <input type="submit" value="update" /><br/><br/>
         </form>
@@ -31,15 +32,10 @@
     
     <div>
         Update my Bio:<br/>
-        <form method="POST" action=".">
+        <form method="POST" action=".">{% csrf_token %}
         <input type="text" value="{{ current_user.description }}" name="profile_bio" style="width:50%;"/>
         <input type="submit" value="update" /><br/><br/>
         </form>
-    </div>
-
-    <div>
-        Your private code:<br/>
-        --{{ request.session.access_token }}--<br/><br/>
     </div>
 
 </div>
