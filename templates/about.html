@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+<div style="padding:3em;">
+1. 我是谁？ <br />
+<ul>
+    <li>王宏钢, 83年生人</li>
+    <li>一个在北京的程序员</li>
+    <li>毕业于2007年</li>
+    <li>当前用python做基于django的网站开发</li>
+    <li>目前在华美汉盛工作</li>
+    <li>我的 Twitter: @<a href="http://twitter.com/mitnk">mitnk</a>
+</ul>
+2. 为啥这里叫 Critical Think ？<br />
+<ul>
+<li>源自一本叫 《Critical Thinking》的书</li>
+</ul>
+3. 这个部落格会有什么文章？<br />
+<ul>
+<li>技术文章，比如Linux或python相关</li>
+<li>读书笔记，我常常假装一个爱看书的人:)</li>
+<li>胡思乱想，乱敲些不成熟的思考</li>
+<li>其它，我可能出于兴趣写些其它方面的文章</li>
+</ul>
+4. 你这个blog用什么架设的？
+<ul>
+<li>nginx, 一个HTTP Server.</li>
+<li>django, 一个基于的python网站框架</li>
+<li>ubuntu, Linux的一个发行版
+<li>vps, 由 ramhost 提供
+</ul>
+5. 如何联系我？<br />
+<ul>
+<li>whgking E.T. gmail.com</li>
+</ul>
+</div>
+{% endblock %}
