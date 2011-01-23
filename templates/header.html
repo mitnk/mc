@@ -1,10 +1,8 @@
 {% load common_tags %}
 
 <div id="header">
-  <div id="logo">
-    <a href="{{ request.META.PATH_INFO|get_first_path }}">Thinking Critically</a>
-  </div>
-
+  <h1>Critical Think</h1>
+  <h2>mitnk's blog</h2>
   {% ifequal request.META.PATH_INFO|get_first_path "/wiki/" %}
   <div id="header-search">
     <form id="cse-form" action="http://www.google.com/cse">
@@ -14,4 +12,10 @@
     </form>
   </div>
   {% endifequal %}
+</div>
+<div id="menu">
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/about/">About</a></li>
+</ul>
 </div>
