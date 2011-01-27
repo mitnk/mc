@@ -123,6 +123,13 @@ quote {
 .entry-content {
  line-height: 24px;
 }
+.entry-content a {
+ color: #B51C1E;
+}
+.entry-content a:hover {
+ background-color: #B51C1E;
+ color:222;
+}
 .entry-meta { 
  font-size: 11px;
 }
