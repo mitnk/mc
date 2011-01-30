@@ -52,7 +52,7 @@
     <ul class="about vcard entry-author">
       <li><span class="label">Name</span> <span class="fn">{{ current_user.name }}</span></li>
       <li><span class="label">Location</span> <span class="adr">{{ current_user.location }}</span></li>
-      <li><span class="label">Web</span> <a target="_blank" class="url" href="{{ aim_user.url }}">{{ current_user.url }}</a></li>
+      <li><span class="label">Web</span> <a target="_blank" class="url" href="{{ current_user.url }}">{{ current_user.url }}</a></li>
       <li id="bio"><span class="label">Bio</span> <span class="bio">{{ current_user.description|ParseStatusText|safe }}</span></li>
       <li><span class="label">Since</span> <span class="fn">{{ current_user.created_at|GetShortDate }}</span></li>
     </ul>

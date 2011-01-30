@@ -122,6 +122,7 @@ quote {
 }
 .entry-content {
  line-height: 24px;
+ font-size:16px;
 }
 .entry-content a {
  color: #B51C1E;
@@ -132,6 +133,7 @@ quote {
 }
 .entry-meta { 
  font-size: 11px;
+ margin-top: 20px;
 }
 .entryDate { 
  border: 1px solid #999; 
