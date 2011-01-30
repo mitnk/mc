@@ -3,7 +3,7 @@ import re
 from django import template
 from django.conf import settings
 
-import pygments
+from pygments import highlight
 from pygments.lexers import guess_lexer, get_lexer_by_name, PythonLexer
 from pygments.formatters import HtmlFormatter
 
@@ -35,7 +35,7 @@ def pygmentize(value):
             # remove the start charater '<'
             code_string = code_string[1:]
 
-        pygmented_string = pygments.highlight(code_string, lexer, HtmlFormatter())
+        pygmented_string = highlight(code_string, lexer, HtmlFormatter())
         to_return = to_return + value[last_end:match_obj.start(1)].replace('\r', '<br />') + pygmented_string
         last_end = match_obj.end(1)
         found = found + 1
