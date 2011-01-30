@@ -11,13 +11,18 @@ register = template.Library()
 
 @register.filter
 def pygmentize(value):
-    value = value.replace('\n', '')
+    """ # TODO: recode this dirty code
+    >>> pygmentize('AB<code>abc</code>CD')
+    u'AB<div class="highlight"><pre><span class="n">abc</span>\\n</pre></div>CD'
+    
+    >>> pygmentize('AB<code class="bash">abc</code>CD')
+    u'AB<div class="highlight"><pre>abc\\n</pre></div>CD'
+    """
     regex = re.compile(r'<code(.*?)</code>', re.DOTALL)
     last_end = 0
     to_return = ''
-    found = 0
     for match_obj in regex.finditer(value):
-        code_string = match_obj.group(1).rstrip()
+        code_string = match_obj.group(1)
 
         # determin lexer name by class name
         # then remove class attribute
@@ -35,11 +40,15 @@ def pygmentize(value):
             # remove the start charater '<'
             code_string = code_string[1:]
 
-        pygmented_string = highlight(code_string, lexer, HtmlFormatter())
-        to_return = to_return + value[last_end:match_obj.start(1)].replace('\r', '<br />') + pygmented_string
-        last_end = match_obj.end(1)
-        found = found + 1
-    to_return = to_return + value[last_end:].replace('\r', '<br />')
+        pygmented_string = highlight(code_string, lexer, HtmlFormatter()).rstrip()
+        to_return = (to_return + 
+                     value[last_end:match_obj.start(1) - 5].replace('\n', '<br />') + 
+                     pygmented_string)
+
+        # remove '</code>'
+        last_end = match_obj.end(1) + 7
+
+    to_return = to_return + value[last_end:].replace('\n', '<br />')
     return to_return
 
 
