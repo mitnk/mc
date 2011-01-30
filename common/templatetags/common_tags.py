@@ -17,7 +17,7 @@ def pygmentize(value):
     to_return = ''
     found = 0
     for match_obj in regex.finditer(value):
-        code_string = match_obj.group(1)
+        code_string = match_obj.group(1).rstrip()
 
         # determin lexer name by class name
         # then remove class attribute
