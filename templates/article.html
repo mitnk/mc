@@ -4,6 +4,7 @@
 
 {% block extra_css %}
     <link type="text/css" rel="stylesheet" href="/site_media/css/comments.css" />
+    <link type="text/css" rel="stylesheet" href="/site_media/css/pygments.css" />
 {% endblock %}
 {% block extra_js %}
     <script type="text/javascript">
@@ -25,7 +26,7 @@
 <div class="entry" style="margin-left:0;">
   <h1 class="entry-title">{{ article.title|safe }}</h1>
   <div class="entry-content">
-      {{ article.content|safe|linebreaks }}<br/>
+      {{ article.content|pygmentize|safe }}<br/>
 
   </div>
   <div class="entry-meta">
