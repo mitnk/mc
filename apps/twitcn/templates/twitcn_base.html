@@ -7,30 +7,6 @@
 
 <link href="/twitcn_media/images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <link href="/twitcn_media/css/default.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript">
-$('html').ajaxSend(function(event, xhr, settings) {
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-        // Only send the token to relative URLs i.e. locally.
-        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-    }
-});
-</script>
-
 {% block stylesheets %}{% endblock %}
 <title>{% block title %}Twitcn{% endblock %}</title>
 </head>
@@ -78,6 +54,27 @@ $('html').ajaxSend(function(event, xhr, settings) {
 <script type="text/javascript" src="/twitcn_media/js/utils.js"></script>
 
 <script type="text/javascript">
+$('html').ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        // Only send the token to relative URLs i.e. locally.
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
 function loadSearches(q) {if(q == '')return false;return loadMoreStatus({'asker': 'search', 'first_time': true, 'q': q, 'page_name': 'Real-time result for ' + q});}
 </script>
 {% block javascripts %}{% endblock %}
