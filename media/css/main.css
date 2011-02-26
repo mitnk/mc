@@ -4,11 +4,12 @@ body {
   font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
   background: #dda;
   color: #222;
+  padding: 0;
 }
 #wrapper {
   width: 800px;
   margin: 0 auto;
-  padding: 0;
+  align: center;
   background: #fff;
   -moz-border-radius: 1.5em;
   -webkit-border-radius: 1.5em;
@@ -95,6 +96,7 @@ quote {
  color:white;
 }
 #content {
+ align: center;
  margin:0 auto;
  width:600px;
 }
