@@ -5,6 +5,7 @@ body {
   background: #dda;
   color: #222;
   padding: 0;
+  text-align: center;
 }
 
 #wrapper {
@@ -14,6 +15,7 @@ body {
   -moz-border-radius: 1.5em;
   -webkit-border-radius: 1.5em;
   border-radius: 1.5em;
+  text-align: left;
 }
 
 #header {
