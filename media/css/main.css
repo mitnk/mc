@@ -6,10 +6,11 @@ body {
   color: #222;
   padding: 0;
 }
+
 #wrapper {
   width: 800px;
   margin: 0 auto;
-  align: center;
+  text-align: center;
   background: #fff;
   -moz-border-radius: 1.5em;
   -webkit-border-radius: 1.5em;
@@ -18,7 +19,6 @@ body {
 
 #header {
   font-family: Courier;
-  text-align: left;
   background: #222;
   -moz-border-radius-topleft: 1em;
   -webkit-border-top-left-radius: 1em;
@@ -74,14 +74,17 @@ quote {
  color: #0F7332;
  border-left: 6px solid lightgray;
 }
+
 #header-search {
  float: right;
  margin-top:26px;
  margin-right:100px;
 }
+
 #header-search input {
  height:24px;
 }
+
 .cse-bgimg {
  background: url("/site_media/images/google_custom_search_watermark.gif") no-repeat scroll left center rgb(255, 255, 255);
 }
@@ -96,7 +99,7 @@ quote {
  color:white;
 }
 #content {
- align: center;
+ text-align: center;
  margin:0 auto;
  width:600px;
 }
