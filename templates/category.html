@@ -6,7 +6,7 @@
   {% endif %}
 
   {% for category in categories %}
-    <h2>{{ category.title }} ({{ category.count }})</h2>
+    <h2><a href="{{ category.get_absolute_url }}">{{ category.title }} ({{ category.count }})</a></h2>
     {% if category.articles.count %}
       <ul>
       {% for article in category.articles %}

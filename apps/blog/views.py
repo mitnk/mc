@@ -33,7 +33,7 @@ def get_all_categories(request):
     categories = Category.objects.all()
     for category in categories:
         category.articles = category.article_set.order_by("-added")
-    return render_to_response('categories.html', 
+    return render_to_response('category.html', 
                               {'categories': categories, },
                               context_instance=RequestContext(request))
 
