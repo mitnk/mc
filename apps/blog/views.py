@@ -22,7 +22,7 @@ def get_category(request, id):
     try:
         category = Category.objects.get(id=id)
         articles = category.article_set.order_by("-added")
-        return render_to_response('category.html',
+        return render_to_response('article_list.html',
                                   {'category': category,
                                    'articles': articles,},
                                   context_instance=RequestContext(request))
