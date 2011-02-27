@@ -10,24 +10,18 @@
   {% endif %}
 
   {% for article in articles %}
-  <div class="entry-box">
-    <div class="entryDate">
-      <span class="postMonth">{{ article.added|date:"M" }}</span>
-      <span class="postDay">{{ article.added|date:"d" }}</span>
-      <span class="postYear">{{ article.added|date:"Y" }}</span>
+  <div class="entry">
+    <h2 class="entry-title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
+    <div class="entry-content">
+      {{ article.content|striptags|slice:":100"|linebreaks }}
     </div>
-    <div class="entry">
-      <h2 class="entry-title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
-      <div class="entry-content">
-        {{ article.content|striptags|slice:":100"|linebreaks }}
-      </div>
-      <div class="entry-meta">
-        Category: <a href="{{ article.category.get_absolute_url }}">{{ article.category }}</a> 
-        {% get_comment_count for article as comment_count %}
-        {% if comment_count %}
-            &nbsp;&nbsp;&nbsp;&nbsp;Comments: <a href="{{ article.get_absolute_url }}#comments">({{ comment_count }})</a>
-        {% endif %}
-      </div>
+    <div class="entry-meta">
+      {{ article.added }}
+      Category: <a href="{{ article.category.get_absolute_url }}">{{ article.category }}</a> 
+      {% get_comment_count for article as comment_count %}
+      {% if comment_count %}
+          &nbsp;&nbsp;&nbsp;&nbsp;Comments: <a href="{{ article.get_absolute_url }}#comments">({{ comment_count }})</a>
+      {% endif %}
     </div>
   </div>
   {% endfor %}

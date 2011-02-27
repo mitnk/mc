@@ -23,7 +23,7 @@
 {% block body_event %} onload="insert_next_url()"{% endblock %}
 
 {% block content %}
-<div class="entry" style="margin-left:0;">
+<div class="entry">
   <h1 class="entry-title">{{ article.title|safe }}</h1>
   <div class="entry-content">
       {{ article.content|pygmentize|safe }}<br/>
