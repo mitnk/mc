@@ -3,7 +3,7 @@
 {% block javascripts %}
 <script type="text/javascript">
 function autoUpdate(){$.post("{{ ROOT_PATH }}/more/",{{ more_data_auto_update_json|safe }},afterAutoUpdate);}
-pid_auto_update = setInterval(autoUpdate, 300000);
+pid_auto_update = setInterval(autoUpdate, 60000);
 $(function(){loadMoreStatus({{ more_data_home_json|safe }});});
 </script>
 {% endblock %}
