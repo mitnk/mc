@@ -55,8 +55,8 @@
       <li><span class="label">Web</span> <a target="_blank" class="url" href="{{ current_user.url }}">{{ current_user.url }}</a></li>
       <li id="bio"><span class="label">Bio</span> <span class="bio">{{ current_user.description|ParseStatusText|safe }}</span></li>
       <li><span class="label">Since</span> <span class="fn">{{ current_user.created_at|GetShortDate }}</span></li>
+      <li><span class="label">Token</span> <span>{{ request.session.access_token }}</span>
     </ul>
   </div>
-          
 </div> <!-- end of side -->
 {% endblock %}

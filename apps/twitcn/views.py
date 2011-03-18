@@ -1,18 +1,18 @@
 #coding=utf-8
+from urllib2 import HTTPError
+import datetime
+import twitter, oauth
+from oauthtwitter import OAuthApi
+
 from django.shortcuts import render_to_response
 from django.http import *
 from django.contrib.sessions.models import Session
 from django.contrib.sessions.backends.db import SessionStore
 from django.template import RequestContext
 from django.utils import simplejson as json
-from urllib2 import HTTPError
-import datetime
 
-import twitter, oauth
 from tools import *
 from asker_types import *
-from config import CONSUMER_KEY, CONSUMER_SECRET
-from oauthtwitter import OAuthApi
 
 def private(request):
     api = getPrivateApi()
@@ -417,7 +417,7 @@ def logout(request):
     return HttpResponseRedirect(get_root_path() + "/")
 
 def login_with_oauth(request):
-    api = OAuthApi(CONSUMER_KEY, CONSUMER_SECRET)
+    api = OAuthApi(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
     request_token = api.getRequestToken()
     request.session["request_token"] = request_token.to_string()
     authorization_url = api.getAuthorizationURL(request_token)
@@ -425,7 +425,7 @@ def login_with_oauth(request):
     
 def callback(request):
     req_token = oauth.Token.from_string(request.session.get('request_token'))
-    api = OAuthApi(CONSUMER_KEY, CONSUMER_SECRET, req_token.key, req_token.secret)
+    api = OAuthApi(settings.CONSUMER_KEY, settings.CONSUMER_SECRET, req_token.key, req_token.secret)
     access_token = api.getAccessToken() 
     request.session["access_token"] = access_token.to_string()
     del request.session["request_token"]

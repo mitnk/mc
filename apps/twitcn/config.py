@@ -1,5 +1,0 @@
-CONSUMER_KEY = 'CHiWDTKdSl6KzarBh3kgwg'
-CONSUMER_SECRET = 'pI0eXyakXqqDF4OhDD31LxLQDmSJoyU2Fqy8p3shoXU'
-
-# MUST starts with '/'
-TWITCN_ROOT_PATH = "/t"

@@ -4,19 +4,20 @@ Created on 2009-6-7
 
 @author: mitnk
 '''
-from django.utils import simplejson
+from BeautifulSoup import BeautifulSoup
+from oauthtwitter import OAuthApi
+import datetime
 import re
+import twitter, oauth
 import urllib
 import urllib2
-import datetime
-from config import CONSUMER_KEY, CONSUMER_SECRET, TWITCN_ROOT_PATH
-import twitter, oauth
-from oauthtwitter import OAuthApi
-from BeautifulSoup import BeautifulSoup
- 
+
+from django.conf import settings
+from django.utils import simplejson
+
 def getPrivateApi():
-    access_token = oauth.Token.from_string("oauth_token_secret=9Bjtq4wSHL4Vm3mTGi8y1rWAFFvsdUgxnhPHTnNp8&oauth_token=23502724-2D6P9yR82kszjsRx7UavvbYAlWU06OpEW45h2tUbY")
-    api = OAuthApi(CONSUMER_KEY, CONSUMER_SECRET, 
+    access_token = oauth.Token.from_string(settings.TWITCN_PRIVATE_TOKEN)
+    api = OAuthApi(settings.CONSUMER_KEY, settings.CONSUMER_SECRET, 
                    access_token.key, access_token.secret, verified=True)
     return api
 
@@ -62,7 +63,7 @@ def getTwitterApi(request, update=False):
     # login with oauth
     if access_token: 
         access_token = oauth.Token.from_string(access_token)
-        api = OAuthApi(CONSUMER_KEY, CONSUMER_SECRET, 
+        api = OAuthApi(settings.CONSUMER_KEY, settings.CONSUMER_SECRET, 
                        access_token.key, access_token.secret, verified=True)
 
         if update or not user_info:
@@ -75,10 +76,10 @@ def getTwitterApi(request, update=False):
     return api, user
 
 def get_root_path():
-    if TWITCN_ROOT_PATH == "/":
+    if settings.TWITCN_ROOT_PATH == "/":
         return ""
     else:
-        return "/" + TWITCN_ROOT_PATH.strip("/")
+        return "/" + settings.TWITCN_ROOT_PATH.strip("/")
 
 def twitcn_path(request):
     """Return root path of twitcn app."""
