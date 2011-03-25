@@ -18,6 +18,7 @@ def private(request):
     api = getPrivateApi()
     if request.method == "POST":
         msg = request.POST.get("tweet-text")
+        msg = shortenStatusUrls(msg)
         api.PostUpdates(msg)
         url = request.META.get("PATH_INFO")
         return HttpResponseRedirect(url)
