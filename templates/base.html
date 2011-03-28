@@ -8,8 +8,6 @@
 <link type="text/css" rel="stylesheet" href="/site_media/css/main.css" />
 <link type="text/css" rel="stylesheet" href="/site_media/css/paginator.css" />
 {% block extra_css %}{% endblock %}
-<script type="text/javascript" src="/site_media/js/main.js"></script>
-{% block extra_js %}{% endblock %}
 </head>
 
 <body{% block body_event %}{% endblock %}>
@@ -19,6 +17,9 @@
   <div style="height:20px"></div>
 </div> <!-- end #wrapper -->
 {% include "footer.html" %}
+
+<script type="text/javascript" src="/site_media/js/main.js"></script>
+{% block extra_js %}{% endblock %}
 
 <script type="text/javascript">
   var _gaq = _gaq || [];
@@ -32,6 +33,5 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 </script>
-
 </body>
 </html>
