@@ -1,4 +1,4 @@
-.highlight { font-size: 13px; line-height: 17px; padding-left:7px; padding-top:1px; padding-bottom:1px; overflow:auto; margin-top:5px; }
+.highlight { font-family:monospace; font-size: 13px; line-height: 17px; padding-left:7px; padding-top:1px; padding-bottom:1px; overflow:auto; margin-top:5px; }
 .highlight .hll { background-color: #333333 }
 .highlight  { background: #111111; color: #ffffff }
 .highlight .c { color: #008800; font-style: italic; background-color: #0f140f } /* Comment */

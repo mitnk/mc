@@ -1,4 +1,4 @@
-body { font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; background: #dda; color: #222; padding: 0; text-align: center; }
+body { font-family:"Wenquanyi Zen Hei", "Helvetica Neue", Helvetica, Arial, sans-serif; background: #dda; color: #222; padding: 0; text-align: center; }
 
 a { color:#3E423A; text-decoration:none; }
 quote { padding-left: 12px; display: block; color: #0F7332; border-left: 6px solid lightgray; }
@@ -26,7 +26,7 @@ quote { padding-left: 12px; display: block; color: #0F7332; border-left: 6px sol
 .entry h1 { font-size:22px; }
 .entry-content { line-height: 24px; font-size:16px; }
 .entry-content a { color: #B51C1E; } 
-.entry-content a:hover { background-color: #B51C1E; color:222; }
+.entry-content a:hover { background-color: #B51C1E; color: #FFFFFF; }
 .entry-meta { font-size: 13px; margin-top: 20px; }
 
 #footer { margin-top:1em; padding-top:1em; height:30px; font-size:12px; text-align:center; }
