@@ -1,7 +1,8 @@
-#comment-container { margin-top:14px; padding-top:12px; border-top:1px solid lightBlue; }
+#comment-container { margin-top:14px; border-top:1px solid lightBlue; }
 #comment-container form p { padding-left:10px; }
 #comment-container form label { display:block; font-size:12px; }
 
 #comments { border-bottom:1px solid lightBlue; }
+#comments a { color: #B51C1E; }
 #comments dt { font-size:12px; color: #555555; }
 #comments dd { font-size:14px; color:darkBlue; margin-left:1em; }
