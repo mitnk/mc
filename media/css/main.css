@@ -14,10 +14,8 @@ quote { padding-left: 12px; display: block; color: #0F7332; border-left: 6px sol
 #menu ul li { display: inline; }
 #menu ul li a { color: white; font-size: 1.1em; padding: 0 0.8em; line-height: 2.5em; font-weight: normal; text-decoration: underline; }
 
-#header-search { float: right; margin-top:26px; margin-right:100px; }
+#header-search { float: right; }
 #header-search input { height:24px; }
-.cse-bgimg { background: url("/site_media/images/google_custom_search_watermark.gif") no-repeat scroll left center rgb(255, 255, 255); }
-.cse-bgnoimg { background: none repeat scroll 0% 0% rgb(255, 255, 255); }
 
 #content { margin:0 auto; width:660px; text-align:left;}
 #content h2 { font-size:22px; }

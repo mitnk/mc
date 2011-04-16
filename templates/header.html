@@ -2,21 +2,16 @@
 
 <div id="header">
   <h1>Thinking Critically</h1>
-  <h2></h2>
+  <h2> </h2>
   {% ifequal request.META.PATH_INFO|get_first_path "/wiki/" %}
-  <div id="header-search">
-    <form id="cse-form" action="http://www.google.com/cse">
-      <input type="hidden" name="siteurl" value="mitnk.com" />
-      <input type="hidden" value="001178881884595255196:zxbbdpwksnw" name="cx" />
-      <input type="text" id="cse-input" name='q' onblur="javascript:set_cse_bkimg();" onclick="javascript:clear_cse_bkimg();" class="cse-bgimg" />
-    </form>
-  </div>
+    {% include "google_cse.html" %}
   {% endifequal %}
 </div>
+
 <div id="menu">
-<ul>
-<li><a href="/">Home</a></li>
-<li><a href="/category/">Category</a></li>
-<li><a href="/about/">About</a></li>
-</ul>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/category/">Category</a></li>
+    <li><a href="/about/">About</a></li>
+  </ul>
 </div>

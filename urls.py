@@ -1,8 +1,9 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.conf import settings
-from common.sitemap import sitemaps
+
 from apps.public.feeds import LatestEntriesFeed
+from common.sitemap import sitemaps
 
 admin.autodiscover()
 
@@ -21,6 +22,6 @@ urlpatterns = patterns('',
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-            (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': '/home/mitnk/projects/mitnkcom/media/'}),)
+        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': '/Users/mitnk/projects/mitnkcom/media/'}),)
 
