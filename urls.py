@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.conf import settings
 
 from apps.public.feeds import LatestEntriesFeed
-from common.sitemap import sitemaps
+from apps.common.sitemap import sitemaps
 
 admin.autodiscover()
 
@@ -18,7 +18,9 @@ urlpatterns = patterns('',
     (r'^sitemap\.xml', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     (r'^links/$', include('apps.links.urls')),
     (r'^feed/$', LatestEntriesFeed()),
-    (r'^(\d+)/$', 'apps.public.views.get_article'),
+
+    (r'^category/$', 'apps.public.views.get_all_categories'),
+    (r'^about/$', 'apps.public.views.about'),
 )
 
 if settings.DEBUG:

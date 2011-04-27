@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from common.templatetags.common_tags import get_first_path
-from common.templatetags.common_tags import pygmentize
+from apps.common.templatetags.common_tags import get_first_path
+from apps.common.templatetags.common_tags import pygmentize
 
 __test__ = {'test_get_first_path': get_first_path,
             'test_pygmentize': pygmentize,}
