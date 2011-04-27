@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     (r'^sitemap\.xml', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     (r'^links/$', include('apps.links.urls')),
     (r'^feed/$', LatestEntriesFeed()),
+    (r'^(\d+)/$', 'apps.public.views.get_article'),
 )
 
 if settings.DEBUG:
