@@ -11,13 +11,33 @@
 {% block extra_css %}{% endblock %}
 </head>
 
+{% load common_tags %}
 <body{% block body_event %}{% endblock %}>
 <div id="wrapper">
-  {% include "header.html" %}
+  <div id="header">
+    <h1>Thinking Critically</h1>
+    <h2> </h2>
+    {% ifequal request.META.PATH_INFO|get_first_path "/wiki/" %}
+      {% include "google_cse.html" %}
+    {% endifequal %}
+  </div>
+
+  <div id="menu">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/category/">Category</a></li>
+      <li><a href="/about/">About</a></li>
+    </ul>
+  </div>
+
   <div id="content"> {% block content %}{% endblock %} </div>
   <div style="height:20px"></div>
 </div> <!-- end #wrapper -->
-{% include "footer.html" %}
+
+<div id="footer">
+<a href="http://www.djangoproject.com"><img src="/site_media/images/djangosite.gif"></a>
+Power by <a href="http://twitter.com/mitnk">@mitnk</a> 2010-2011 <a href="/feed/">RSS</a>
+</div>
 
 {% block extra_js %}{% endblock %}
 
@@ -33,5 +53,6 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 </script>
+
 </body>
 </html>
