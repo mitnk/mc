@@ -439,6 +439,8 @@ def updateSinceIdForAutoUpdate(request, messages):
         else:
             request.session["since_id_for_update"] = messages[0].id + 1
 
+MAX_ID_SPAN = 100
+
 def more(request):
     """ Get Information (statuses, DM, followers etc.) for different pages """
     if request.method != "POST":
@@ -472,7 +474,7 @@ def more(request):
                 updateSinceIdForAutoUpdate(request, messages)
 
             if messages:
-                max_id = messages[-1].id - 1
+                max_id = messages[-1].id - MAX_ID_SPAN
         except:
             raise
             messages = [info_tweet]
@@ -506,7 +508,7 @@ def more(request):
         try:
             messages = api.GetMentions(max_id=max_id)
             if messages:
-                max_id = messages[-1].id - 1
+                max_id = messages[-1].id - MAX_ID_SPAN
         except:
             messages = [info_tweet]
         
@@ -523,7 +525,7 @@ def more(request):
         try:
             messages = api.GetRetweets(max_id=max_id)
             if messages:
-                max_id = messages[-1].id - 1
+                max_id = messages[-1].id - MAX_ID_SPAN
         except:
             messages = [info_tweet]
         
@@ -540,7 +542,7 @@ def more(request):
         try:
             messages = api.GetDirectMessages(max_id=max_id)
             if messages:
-                max_id = messages[-1].id - 1
+                max_id = messages[-1].id - MAX_ID_SPAN
         except:
             messages = [info_tweet]
         
@@ -586,7 +588,7 @@ def more(request):
         try:
             messages = api.GetListStatuses(list_id, user=list_user, max_id=max_id)
             if messages:
-                max_id = messages[-1].id - 1
+                max_id = messages[-1].id - MAX_ID_SPAN
         except:
             messages = [info_tweet]
         
@@ -630,7 +632,7 @@ def more(request):
             messages = api.SearchTwitter(q, max_id=max_id)
             if messages:
                 from_bing = not messages[0].source
-                max_id = messages[-1].id - 1
+                max_id = messages[-1].id - MAX_ID_SPAN
                 page = int(page) + 1
         except:
             info_tweet['text'] = u'Sorry, no results found.'
@@ -662,7 +664,7 @@ def more(request):
         else:
             messages = api.GetUserTimeline(user=aim_user_name, max_id=max_id)
             if messages: 
-                max_id = messages[-1].id - 1
+                max_id = messages[-1].id - MAX_ID_SPAN
         
         more_data['aim_user_name'] =  aim_user_name
         more_data['max_id'] = max_id

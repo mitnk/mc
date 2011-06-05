@@ -20,9 +20,9 @@ function confirm_msg(msg)
 }
 
 function setTweetText(text) {
-	$("#status_update_box").show();
-	$("#status-textarea").val(text).focus();
-	checkCharCount();
+    $("#status_update_box").show();
+    $("#status-textarea").val(text).focus();
+    checkCharCount();
 }
 
 function retweet(status_id) {
@@ -64,31 +64,31 @@ function destroy_tweet(status_id) {
 }
 
 function after_create_favorite(data, textStatus) {
-	if (textStatus == "success") {
-		if (data.indexOf('ok|') != -1) {
-			id = data.substr(data.indexOf('|')+1);
-			$("#favo-action-" + id).addClass("this-is-favo");
-		}
-	}
+    if (textStatus == "success") {
+        if (data.indexOf('ok|') != -1) {
+            id = data.substr(data.indexOf('|')+1);
+            $("#favo-action-" + id).addClass("this-is-favo");
+        }
+    }
 }
 
 function create_favorite(status_id) {
-	$.post(TWITCN_ROOT_PATH + "/create_favorite/", 
+    $.post(TWITCN_ROOT_PATH + "/create_favorite/", 
             {"status_id":status_id}, 
             after_create_favorite);
 }
 
 function after_destroy_favorite(data, textStatus) {
-	if (textStatus == "success") {
-		if (data.indexOf('ok|') != -1) {
-			id = data.substr(data.indexOf('|')+1);
-			$("#favo-action-" + id).removeClass("this-is-favo");
-		}
-	}
+    if (textStatus == "success") {
+        if (data.indexOf('ok|') != -1) {
+            id = data.substr(data.indexOf('|')+1);
+            $("#favo-action-" + id).removeClass("this-is-favo");
+        }
+    }
 }
 
 function destroy_favorite(status_id) {
-	$.post(TWITCN_ROOT_PATH + "/destroy_favorite/", 
+    $.post(TWITCN_ROOT_PATH + "/destroy_favorite/", 
             {"status_id":status_id}, 
             after_destroy_favorite);
 }
@@ -265,7 +265,7 @@ function afterLoadMore(data, textStatus) {
             new_results_count = 0;
         }
 
-    	$('#timeline').find("li#first-time-helper").remove();
+        $('#timeline').find("li#first-time-helper").remove();
         $("#pagination").remove();
         $('#timeline').append(data);
         make_hover_action();
@@ -278,15 +278,15 @@ function resetCursor(cursor_name) {
 }
 
 function loadMoreStatus(data) {
-	if (data['first_time']) {
-	    resetCursor(data['cursor_name']);
-	    var loadingHTML = '<li id="first-time-helper"><div style="width:100px; height:100px; margin:0 auto; padding-top:1em;"><a href="#"><img src="/twitcn_media/images/loading.gif" width=100 height=100></a></div></li>';
-		$('#timeline').html(loadingHTML); 
-		$("#heading").html(data['page_name']);
-	}
-	else {
-		$("#more").addClass("loading").html("");
-	}
+    if (data['first_time']) {
+        resetCursor(data['cursor_name']);
+        var loadingHTML = '<li id="first-time-helper"><div style="width:100px; height:100px; margin:0 auto; padding-top:1em;"><a href="#"><img src="/twitcn_media/images/loading.gif" width=100 height=100></a></div></li>';
+        $('#timeline').html(loadingHTML); 
+        $("#heading").html(data['page_name']);
+    }
+    else {
+        $("#more").addClass("loading").html("");
+    }
 
     $.post(TWITCN_ROOT_PATH + "/more/", 
             data, 
