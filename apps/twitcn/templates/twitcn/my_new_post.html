@@ -10,7 +10,7 @@
         <span class="actions">
           <div><a title="favorite this tweet" id="status_star_5332220272" class="fav-action non-fav"> </a>
           {% ifequal status.user.screen_name current_user.screen_name %}
-            <a href="#" onclick="javascript:destroy_tweet({{ status.id }});return false;"><img width="16px" height="16px" src="/twitcn_media/images/del_status.gif"/></a>
+            <a href="#" onclick="javascript:destroy_tweet('{{ status.id }}');return false;"><img width="16px" height="16px" src="/twitcn_media/images/del_status.gif"/></a>
           {% endifequal %}
           </div>
         </span>

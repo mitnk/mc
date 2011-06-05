@@ -31,7 +31,7 @@
           {% ifequal status.user.screen_name current_user.screen_name %}
             <span class="reply">
               <span class="del-icon icon"/>
-              <a href="#" onclick="javascript:destroy_tweet({{ status.id }});return false;" title="delete this tweet">Delete</a>
+              <a href="#" onclick="javascript:destroy_tweet('{{ status.id }}');return false;" title="delete this tweet">Delete</a>
             </span>
           {% else %}
             <span class="reply">
