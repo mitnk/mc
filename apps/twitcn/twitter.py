@@ -271,10 +271,9 @@ class Status(object):
       A twitter.Status instance
     '''
     if 'retweeted_status' in data:
-        by_user = None
         if 'user' in data:
-            by_user = data['user']
-        return Status.NewFromJsonDict(data['retweeted_status'], by_user, data['id'])
+            retweeted_by = data['user']
+        retweeted_id = data['id']
 
     if 'user' in data:
       user = User.NewFromJsonDict(data['user'])
