@@ -475,7 +475,6 @@ def more(request):
             if messages:
                 max_id = messages[-1].id - 1
         except:
-            raise
             messages = [info_tweet]
         
         more_data['max_id'] = str(max_id)
