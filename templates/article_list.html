@@ -3,7 +3,7 @@
 
 {% block content %}
   {% load pagination_tags %}
-  {% autopaginate articles 10 %}
+  {% autopaginate articles 5 %}
   {% include "douban_book.html" %}
 
   {% if not articles.count %}
