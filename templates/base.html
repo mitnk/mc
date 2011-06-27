@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+{% load common_tags %}
 {% ifequal request.META.PATH_INFO "/about/" %}
 <!-- Google Website Optimizer Tracking Script -->
 <script type="text/javascript">
@@ -67,7 +68,6 @@
 {% block extra_css %}{% endblock %}
 </head>
 
-{% load common_tags %}
 <body{% block body_event %}{% endblock %}>
 <div id="wrapper">
   <div id="header">
