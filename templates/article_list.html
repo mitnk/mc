@@ -4,6 +4,7 @@
 {% block content %}
   {% load pagination_tags %}
   {% autopaginate articles 10 %}
+  {% include "douban_book.html" %}
 
   {% if not articles.count %}
     <h1>No available data.</h1>
