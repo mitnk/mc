@@ -1483,28 +1483,17 @@ class Api(object):
     self._CheckForTwitterError(data)
     return User.NewFromJsonDict(data)
 
-  def GetDirectMessages(self, since=None, since_id=None, max_id=None, page=None):
-    '''Returns a list of the direct messages sent to the authenticating user.
-
-    The twitter.Api instance must be authenticated.
-
-    Args:
-      since:
-        Narrows the returned results to just those statuses created
-        after the specified HTTP-formatted date. [optional]
-      since_id:
-        Returns only public statuses with an ID greater than (that is,
-        more recent than) the specified ID. [Optional]
-
+  def GetDirectMessages(self, count=20, since_id=None, max_id=None, page=None):
+    """
     Returns:
       A sequence of twitter.DirectMessage instances
-    '''
+    """
     url = TWITTER_API + 'direct_messages.json'
     if not self.verified:
       raise TwitterError("The twitter.Api instance must be authenticated.")
     parameters = {}
-    if since:
-      parameters['since'] = since
+    if count:
+      parameters['count'] = count
     if since_id:
       parameters['since_id'] = since_id
     if max_id:
