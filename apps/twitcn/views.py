@@ -541,7 +541,8 @@ def more(request):
             messages = api.GetDirectMessages(max_id=max_id)
             if messages:
                 max_id = messages[-1].id - 1
-        except:
+        except Exception, e:
+            info_tweet['text'] = str(e)
             messages = [info_tweet]
         
         more_data['max_id'] = str(max_id)

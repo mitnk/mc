@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-{% load common_tags %}
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-{% if request.META.QUERY_STRING %}<meta name="robots" content="noindex">{% endif %}
-<meta name="keywords" content="mitnk,homepage,think critically,thinking critically" />
-<link rel="alternate" type="application/rss+xml" title="Mitnk's Blog - RSS Feed" href="http://mitnk.com/feed/" />
-<title>{% block title %}Thinking Critically{% endblock %}</title>
-<link type="text/css" rel="stylesheet" href="/site_media/css/main.css" />
-<link type="text/css" rel="stylesheet" href="/site_media/css/paginator.css" />
-{% block extra_css %}{% endblock %}
+  {% load common_tags %}
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  {% if request.META.QUERY_STRING %}<meta name="robots" content="noindex">{% endif %}
+  <meta name="keywords" content="mitnk,homepage,think critically,thinking critically" />
+  <link rel="alternate" type="application/rss+xml" title="Mitnk's Blog - RSS Feed" href="http://mitnk.com/feed/" />
+  <title>{% block title %}Thinking Critically{% endblock %}</title>
+  <link type="text/css" rel="stylesheet" href="/site_media/css/main.css" />
+  <link type="text/css" rel="stylesheet" href="/site_media/css/paginator.css" />
+  {% block extra_css %}{% endblock %}
 </head>
 
 <body{% block body_event %}{% endblock %}>
@@ -25,7 +25,6 @@
   <div id="menu">
     <ul>
       <li><a href="/">Home</a></li>
-      <li><a href="/category/">Category</a></li>
       <li><a href="/about/">About</a></li>
     </ul>
   </div>
