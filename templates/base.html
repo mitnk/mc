@@ -4,9 +4,9 @@
   {% load common_tags %}
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   {% if request.META.QUERY_STRING %}<meta name="robots" content="noindex">{% endif %}
-  <meta name="keywords" content="mitnk,homepage,think critically,thinking critically" />
-  <link rel="alternate" type="application/rss+xml" title="Mitnk's Blog - RSS Feed" href="http://mitnk.com/feed/" />
-  <title>{% block title %}Thinking Critically{% endblock %}</title>
+  {% block keywords %}<meta name="keywords" content="mitnk,homepage" />{% endblock %}
+  <link rel="alternate" type="application/rss+xml" title="K.I.S.S - RSS Feed" href="http://mitnk.com/feed/" />
+  <title>{% block title %}{% endblock %}K.I.S.S</title>
   <link type="text/css" rel="stylesheet" href="/site_media/css/main.css" />
   <link type="text/css" rel="stylesheet" href="/site_media/css/paginator.css" />
   {% block extra_css %}{% endblock %}
@@ -15,8 +15,8 @@
 <body{% block body_event %}{% endblock %}>
 <div id="wrapper">
   <div id="header">
-    <h1>Thinking Critically</h1>
-    <h2> </h2>
+    <h1>K.I.S.S</h1>
+    <h2>Keep it simple, Stupid!</h2>
     {% ifequal request.META.PATH_INFO|get_first_path "/wiki/" %}
       {% include "google_cse.html" %}
     {% endifequal %}
