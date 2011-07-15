@@ -4,7 +4,10 @@
 {% block content %}
   {% load pagination_tags %}
   {% autopaginate articles 5 %}
-  {% include "douban_book.html" %}
+
+  {% ifequal request.META.PATH_INFO "/" %}
+    {% include "douban_book.html" %}
+  {% endifequal %}
 
   {% if not articles.count %}
     <h1>No available data.</h1>
