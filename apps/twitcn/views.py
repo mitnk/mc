@@ -23,7 +23,7 @@ def private(request):
         url = request.META.get("PATH_INFO")
         return HttpResponseRedirect(url)
     else:
-        messages = api.GetHomeTimeline()
+        messages = api.GetHomeTimeline(count=50)
         return render_to_response("twitcn/private.html", 
                                   {'messages': messages,},
                                   context_instance=RequestContext(request))
