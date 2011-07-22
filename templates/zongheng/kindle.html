@@ -1,0 +1,6 @@
+Novel List:<br/>
+<ul>
+  {% for novel in novels %}
+  <li>{{ novel.title }}: {{ novel.last_id }}, last sent: {{ novel.last_sent }}</li>
+  {% endfor %}
+</ul>

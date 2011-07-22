@@ -21,6 +21,8 @@ urlpatterns = patterns('',
 
     (r'^category/$', 'apps.public.views.get_all_categories'),
     (r'^about/$', 'apps.public.views.about'),
+
+    (r'^webapps/', include('mitnkcom.webapps.urls')),
 )
 
 if settings.DEBUG:
