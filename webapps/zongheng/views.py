@@ -1,4 +1,5 @@
 import datetime
+import os.path
 import re
 import urllib2
 
@@ -42,8 +43,9 @@ def ParseUstringProc(res):
 
 
 def write_content(book_id, cids):
-    f = open(settings.ZONGHENG_FILE, "w")
-    f.write("Update: %s.\r\n" % datetime.datetime.now())
+    file_name = "zongheng_%s.txt" % datetime.datetime.now().strftime("%h-%d-%H")
+    file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
+    f = open(file_name, "w")
     pattern = re.compile(r"\[|\]|u'[^']+'", re.VERBOSE)
     for cid in cids:
         url = 'http://m.zongheng.com/chapter?bookid=%s&cid=%s' % (book_id, cid)
@@ -57,14 +59,15 @@ def write_content(book_id, cids):
         content = smart_str(striptags(content)) + "\r\n"
         f.write(content)
     f.close()
+    return file_name
 
 
-def send_to_kindle(cids):
+def send_to_kindle(file_name, cids):
     send_from = "admin@mitnk.com"
     send_to = ['whgking@free.kindle.com']
     subject = "Zong Heng Novels Update"
     text = "There are %s chapter updated." % len(cids)
-    files = [settings.ZONGHENG_FILE]
+    files = [file_name]
     send_mail(send_from, send_to, subject, text, files)
 
 
@@ -80,11 +83,11 @@ def kindle(request):
             if not cids:
                 return HttpResponse("No new contents.(%s-%s)" % (book_id, novel.last_id))
 
-            write_content(book_id, cids)
-            send_to_kindle(cids)
+            file_name = write_content(book_id, cids)
+            send_to_kindle(file_name, cids)
 
-            # novel.last_id = cids[-1]
-            # novel.save()
+            novel.last_id = cids[-1]
+            novel.save()
         except Novel.DoesNotExist:
             return HttpResponse("Book does not Exist. %s" % book_id)
 
