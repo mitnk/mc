@@ -1,3 +1,4 @@
+import datetime
 import re
 import urllib2
 
@@ -42,6 +43,7 @@ def ParseUstringProc(res):
 
 def write_content(book_id, cids):
     f = open(settings.ZONGHENG_FILE, "w")
+    f.write("Update: %s.\r\n" % datetime.datetime.now())
     pattern = re.compile(r"\[|\]|u'[^']+'", re.VERBOSE)
     for cid in cids:
         url = 'http://m.zongheng.com/chapter?bookid=%s&cid=%s' % (book_id, cid)
