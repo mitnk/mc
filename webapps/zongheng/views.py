@@ -59,7 +59,7 @@ def write_content(book_id, cids):
 
 def send_to_kindle(cids):
     send_from = "admin@mitnk.com"
-    send_to = ['whgking@gmail.com']
+    send_to = ['whgking@free.kindle.com']
     subject = "Zong Heng Novels Update"
     text = "There are %s chapter updated." % len(cids)
     files = [settings.ZONGHENG_FILE]
