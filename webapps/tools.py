@@ -5,9 +5,19 @@ from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
+import urllib2
 
 
-def send_mail(send_from, send_to, subject, text, files=[]):
+def website_is_down(url):
+    try:
+        page = urllib2.urlopen(url)
+        return page.code != 200
+    except:
+        pass
+    return True
+    
+
+def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[]):
     assert type(send_to) == list
     assert type(files) == list
 

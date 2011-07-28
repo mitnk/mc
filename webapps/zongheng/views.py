@@ -63,12 +63,11 @@ def write_content(book_id, cids):
 
 
 def send_to_kindle(file_name, cids):
-    send_from = "admin@mitnk.com"
     send_to = ['whgking@free.kindle.com']
     subject = "Zong Heng Novels Update"
     text = "There are %s chapter updated." % len(cids)
     files = [file_name]
-    send_mail(send_from, send_to, subject, text, files)
+    send_mail(send_to, subject, text, files)
 
 
 @csrf_exempt
