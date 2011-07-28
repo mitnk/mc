@@ -10,7 +10,7 @@ from webapps.tools import send_mail, website_is_down
 
 @csrf_exempt
 def check_website(request):
-    info = "not check"
+    content = "not check"
     if request.method == "POST":
         url = request.POST.get('url_for_check')
         wai, created = WebAppInfo.objects.get_or_create(category='check_website', name=url)
@@ -22,34 +22,30 @@ def check_website(request):
             # send means server is down and report email is sent
             if wai.value == 'send':
                 # do nothing, just wait for rechecking
-                pass
+                content = "is down (had sent report)"
             else:
                 wai.value = 'down'
                 wai.save()
-                info = "checked: down."
 
                 content = "Target url: %s" % url
                 content += "\r\nDown at: %s" % datetime.datetime.now()
                 send_mail(mail_to, '%s is Down' % site_name, content)
                 wai.value = 'send'
                 wai.save()
-                info = "checked and sent: down."
         else:
             if not wai.value:
                 wai.value = 'up'
                 wai.save()
-                info = "check: up"
 
             if wai.value in ['down', 'send']:
                 time_span = datetime.datetime.now() - wai.updated
                 content = "Target url: %s" % url
                 content += "\r\nUp at: %s" % datetime.datetime.now()
                 content += "\r\nWas down for: %s" % time_span
-                info = "checked: up (again)."
 
                 wai.value = 'up'
                 wai.save()
                 send_mail(mail_to, '%s is Up' % site_name, content)
 
-    return HttpResponse("webapps.check_website - " + info)
+    return HttpResponse(content)
 
