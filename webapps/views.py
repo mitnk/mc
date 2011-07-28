@@ -34,6 +34,11 @@ def check_website(request):
                 wai.save()
                 info = "checked and sent: down."
         else:
+            if not wai.value:
+                wai.value = 'up'
+                wai.save()
+                info = "check: up"
+
             if wai.value in ['down', 'send']:
                 time_span = datetime.datetime.now() - wai.updated
                 content = "Up at: %s" % datetime.datetime.now()
