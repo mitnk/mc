@@ -14,7 +14,7 @@ def check_website(request):
     if request.method == "POST":
         url = request.POST.get('url_for_check')
         site_name = request.POST.get('site_name')
-        if not url_name or not site_name:
+        if not site_name or not site_name:
             return HttpResponse('params required')
 
         wai, created = WebAppInfo.objects.get_or_create(category='check_website', name=url)
