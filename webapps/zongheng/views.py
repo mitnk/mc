@@ -67,7 +67,7 @@ def send_to_kindle(file_name, cids):
     subject = "Zong Heng Novels Update"
     text = "There are %s chapter updated." % len(cids)
     files = [file_name]
-    send_mail(send_to, subject, text, files)
+    send_mail(send_to, subject, text, files=files)
 
 
 @csrf_exempt
