@@ -13,10 +13,13 @@ def check_website(request):
     content = "not check"
     if request.method == "POST":
         url = request.POST.get('url_for_check')
+        site_name = request.POST.get('site_name')
+        if not url_name or not site_name:
+            return HttpResponse('params required')
+
         wai, created = WebAppInfo.objects.get_or_create(category='check_website', name=url)
         is_down = website_is_down(url)
         mail_to = ['wanghonggang@cn-acg.com']
-        site_name = "Platform"
 
         if is_down:
             # send means server is down and report email is sent

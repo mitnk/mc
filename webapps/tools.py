@@ -11,7 +11,7 @@ import urllib2
 def website_is_down(url):
     try:
         page = urllib2.urlopen(url)
-        return page.code != 200
+        return page.code > 500
     except:
         pass
     return True
