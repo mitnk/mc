@@ -18,7 +18,7 @@ def check_website(request):
             return HttpResponse('params required')
 
         wai, created = WebAppInfo.objects.get_or_create(category='check_website', name=url)
-        is_down = website_is_down(url)
+        is_down, reason = website_is_down(url)
         mail_to = ['wanghonggang@cn-acg.com']
 
         if is_down:
@@ -31,6 +31,7 @@ def check_website(request):
                 wai.save()
 
                 content = "Target url: %s" % url
+                content += "\r\nReason: %s" % reason
                 content += "\r\nDown at: %s" % datetime.datetime.now()
                 send_mail(mail_to, '%s is Down' % site_name, content)
                 wai.value = 'send'
@@ -43,6 +44,7 @@ def check_website(request):
             if wai.value in ['down', 'send']:
                 time_span = datetime.datetime.now() - wai.updated
                 content = "Target url: %s" % url
+                content += "\r\nReason: %s" % reason
                 content += "\r\nUp at: %s" % datetime.datetime.now()
                 content += "\r\nWas down for: %s" % time_span
 

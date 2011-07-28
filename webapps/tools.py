@@ -11,13 +11,19 @@ import urllib2
 def website_is_down(url):
     try:
         page = urllib2.urlopen(url)
-        return page.code > 500
-    except urllib2.HTTPError, e:
-        return e.getcode() > 500
-    except urllib2.URLError:
-        return True
+        if page.code > 500:
+            return True, "HTTP Code: %s" % page.code
 
-    return False
+    except urllib2.HTTPError, e:
+        if e.getcode() > 500:
+            return True, "HTTP Code: %s" % e.getcode()
+        else:
+            return True, str(e)
+
+    except urllib2.URLError, e:
+        return True, str(e)
+
+    return False, "Does not Down at all."
     
 
 def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[]):
