@@ -28,7 +28,8 @@ def check_website(request):
                 wai.save()
                 info = "checked: down."
 
-                content = "Down at: %s" % datetime.datetime.now()
+                content = "Target url: %s" % url
+                content += "\r\nDown at: %s" % datetime.datetime.now()
                 send_mail(mail_to, '%s is Down' % site_name, content)
                 wai.value = 'send'
                 wai.save()
@@ -41,7 +42,8 @@ def check_website(request):
 
             if wai.value in ['down', 'send']:
                 time_span = datetime.datetime.now() - wai.updated
-                content = "Up at: %s" % datetime.datetime.now()
+                content = "Target url: %s" % url
+                content += "\r\nUp at: %s" % datetime.datetime.now()
                 content += "\r\nWas down for: %s" % time_span
                 info = "checked: up (again)."
 
