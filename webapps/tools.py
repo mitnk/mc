@@ -17,7 +17,7 @@ def website_is_down(url):
     except urllib2.URLError:
         return True
 
-    return True
+    return False
     
 
 def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[]):
