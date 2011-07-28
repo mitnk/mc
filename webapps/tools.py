@@ -12,8 +12,11 @@ def website_is_down(url):
     try:
         page = urllib2.urlopen(url)
         return page.code > 500
-    except:
-        pass
+    except urllib2.HTTPError, e:
+        return e.getcode() > 500
+    except urllib2.URLError:
+        return True
+
     return True
     
 
