@@ -13,7 +13,7 @@ def check_website(request):
     info = "not check"
     if request.method == "POST":
         url = request.POST.get('url_for_check')
-        wai, created = WebAppInfo.objects.get_or_create(category='', name='')
+        wai, created = WebAppInfo.objects.get_or_create(category='check_website', name=url)
         is_down = website_is_down(url)
         mail_to = ['wanghonggang@cn-acg.com']
         site_name = "Platform"
