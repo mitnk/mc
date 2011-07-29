@@ -46,7 +46,7 @@ def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[], fai
         msg.attach(part)
 
     try:
-        smtp = smtplib.SMTP_SSL("smtp.gmail.com", 587)
+        smtp = smtplib.SMTP("smtp.gmail.com", 587)
 
         smtpserver = 'smtp.gmail.com'
         smtpuser = 'admin@mitnk.com'         # set SMTP username here
