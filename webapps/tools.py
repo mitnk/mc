@@ -11,14 +11,14 @@ import urllib2
 def website_is_down(url):
     try:
         page = urllib2.urlopen(url)
-        if page.code > 500:
+        if page.code >= 500:
             return True, "HTTP Code: %s" % page.code
 
     except urllib2.HTTPError, e:
-        if e.getcode() > 500:
+        if e.getcode() >= 500:
             return True, "HTTP Code: %s" % e.getcode()
         else:
-            return True, str(e)
+            return False, str(e)
 
     except urllib2.URLError, e:
         return True, str(e)
@@ -26,7 +26,7 @@ def website_is_down(url):
     return False, "Does not Down at all."
     
 
-def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[]):
+def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[], fail_silently=True):
     assert type(send_to) == list
     assert type(files) == list
 
@@ -45,16 +45,20 @@ def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[]):
         part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(f))
         msg.attach(part)
 
-    smtp = smtplib.SMTP("smtp.gmail.com", 587)
+    try:
+        smtp = smtplib.SMTP_SSL("smtp.gmail.com", 587)
 
-    smtpserver = 'smtp.gmail.com'
-    smtpuser = 'admin@mitnk.com'         # set SMTP username here
-    smtppass = 'writeblog'   # set SMTP password here
+        smtpserver = 'smtp.gmail.com'
+        smtpuser = 'admin@mitnk.com'         # set SMTP username here
+        smtppass = 'writeblog'   # set SMTP password here
 
-    smtp.ehlo()
-    smtp.starttls()
-    smtp.ehlo()
-    smtp.login(smtpuser, smtppass)
-    smtp.sendmail(send_from, send_to, msg.as_string())
-    smtp.close()
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.ehlo()
+        smtp.login(smtpuser, smtppass)
+        smtp.sendmail(send_from, send_to, msg.as_string())
+        smtp.close()
+    except:
+        if not fail_silently:
+            raise
 
