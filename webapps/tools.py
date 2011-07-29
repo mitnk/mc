@@ -13,6 +13,8 @@ def website_is_down(url):
         page = urllib2.urlopen(url)
         if page.code >= 500:
             return True, "HTTP Code: %s" % page.code
+        else:
+            return False, "HTTP Code: %s" % page.code
 
     except urllib2.HTTPError, e:
         if e.getcode() >= 500:
@@ -23,7 +25,7 @@ def website_is_down(url):
     except urllib2.URLError, e:
         return True, str(e)
 
-    return False, "Does not Down at all."
+    return False, "We check page code_status and URLErrors and seems nothing wrong."
     
 
 def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[], fail_silently=True):
