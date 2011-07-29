@@ -27,13 +27,15 @@ def check_website(request):
                 # do nothing, just wait for rechecking
                 content = "is down (had sent report)"
             else:
-                wai.value = 'down'
-                wai.save()
+                # If server is already down, do not save to update the time again.
+                if wai.value != 'down':
+                    wai.value = 'down'
+                    wai.save()
 
                 content = "Target url: %s" % url
                 content += "\r\nReason: %s" % reason
                 content += "\r\nDown at: %s" % datetime.datetime.now()
-                send_mail(mail_to, '%s is Down' % site_name, content)
+                send_mail(mail_to, '%s is Down' % site_name, content, fail_silently=False)
                 wai.value = 'send'
                 wai.save()
         else:
@@ -48,9 +50,9 @@ def check_website(request):
                 content += "\r\nUp at: %s" % datetime.datetime.now()
                 content += "\r\nWas down for: %s" % time_span
 
+                send_mail(mail_to, '%s is Up' % site_name, content, fail_silently=False)
                 wai.value = 'up'
                 wai.save()
-                send_mail(mail_to, '%s is Up' % site_name, content)
 
     return HttpResponse(content)
 
