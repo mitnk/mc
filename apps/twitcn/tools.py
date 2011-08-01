@@ -15,8 +15,8 @@ import urllib2
 from django.conf import settings
 from django.utils import simplejson
 
-def getPrivateApi():
-    access_token = oauth.Token.from_string(settings.TWITCN_PRIVATE_TOKEN)
+def getPrivateApi(token):
+    access_token = oauth.Token.from_string(token)
     api = OAuthApi(settings.CONSUMER_KEY, settings.CONSUMER_SECRET, 
                    access_token.key, access_token.secret, verified=True)
     return api

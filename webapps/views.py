@@ -5,7 +5,23 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 
 from webapps.models import WebAppInfo
-from webapps.tools import send_mail, website_is_down
+from webapps.tools import send_mail, website_is_down, get_last_updated_id
+from apps.twitcn.tools import getPrivateApi
+
+
+def send_tweets_to_kindle(request):
+    token = settings.TWITCN_PRIVATE_TOKEN
+    api = getPrivateApi(token)
+    #since_id = get_last_updated_id(api)
+    since_id = "97961065496838145"
+    latest_id = api.GetHomeTimeline(count=1)
+
+    messages = api.GetHomeTimeline(since_id=since_id, count=5)
+    while messages[-1].id < latest_id:
+        since_id = messages[-1].id + 1
+        messages += api.GetHomeTimeline(since_id=since_id, count=5)
+
+    return render_to_response("twitcn/private.html", {'messages': messages,})
 
 
 @csrf_exempt

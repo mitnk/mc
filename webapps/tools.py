@@ -8,6 +8,10 @@ from email import Encoders
 import urllib2
 
 
+def get_last_updated_id(api):
+    pass
+
+
 def website_is_down(url):
     try:
         page = urllib2.urlopen(url)

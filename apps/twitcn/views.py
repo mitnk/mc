@@ -15,7 +15,8 @@ from tools import *
 from asker_types import *
 
 def private(request):
-    api = getPrivateApi()
+    token = settings.TWITCN_PRIVATE_TOKEN
+    api = getPrivateApi(token)
     if request.method == "POST":
         msg = request.POST.get("tweet-text")
         msg = shortenStatusUrls(msg)
