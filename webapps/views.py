@@ -17,10 +17,11 @@ def send_tweets_to_kindle(request):
     since_id = "97961065496838145"
     latest_id = api.GetHomeTimeline(count=1)[0].id
 
-    messages = api.GetHomeTimeline(since_id=since_id, count=5)
-    while messages[-1].id < latest_id:
-        since_id = messages[-1].id + 1
-        messages += api.GetHomeTimeline(since_id=since_id, count=5)
+    messages = api.GetHomeTimeline(count=5)
+    min_id = messages[-1].id - 1
+    while min_id < int(since_id):
+        messages += api.GetHomeTimeline(max_id=min_id, count=5)
+        min_id = messages[-1].id + 1
 
     return render_to_response("twitcn/private.html", {'messages': messages,})
 
