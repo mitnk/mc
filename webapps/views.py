@@ -3,28 +3,62 @@ import datetime
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 
 from webapps.models import WebAppInfo
-from webapps.tools import send_mail, website_is_down, get_last_updated_id
+from webapps.tools import send_mail, website_is_down
 from apps.twitcn.tools import getPrivateApi
 
+
+def get_last_updated_id():
+    wai, created = WebAppInfo.objects.get_or_create(category='twitter', name="last_updated_id")
+    if not created:
+        return int(wai.value)
+    return 0
+
+def set_last_updated_id(latest_id):
+    wai, created = WebAppInfo.objects.get_or_create(category='twitter', name="last_updated_id")
+    wai.value = str(latest_id)
+    wai.save()
 
 def send_tweets_to_kindle(request):
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
-    #since_id = get_last_updated_id(api)
-    since_id = "97961065496838145"
-    latest_id = api.GetHomeTimeline(count=1)[0].id
+    latest_id = get_last_updated_id(api)
+    if not latest_id:
+        latest_id = api.GetHomeTimeline(count=1)[0].id
 
-    messages = api.GetHomeTimeline(count=5)
+    messages = api.GetHomeTimeline(count=200)
+    set_last_updated_id(messages[0].id)
+
     min_id = messages[-1].id - 1
-    while min_id < int(since_id):
-        messages += api.GetHomeTimeline(max_id=min_id, count=5)
-        min_id = messages[-1].id + 1
+    while min_id > int(latest_id):
+        messages += api.GetHomeTimeline(max_id=min_id, count=200)
+        min_id = messages[-1].id - 1
 
-    return render_to_response("twitcn/private.html", {'messages': messages,})
+    unread_number = 0
+    for msg in messages:
+        if msg.id > latest_id:
+            unread_number += 1
+        else:
+            break
+        
+    messages = messages[:unread_number]
+    content = render_to_string("webapps/tweets_for_kindle.txt", {'messages': messages})
+    file_name = "Tweets_%s.txt" % datetime.datetime.now().strftime("%h-%d-%H")
+    file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
+    f = open(file_name, "w")
+    f.write(content)
+    f.close()
 
+    send_to = ['whgking@free.kindle.com', 'whgking@gmail.com']
+    subject = "Tweets Daily Update"
+    text = "There are %s tweets updated." % len(messages)
+    files = [file_name]
+    send_mail(send_to, subject, text, files=files)
+
+    return HttpResponse("200 OK.")
 
 @csrf_exempt
 def check_website(request):
