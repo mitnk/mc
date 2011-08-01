@@ -25,26 +25,26 @@ def set_last_updated_id(latest_id):
 def send_tweets_to_kindle(request):
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
-    latest_id = get_last_updated_id(api)
-    if not latest_id:
-        latest_id = api.GetHomeTimeline(count=1)[0].id
+    latest_id = get_last_updated_id()
 
     messages = api.GetHomeTimeline(count=200)
     set_last_updated_id(messages[0].id)
 
     min_id = messages[-1].id - 1
-    while min_id > int(latest_id):
+    while latest_id and min_id > int(latest_id):
         messages += api.GetHomeTimeline(max_id=min_id, count=200)
         min_id = messages[-1].id - 1
 
-    unread_number = 0
-    for msg in messages:
-        if msg.id > latest_id:
-            unread_number += 1
-        else:
-            break
-        
-    messages = messages[:unread_number]
+    if latest_id:
+        unread_number = 0
+        for msg in messages:
+            if msg.id > latest_id:
+                unread_number += 1
+            else:
+                break
+        messages = messages[:unread_number]
+
+    messages.reverse()
     content = render_to_string("webapps/tweets_for_kindle.txt", {'messages': messages})
     file_name = "Tweets_%s.txt" % datetime.datetime.now().strftime("%h-%d-%H")
     file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
