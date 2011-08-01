@@ -5,6 +5,7 @@ from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
+from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
 from webapps.models import WebAppInfo
@@ -50,7 +51,7 @@ def send_tweets_to_kindle(request):
     file_name = "Tweets_%s.txt" % datetime.datetime.now().strftime("%h-%d-%H")
     file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
     f = open(file_name, "w")
-    f.write(content)
+    f.write(smart_str(content))
     f.close()
 
     send_to = ['whgking@free.kindle.com', 'whgking@gmail.com']
