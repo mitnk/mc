@@ -1,3 +1,4 @@
-{% for status in messages %}{{ status.user.screen_name }}: {{ status.text }}
-{{ status.created_at }}{% endfor %}
-
+{% for status in messages %}
+@{{ status.user.screen_name }}: {{ status.text }}
+=={{ status.created_at }}==
+{% endfor %}
