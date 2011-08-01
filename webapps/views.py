@@ -15,7 +15,7 @@ def send_tweets_to_kindle(request):
     api = getPrivateApi(token)
     #since_id = get_last_updated_id(api)
     since_id = "97961065496838145"
-    latest_id = api.GetHomeTimeline(count=1)
+    latest_id = api.GetHomeTimeline(count=1)[0].id
 
     messages = api.GetHomeTimeline(since_id=since_id, count=5)
     while messages[-1].id < latest_id:
