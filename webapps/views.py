@@ -19,6 +19,10 @@ def check_website(request):
 
         wai, created = WebAppInfo.objects.get_or_create(category='check_website', name=url)
         is_down, reason = website_is_down(url)
+        if is_down:
+            # check again to make sure it is really down
+            is_down, reason = website_is_down(url)
+
         mail_to = ['wanghonggang@cn-acg.com']
 
         if is_down:
