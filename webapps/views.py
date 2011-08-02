@@ -47,6 +47,8 @@ def send_tweets_to_kindle(request):
         messages = messages[:unread_number]
 
     messages.reverse()
+    for msg in messages:
+        msg.text = smart_str(msg.text)
     content = render_to_string("webapps/tweets_for_kindle.txt", {'messages': messages})
     file_name = "Tweets_%s.txt" % datetime.datetime.now().strftime("%h-%d-%H-%M")
     file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
