@@ -30,7 +30,6 @@ def send_tweets_to_kindle(request):
     latest_id = get_last_updated_id()
 
     messages = api.GetHomeTimeline(count=200)
-    set_last_updated_id(messages[0].id)
 
     min_id = messages[-1].id - 1
     while latest_id and min_id > int(latest_id):
@@ -60,7 +59,8 @@ def send_tweets_to_kindle(request):
     subject = "Tweets Daily Update"
     text = "There are %s tweets updated." % len(messages)
     files = [file_name]
-    send_mail(send_to, subject, text, files=files)
+    send_mail(send_to, subject, text, files=files, fail_silently=False)
+    set_last_updated_id(messages[-1].id)
 
     return HttpResponse("200 OK.")
 
