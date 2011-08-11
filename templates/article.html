@@ -1,26 +1,11 @@
 {% extends "base.html" %}
 {% load common_tags %}
-{% load comments %}
 
 {% block extra_css %}
-    <link type="text/css" rel="stylesheet" href="/site_media/css/comments.css" />
     <link type="text/css" rel="stylesheet" href="/site_media/css/pygments.css" />
-{% endblock %}
-{% block extra_js %}
-    <script type="text/javascript">
-    function insert_next_url() {
-        var next = document.createElement('input');
-        next.setAttribute('type', 'hidden');
-        next.setAttribute('name', 'next');
-        next.setAttribute('value', '{{ article.get_absolute_url|safe }}');
-        var form = document.getElementById("comment-container").getElementsByTagName("form")[0];
-        form.appendChild(next);
-    }
-    </script>
 {% endblock %}
 
 {% block title %}{{ article.title }} - {% endblock %}
-{% block body_event %} onload="insert_next_url()"{% endblock %}
 
 {% block content %}
 <div class="entry">
@@ -30,33 +15,9 @@
 
   </div>
   <div class="entry-meta">
-    Created at: {{ article.added|date }}<br/>
-    Category: <a href="{{ article.category.get_absolute_url }}">{{ article.category }}</a> 
-    {% get_comment_count for article as comment_count %}
-    &nbsp;&nbsp;&nbsp;&nbsp;Comments: ({{ comment_count }})
+    Created at: <span style="color:#33333;">{{ article.added|date:"N j, Y" }}</span> Category: <a href="{{ article.category.get_absolute_url }}">{{ article.category }}</a> 
   </div>
 
-  {% ifnotequal request.META.PATH_INFO|get_first_path "/wiki/" %}
-  <div id="comment-container">
-  <a name="comments"></a>
-      {% if comment_count %}
-        {% get_comment_list for article as comment_list %}
-        <dl id="comments">
-        {% for comment in comment_list %}
-          <dt>{{ comment.submit_date }} - 
-            {% if comment.user_url %}
-              <a href="{{ comment.user_url }}">{{ comment.user_name }}</a>
-            {% else %}
-              {{ comment.user_name }}
-            {% endif %}
-          </dt>
-          <dd>{{ comment.comment|linebreaksbr }}</dd>
-        {% endfor %}
-        </dl>
-      {% endif %}
-      {% render_comment_form for article %}
-  </div>
-  {% endifnotequal %}
 </div>
 
 {% endblock %}

@@ -3,16 +3,20 @@
 <head>
   {% load common_tags %}
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="alternate" type="application/rss+xml" title="K.I.S.S - RSS Feed" href="http://mitnk.com/feed/" />
+
   {% if request.META.QUERY_STRING %}<meta name="robots" content="noindex">{% endif %}
   {% block keywords %}<meta name="keywords" content="mitnk,homepage" />{% endblock %}
-  <link rel="alternate" type="application/rss+xml" title="K.I.S.S - RSS Feed" href="http://mitnk.com/feed/" />
-  <title>{% block title %}{% endblock %}K.I.S.S</title>
+
+
   <link type="text/css" rel="stylesheet" href="/site_media/css/main.css" />
   <link type="text/css" rel="stylesheet" href="/site_media/css/paginator.css" />
   {% block extra_css %}{% endblock %}
+
+  <title>{% block title %}{% endblock %}K.I.S.S</title>
 </head>
 
-<body{% block body_event %}{% endblock %}>
+<body>
 <div id="wrapper">
   <div id="header">
     <h1>K.I.S.S</h1>
@@ -37,7 +41,6 @@
   <a href="http://www.djangoproject.com"><img src="/site_media/images/djangosite.gif"></a>
   Power by <a href="http://twitter.com/mitnk">@mitnk</a> 2010-2011 <a href="/feed/">RSS</a>
 </div>
-{% block extra_js %}{% endblock %}
 
 <script type="text/javascript">
   var _gaq = _gaq || [];

@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load comments %}
 
 {% block content %}
   {% load pagination_tags %}
@@ -19,14 +18,7 @@
     <div class="entry-content">
       {{ article.content|striptags|slice:":100"|linebreaks }}
     </div>
-    <div class="entry-meta">
-      {{ article.added }}
-      Category: <a href="{{ article.category.get_absolute_url }}">{{ article.category }}</a> 
-      {% get_comment_count for article as comment_count %}
-      {% if comment_count %}
-          &nbsp;&nbsp;&nbsp;&nbsp;Comments: <a href="{{ article.get_absolute_url }}#comments">({{ comment_count }})</a>
-      {% endif %}
-    </div>
+    <div class="entry-meta"> {{ article.added|date:"N j, Y" }} </div>
   </div>
   {% endfor %}
 

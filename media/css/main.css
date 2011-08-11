@@ -29,3 +29,7 @@ quote { padding-left: 12px; display: block; color: #0F7332; border-left: 6px sol
 
 #footer { margin-top:1em; padding-top:1em; height:30px; font-size:12px; text-align:center; }
 #douban_book {float:right;}
+
+.cg { color: green; }
+.cr { color: red; }
+.cb { color: blue; }
