@@ -118,5 +118,5 @@ def check_website(request):
 
 def user_agent(request):
     if "HTTP_USER_AGENT" in request.META:
-        return HttpResponse("-" + request.META["HTTP_USER_AGENT"] + "-")
+        return HttpResponse("-" + request.META["HTTP_USER_AGENT"] + "-\r\n")
     return HttpResponse("User-Agent not found.")
