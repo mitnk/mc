@@ -3,13 +3,12 @@
 <head>
   {% load common_tags %}
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link rel="alternate" type="application/rss+xml" title="K.I.S.S - RSS Feed" href="http://mitnk.com/feed/" />
-
   {% if request.META.QUERY_STRING %}<meta name="robots" content="noindex">{% endif %}
   {% block keywords %}<meta name="keywords" content="mitnk,homepage" />{% endblock %}
 
 
   <link type="text/css" rel="stylesheet" href="/site_media/css/main.css" />
+  <link rel="alternate" type="application/rss+xml" title="K.I.S.S - RSS Feed" href="http://mitnk.com/feed/" />
   <link type="text/css" rel="stylesheet" href="/site_media/css/paginator.css" />
   {% block extra_css %}{% endblock %}
 
