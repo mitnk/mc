@@ -1,7 +1,0 @@
-{% if trends %}
-  {% for trend in trends %}
-    <li id="trend_{{ forloop.counter }}_tab"><a onclick="javascript:loadMoreStatus({{ trend.more_data_json }});" href="#{{ trend.name }}"><span>{{ trend.name }}</span></a></li>
-  {% endfor %}
-{% else %}
-  <li><a href="#">No trends returned</a></li>
-{% endif %}
