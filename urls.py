@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     (r'^' + settings.URL_WIKI[1:], include('mitnkcom.wiki.urls')),
     (r'^' + settings.URL_PUBLIC[1:], include('mitnkcom.public.urls')),
     (r'^t/', include('twitcn.urls')),
-    (r'^$', 'mitnkcom.views.index'),
+    (r'^$', 'blog.views.index'),
     (r'^commands/$', 'mitnkcom.views.linux_commands'),
     (r'^admin/', include(admin.site.urls)),
     (r'^sitemap\.xml', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     (r'^category/$', 'public.views.get_all_categories'),
     (r'^about/$', 'public.views.about'),
 
-    (r'^webapps/', include('mitnkcom.weburls')),
+    (r'^webapps/', include('mitnkcom.webapps.urls')),
 )
 
 if settings.DEBUG:

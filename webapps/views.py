@@ -8,8 +8,8 @@ from django.template.loader import render_to_string
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
-from webmodels import WebAppInfo
-from webtools import send_mail, website_is_down
+from webapps.models import WebAppInfo
+from webapps.tools import send_mail, website_is_down
 from twitcn.tools import getPrivateApi
 
 
