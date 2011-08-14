@@ -20,7 +20,7 @@ def get_latest_id(book_id, last_id):
     if not book_id:
         return 0
 
-    url = 'http://m.zongheng.com/chapter/list?bookid=%s&asc=0&pageNum=1'
+    url = 'http://wap.zongheng.com/chapter/list?bookid=%s&asc=0&pageNum=1'
     page = urllib2.urlopen(url % book_id)
     soup = BeautifulSoup(page)
     tag = soup.find("div", {"class": "list"})
@@ -48,7 +48,7 @@ def write_content(book_id, cids):
     f = open(file_name, "w")
     pattern = re.compile(r"\[|\]|u'[^']+'", re.VERBOSE)
     for cid in cids:
-        url = 'http://m.zongheng.com/chapter?bookid=%s&cid=%s' % (book_id, cid)
+        url = 'http://wap.zongheng.com/chapter?bookid=%s&cid=%s' % (book_id, cid)
         opener = urllib2.build_opener()
         opener.addheaders.append(('Cookie', 'WAPPageSize=0'))
         page = opener.open(url)
