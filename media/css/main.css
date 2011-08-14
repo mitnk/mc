@@ -8,7 +8,8 @@ h1 {font-family: Georgia;}
 #wrapper { width: 800px; margin: 0 auto; background: #fff; -moz-border-radius: 1.5em; -webkit-border-radius: 1.5em; border-radius: 1.5em; text-align: center; }
 
 #header { font-family: Courier; background: #222; -moz-border-radius-topleft: 1em; -webkit-border-top-left-radius: 1em; -moz-border-radius-topright: 1em; -webkit-border-top-right-radius: 1em; border-top-left-radius: 1em; border-top-right-radius: 1em; padding: 1em; text-align: center; }
-#header h1 { font-size: 42px; display: inline; color: #fff; font-weight: normal; }
+#header h1 { font-size: 42px; font-family:"Wenquanyi Zen Hei", "Helvetica Neue", Helvetica, Arial, sans-serif;display: inline; color: #fff; font-weight: normal; }
+#header h1 a {color:#fff; }
 #header h2 { display: inline; margin-left: 0.5em; font-size: 1.2em; font-weight: normal; color: #dd5; }
 
 #menu { background: #444; }
@@ -17,7 +18,7 @@ h1 {font-family: Georgia;}
 #menu ul li a { color: white; font-size: 1.1em; padding: 0 0.8em; line-height: 2.5em; font-weight: normal; text-decoration: underline; }
 
 #header-search { float: right; }
-#header-search input { height:18px; width:118px; border:medium none; margin-top:14px; background-color:#444444; }
+#header-search input { height:18px; width:118px; border:medium none; margin-top:22px; background-color:#444444; }
 
 #content { margin:0 auto; width:660px; text-align:left;}
 #content h2 { font-size:22px; font-family:Georgia; }
