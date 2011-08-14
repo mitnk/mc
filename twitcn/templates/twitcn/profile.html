@@ -1,0 +1,62 @@
+{% extends "twitcn_base.html" %}
+
+{% load twitcn_filters %}
+
+{% block content %}
+<div style="padding-left:50px;">
+    <div style="height:50px;"><br/><strong>Update your Twitter profile information!</strong></div>
+    <div>
+	    Update my name:<br/>
+	    <form method="POST" action=".">{% csrf_token %}
+
+	    <input type="text" value="{{ current_user.name }}" maxlength="40" name="profile_name" style="width:50%;"/>
+	    <input type="submit" value="update" /><br/><br/>
+	    </form>
+    </div>
+    
+    <div>
+        Update my location:<br/>
+        <form method="POST" action=".">{% csrf_token %}
+        <input type="text" value="{{ current_user.location }}" maxlength="40" name="profile_location" style="width:50%;"/>
+        <input type="submit" value="update" /><br/><br/>
+        </form>
+    </div>
+    
+    <div>
+        Update my Url:<br/>
+        <form method="POST" action=".">{% csrf_token %}
+        <input type="text" value="{{ current_user.url }}" name="profile_url" style="width:50%;"/>
+        <input type="submit" value="update" /><br/><br/>
+        </form>
+    </div>
+    
+    <div>
+        Update my Bio:<br/>
+        <form method="POST" action=".">{% csrf_token %}
+        <input type="text" value="{{ current_user.description }}" name="profile_bio" style="width:50%;"/>
+        <input type="submit" value="update" /><br/><br/>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block right_side %}
+<div id="side">
+
+  <div id="profile" class="section">
+    <div>
+        <img width="73" height="73" src="{{ current_user.profile_image_url }}" alt="{{ current_user.screen_name }}"/>
+    </div>
+    <div class="aim_user_name">{{ current_user.screen_name }}</div>
+    <ul class="about vcard entry-author">
+      <li><span class="label">Name</span> <span class="fn">{{ current_user.name }}</span></li>
+      <li><span class="label">Location</span> <span class="adr">{{ current_user.location }}</span></li>
+      <li><span class="label">Web</span> <a target="_blank" class="url" href="{{ current_user.url }}">{{ current_user.url }}</a></li>
+      <li id="bio"><span class="label">Bio</span> <span class="bio">{{ current_user.description|ParseStatusText|safe }}</span></li>
+      <li><span class="label">Since</span> <span class="fn">{{ current_user.created_at|GetShortDate }}</span></li>
+      <li><span class="label">Token</span> <span>{{ request.session.access_token }}</span>
+    </ul>
+  </div>
+</div> <!-- end of side -->
+{% endblock %}

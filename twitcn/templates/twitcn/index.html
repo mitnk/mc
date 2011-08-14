@@ -1,0 +1,140 @@
+{% extends "twitcn_base.html" %}
+
+{% block javascripts %}
+<script type="text/javascript">
+function autoUpdate(){$.post("{{ ROOT_PATH }}/more/",{{ more_data_auto_update_json|safe }},afterAutoUpdate);}
+pid_auto_update = setInterval(autoUpdate, 60000);
+$(function(){loadMoreStatus({{ more_data_home_json|safe }});});
+</script>
+{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+    body {color: #{{ current_user.profile_text_color }};background: #{{ current_user.profile_background_color }} url('{{ current_user.profile_background_image_url }}') fixed {% if not current_user.profile_background_tile %}no-{% endif %}repeat top left;}
+a { color: #{{ current_user.profile_link_color }};}
+#side_base {background-color:#{{ current_user.profile_sidebar_fill_color }};border-left:1px solid #{{ current_user.profile_sidebar_border_color }};}
+#side hr { color:#{{ current_user.profile_sidebar_border_color }}; background:#{{ current_user.profile_sidebar_border_color }} none repeat scroll 0 0;}
+</style>
+{% endblock %}
+
+{% block content %}
+  <div id="status_update_box">
+    <form class="status-update-form" action="/tweet/">
+      <fieldset class="common-form standard-form">
+        <div class="bar">
+          <h3><label class="doing" for="status">What's happening ?</label></h3>
+          <span class="numeric" id="chars_left_notice">
+            <strong class="char-counter" id="status-field-char-counter" style="color: rgb(204, 204, 204);">140</strong>
+          </span>
+        </div>
+        <div class="info">
+          <textarea onchange="javascript:checkCharCount();" onkeyup="javascript:checkCharCount();" name="tweet-text" tabindex="1" id="status-textarea" class="round" rows="2" cols="40"></textarea>
+          <div class="status-btn">
+            <input type="button" onclick="javascript:return tweet();" tabindex="2" class="status-btn round-btn disabled" id="update-submit" value="Tweet"/>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div> <!-- end of #status_update_box -->
+
+  <div class="section">
+    <div id="timeline_heading">
+      <h1 id="heading"></h1>
+    </div>
+
+    <div id="new_results_notification">
+      <a href="#" id="results_update" onclick="javascript:showNewRetweets();return false;">no new tweets</a>
+    </div>
+    <ol id="timeline" class="statuses"></ol>
+  </div>
+{% endblock %}
+
+{% block right_side %}
+<div id="side">
+  <div id="profile" class="section">
+    <div class="user_icon">
+      <a title="{{ current_user.screen_name }}" rel="contact" class="url" href="{{ ROOT_PATH }}/{{ current_user.screen_name }}/">
+        <img width="48" height="48" src="{{ current_user.profile_image_url }}" class="side_thumb photo fn" alt="{{ current_user.screen_name }}"/>
+        <span id="me_name">{{ current_user.screen_name }}</span>
+        <span id="me_tweets">
+          <span id="update_count">{{ current_user.statuses_count }}</span> tweets
+        </span>
+      </a>
+    </div>
+        
+    <div class="stats">
+      <table>
+        <tr>
+          <td>
+            <a onclick="javascript:loadUsers({{ more_data_following_json }});" class="link-following_page" id="following_count_link" href="#following">
+              <span class="stats_count numeric" id="following_count">{{ current_user.friends_count }} </span>
+              <span class="label">Following</span>
+            </a>
+          </td>
+          <td>
+            <a onclick="javascript:loadUsers({{ more_data_followers_json }});" class="link-followers_page" id="follower_count_link" href="#followers">
+              <span class="stats_count numeric" id="follower_count">{{ current_user.followers_count }} </span>
+              <span class="label">Followers</span>
+            </a>
+          </td>
+          <td>
+            <a title="See which lists you’re on" rel="me" class="link-lists_page" id="lists_count_link" href="#">
+              <span class="stats_count numeric" id="lists_count">0 </span>
+              <span class="label">Listed</span>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div> <!-- end of .stats -->
+  </div> <!-- end of profile -->
+          
+  <ul class="sidebar-menu" id="primary_nav">
+    <li id="home_tab" class="active"><a href="#home" onclick="javascript:loadMoreStatus({{ more_data_home_json }});"><span>Home</span></a></li>
+    <li id="mentions_tab"><a href="#mentions" onclick="javascript:loadMoreStatus({{ more_data_mentions_json }});"><span>@{{ current_user.screen_name }}</span></a></li>
+    <li id="direct_messages_tab"><a href="#messages" onclick="javascript:loadMoreStatus({{ more_data_messages_json }});"><span>Direct Messages</span></a></li>
+    <li id="favorites_tab"><a href="#favorites" onclick="javascript:loadMoreStatus({{ more_data_favorites_json }});"><span class="numeric">{{ current_user.favourites_count }}</span><span>Favorites</span></a></li>
+    <li id="retweets_tab"><a href="#retweets" onclick="javascript:loadMoreStatus({{ more_data_retweets_json }});"><span>Retweets</span></a></li>
+    <li id="mytweets_tab"><a href="#mytweets" onclick="javascript:loadMoreStatus({{ more_data_mytweets_json }});"><span>My Tweets</span></a></li>
+  </ul>
+
+  <div id="custom_search">
+    <span id="sidebar_search" class="search">  
+      <input type="text" title="Search" onKeyDown="if(event.keyCode==13) $('#sidebar_search_submit').click();" class="round-left" name="twitcn_q" id="sidebar_search_q" style="color: rgb(170, 170, 170);"/><span id="sidebar_search_submit" title="Search" onclick="javascript:loadSearches($(this).prev().val());return false;" class="submit round-right"><span style="display:none;">Q</span></span>
+      </span>
+  </div>
+
+  {% if lists %}
+  <div id="side_lists" class="section">
+    <h2 class="sidebar-title"><span>Lists</span></h2>
+  </div>
+  <ul class="sidebar-menu lists-links">
+    {% for list in lists %}
+      <li id="tab_{{ list.id }}"><a href="#{{ list.name }}" onclick="javascript:loadMoreStatus({{ list.more_data_json }});"><span>{{ list.name }}</span></a></li>
+    {% endfor %}
+  </ul>
+
+  <hr/>
+  {% endif %}
+          
+  <div id="side_trends" class="section">
+    <h2 class="sidebar-title">
+      <span>Trends
+        <a href="#" title="current" onclick="javascript:return loadTrends({'flag':'current'});"><span style="font-size:12px;">crt</span></a>
+        <a href="#" title="daily" onclick="javascript:return loadTrends({'flag':'daily'});"><span style="font-size:12px;">day</span></a>
+        <a href="#" title="collapse" onclick="javascript:$('#ul-trends-list').html('<li><a>Get trends</a></li>');return false;"><span style="font-size:12px;">coll</span></a>
+      </span></h2>
+  </div>
+  <ul id="ul-trends-list" class="sidebar-menu lists-links">
+    <li><a href="#" title="current" onclick="javascript:return loadTrends({'flag':'current'});">Get trends</a></li>
+  </ul>
+  
+  <hr/>
+  <div class="section" id="twit_cn">
+    <h2 class="sidebar-title"><span>Feedback</span></h2>
+  </div>
+  <ul class="sidebar-menu saved-search-links">
+    <li><a onclick="javascript:setTweetText('@twit_cn 你好@{{ current_user.screen_name }}，有什么问题或建议吗？');return false;" title="twitcn support" href="#"><span>@twit_cn</span></a></li>
+  </ul>
+          
+</div> <!-- end of side -->
+{% endblock %}

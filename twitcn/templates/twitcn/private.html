@@ -1,0 +1,20 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Twitcn</title>
+</head>
+<body style="font-size:20px">
+<form method="POST" action=".">
+{% csrf_token %}
+<textarea name="tweet-text" tabindex="1" style="width:95%;"></textarea><br/>
+<input type="submit" value="Tweet"/>
+</form>
+{% load twitcn_filters %}
+{% for status in messages %}
+<hr />
+<p><b style="color:red;">{{ status.user.screen_name }}</b>: {{ status.text|ParseStatusText|safe }}<br/>
+{{ status.relative_created_at }}
+</p>
+{% endfor %}
+</body>
+</html>

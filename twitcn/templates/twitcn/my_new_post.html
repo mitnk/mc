@@ -1,0 +1,25 @@
+{% load twitcn_filters %}
+
+{% for status in messages %}
+<li id="tweet-item-{{ status.id }}" class="status first-status">
+    <span class="thumb"><a href="{{ ROOT_PATH }}/{{ status.user.screen_name }}/">
+        <img width="48" height="48" src="{{ status.user.profile_image_url }}" title="{{ status.user.description }}" alt="{{ status.user.name }}"/></a>
+    </span>
+    <span class="status-body">
+        <a title="{{ status.user.name }}" class="sender" href="{{ ROOT_PATH }}/{{ status.user.screen_name }}/"><b>{{ status.user.screen_name }}</b></a> 
+        <span class="actions">
+          <div><a title="favorite this tweet" id="status_star_5332220272" class="fav-action non-fav"> </a>
+          {% ifequal status.user.screen_name current_user.screen_name %}
+            <a href="#" onclick="javascript:destroy_tweet('{{ status.id }}');return false;"><img width="16px" height="16px" src="/twitcn_media/images/del_status.gif"/></a>
+          {% endifequal %}
+          </div>
+        </span>
+        <span class="entry-content">{{ status.text|ParseStatusText|safe }}</span>
+        <span class="meta entry-meta">
+          <a rel="bookmark" class="entry-date" href="{{ ROOT_PATH }}/status/{{ status.id }}/"><span class="published timestamp">{{ status.relative_created_at }}</span></a>
+          <span>{% ifnotequal status.source "web" %}via {{ status.source|safe }}{% endifnotequal %}</span> 
+        </span>
+        <ul class="actions-hover"><li><span class="reply"><a title="reply" href="#"> </a></span></li></ul>
+    </span>
+</li>
+{% endfor %}
