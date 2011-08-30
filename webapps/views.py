@@ -12,6 +12,11 @@ from webapps.models import WebAppInfo
 from webapps.tools import send_mail, website_is_down
 from twitcn.tools import getPrivateApi
 
+def index(request):
+    return render_to_response("webapps/index.html")
+
+def ckeditor(request):
+    return render_to_response("webapps/ckeditor.html")
 
 def get_last_updated_id():
     wai, created = WebAppInfo.objects.get_or_create(category='twitter', name="last_updated_id")

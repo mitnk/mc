@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+    <script type="text/javascript" src="/site_media/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/site_media/ckeditor/_samples/sample.js"></script>
+    <script type="text/javascript">
+    CKEDITOR.on( 'instanceReady', function( ev ) {
+      ev.editor.dataProcessor.writer.setRules( 'p',
+         {
+            indent : false,
+            breakBeforeOpen : true,
+            breakAfterOpen : false,
+            breakBeforeClose : false,
+            breakAfterClose : false
+         });
+      ev.editor.dataProcessor.writer.setRules( 'li',
+         {
+            indent : false,
+            breakBeforeOpen : true,
+            breakAfterOpen : false,
+            breakBeforeClose : false,
+            breakAfterClose : false
+         });
+      ev.editor.dataProcessor.writer.indentationChars = '  ';
+      ev.editor.dataProcessor.writer.lineBreakChars = '\n';
+    });
+    </script>
+{% endblock %}
+
+{% block title %}CKEditor - {% endblock %}
+{% block content %}
+<div class="entry-content" style="padding:40px;">
+    Formating HTML code using CKEditor
+    <ul>
+        <li>1. 先点Source按钮</li>
+        <li>2. 粘贴点乱的HTML代码进去</li>
+        <li>3. 然后连点Source按钮两次，就可以看效果了</li>
+    </ul>
+    <textarea class="ckeditor" name="editor1"> </textarea>
+</div>
+{% endblock %}
