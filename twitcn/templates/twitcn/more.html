@@ -41,7 +41,7 @@
 
             <span class="reply">
               <span class="reply-icon icon"/>
-              <a title="reply to {{ status.user.screen_name }}" onclick="javascript:setTweetText('@{{ status.user.screen_name }} ');return false;" href="#">Reply</a>
+              <a title="reply to {{ status.user.screen_name }}" onclick="javascript:setTweetText('@{{ status.user.screen_name }} ', '{{ status.id }}');return false;" href="#">Reply</a>
             </span>
 
             <span class="reply">
