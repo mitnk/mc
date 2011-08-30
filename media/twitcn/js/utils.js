@@ -234,8 +234,12 @@ function tweet()
 }
 
 function checkCharCount(){
-    var len = 140 - $("#status-textarea").val().length;
-    
+    tweet_length = $("#status-textarea").val().length;
+    if (tweet_length == 0 || $("#status-textarea").val().indexOf("@") == -1) {
+        $("#in_reply_to_status_id").val("");
+    }
+
+    var len = 140 - tweet_length;
     if (len == 140) {
         $("#update-submit").addClass("disabled");
     }
