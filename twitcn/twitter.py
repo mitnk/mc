@@ -1341,7 +1341,7 @@ class Api(object):
     self._CheckForTwitterError(data)
     return Status.NewFromJsonDict(data)
 
-  def PostUpdates(self, status, continuation=None, **kwargs):
+  def PostUpdates(self, status, continuation=None, in_reply_to_status_id=None, **kwargs):
     '''Post one or more twitter status messages from the authenticated user.
 
     Unlike api.PostUpdate, this method will post multiple status updates
@@ -1368,8 +1368,12 @@ class Api(object):
     line_length = CHARACTER_LIMIT - len(continuation)
     lines = textwrap.wrap(status, line_length)
     for line in lines[0:-1]:
-      results.append(self.PostUpdate(line + continuation, **kwargs))
-    results.append(self.PostUpdate(lines[-1], **kwargs))
+      results.append(self.PostUpdate(line + continuation, 
+                                     in_reply_to_status_id=in_reply_to_status_id, 
+                                     **kwargs))
+    results.append(self.PostUpdate(lines[-1], 
+                                   in_reply_to_status_id=in_reply_to_status_id,
+                                   **kwargs))
     return results
 
   def GetReplies(self, since=None, since_id=None, page=None): 

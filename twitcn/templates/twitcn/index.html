@@ -20,6 +20,7 @@ a { color: #{{ current_user.profile_link_color }};}
 {% block content %}
   <div id="status_update_box">
     <form class="status-update-form" action="/tweet/">
+      <input type="hidden" id="in_reply_to_status_id" name="in_reply_to_status_id" value="">
       <fieldset class="common-form standard-form">
         <div class="bar">
           <h3><label class="doing" for="status">What's happening ?</label></h3>

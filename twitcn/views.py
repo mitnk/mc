@@ -194,12 +194,14 @@ def user_page(request, user_name):
 def tweet(request):
     if request.method == "POST":
         msg = request.POST.get("tweet-text")
-        
         if msg:
             api, current_user = getTwitterApi(request)
             try:
+                in_reply_to_status_id = None
+                if request.POST.get("in_reply_to_status_id"):
+                    in_reply_to_status_id = request.POST.get("in_reply_to_status_id")
                 msg = shortenStatusUrls(msg)
-                result = api.PostUpdates(msg)
+                result = api.PostUpdates(msg, in_reply_to_status_id=in_reply_to_status_id)
     
                 if isinstance(result[0], twitter.Status):
                     return render_to_response("twitcn/my_new_post.html", 

@@ -19,7 +19,10 @@ function confirm_msg(msg)
     return false;
 }
 
-function setTweetText(text) {
+function setTweetText(text, in_reply_to_status_id) {
+    if (in_reply_to_status_id != undefined) {
+        $("#in_reply_to_status_id").val(in_reply_to_status_id)
+    }
     $("#status_update_box").show();
     $("#status-textarea").val(text).focus();
     checkCharCount();
@@ -218,7 +221,8 @@ function tweet()
             return false;
         else {
             $.post(TWITCN_ROOT_PATH + "/tweet/", 
-                   {"tweet-text":$("#status-textarea").val()}, 
+                   {"tweet-text":$("#status-textarea").val(),
+                    "in_reply_to_status_id":$("#in_reply_to_status_id").val()}, 
                    after_tweet);
 
             $("#status-field-char-counter").removeClass("char-counter").addClass("loading").css("color","transparent");

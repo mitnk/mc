@@ -2,6 +2,7 @@ import datetime
 import os.path
 import re
 import urllib2
+import time
 
 from django.conf import settings
 from django.http import HttpResponse, Http404
@@ -16,12 +17,12 @@ from webapps.zongheng.models import Novel
 from webapps.tools import send_mail
 
 
-def get_latest_id(book_id, last_id):
+def get_latest_id(book_id, last_id, page):
     if not book_id:
         return 0
 
-    url = 'http://wap.zongheng.com/chapter/list?bookid=%s&asc=0&pageNum=1'
-    page = urllib2.urlopen(url % book_id)
+    url = 'http://wap.zongheng.com/chapter/list?bookid=%s&asc=0&pageNum=%s'
+    page = urllib2.urlopen(url % (book_id, page))
     soup = BeautifulSoup(page)
     tag = soup.find("div", {"class": "list"})
 
@@ -42,13 +43,13 @@ def ParseUstringProc(res):
     return ''
 
 
-def write_content(book_id, cids):
-    file_name = "zongheng_%s.txt" % datetime.datetime.now().strftime("%h-%d-%H")
+def write_content(book_id, cids, page):
+    file_name = "zongheng_%s.txt" % datetime.datetime.now().strftime("%h-%d-%H-%M-%S")
     file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
     f = open(file_name, "w")
     pattern = re.compile(r"\[|\]|u'[^']+'", re.VERBOSE)
     for cid in cids:
-        url = 'http://wap.zongheng.com/chapter?bookid=%s&cid=%s' % (book_id, cid)
+        url = 'http://wap.zongheng.com/chapter?bookid=%s&cid=%s&pageNum=%s' % (book_id, cid, page)
         opener = urllib2.build_opener()
         opener.addheaders.append(('Cookie', 'WAPPageSize=0'))
         page = opener.open(url)
@@ -58,6 +59,7 @@ def write_content(book_id, cids):
         content = pattern.sub(ParseUstringProc, content)
         content = smart_str(striptags(content)) + "\r\n"
         f.write(content)
+        time.sleep(0.3) # sleep a while to be gentle
     f.close()
     return file_name
 
@@ -77,16 +79,27 @@ def kindle(request):
     if request.method == "POST":
         book_id = request.POST.get('book_id')
         try:
-            novel = Novel.objects.get(book_id=book_id)
-            cids = get_latest_id(request.POST.get('book_id', 0), novel.last_id)
-            if not cids:
-                return HttpResponse("No new contents.(%s-%s)" % (book_id, novel.last_id))
+            page = request.POST.get('page')
+            if not page:
+                page = 1
 
-            file_name = write_content(book_id, cids)
+            try:
+                novel = Novel.objects.get(book_id=book_id)
+                last_id = novel.last_id
+            except Novel.DoesNotExist:
+                novel = None
+                last_id = 0
+
+            cids = get_latest_id(request.POST.get('book_id', 0), last_id, page)
+            if not cids:
+                return HttpResponse("No new contents.(%s-%s)" % (book_id, last_id))
+
+            file_name = write_content(book_id, cids, page=page)
             send_to_kindle(file_name, cids)
 
-            novel.last_id = cids[-1]
-            novel.save()
+            if last_id != 0:
+                novel.last_id = cids[-1]
+                novel.save()
         except Novel.DoesNotExist:
             return HttpResponse("Book does not Exist. %s" % book_id)
 
