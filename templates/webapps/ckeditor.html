@@ -2,7 +2,6 @@
 
 {% block extra_css %}
     <script type="text/javascript" src="/site_media/ckeditor/ckeditor.js"></script>
-    <script type="text/javascript" src="/site_media/ckeditor/_samples/sample.js"></script>
     <script type="text/javascript">
     CKEDITOR.on( 'instanceReady', function( ev ) {
       ev.editor.dataProcessor.writer.setRules( 'p',
@@ -36,6 +35,6 @@
         <li>2. 粘贴点乱的HTML代码进去</li>
         <li>3. 然后连点Source按钮两次，就可以看效果了</li>
     </ul>
-    <textarea class="ckeditor" name="editor1"> </textarea>
+    <textarea class="ckeditor" name="demo"> </textarea>
 </div>
 {% endblock %}
