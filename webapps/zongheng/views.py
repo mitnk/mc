@@ -78,30 +78,31 @@ def kindle(request):
     res = 0
     if request.method == "POST":
         book_id = request.POST.get('book_id')
+        page = request.POST.get('page') or 1
+
         try:
-            page = request.POST.get('page')
-            if not page:
-                page = 1
-
-            try:
-                novel = Novel.objects.get(book_id=book_id)
-                last_id = novel.last_id
-            except Novel.DoesNotExist:
-                novel = None
-                last_id = 0
-
-            cids = get_latest_id(request.POST.get('book_id', 0), last_id, page)
-            if not cids:
-                return HttpResponse("No new contents.(%s-%s)" % (book_id, last_id))
-
-            file_name = write_content(book_id, cids, page=page)
-            send_to_kindle(file_name, cids)
-
-            if last_id != 0:
-                novel.last_id = cids[-1]
-                novel.save()
+            novel = Novel.objects.get(book_id=book_id)
+            last_id = novel.last_id
         except Novel.DoesNotExist:
-            return HttpResponse("Book does not Exist. %s" % book_id)
+            novel = None
+            last_id = 0
+        
+        if request.POST.get('last_id'):
+            last_id = request.POST['last_id']
+            print "god", last_id
+
+        cids = get_latest_id(request.POST.get('book_id', 0), last_id, page)
+        if not cids:
+            return HttpResponse("No new contents.(%s-%s)" % (book_id, last_id))
+
+        file_name = write_content(book_id, cids, page=page)
+        send_to_kindle(file_name, cids)
+
+        if last_id != 0:
+            novel.last_id = cids[-1]
+            novel.save()
+        return HttpResponse("Send %s chapters to your kindle" % len(cids))
+
 
     novels = Novel.objects.all()
     return render_to_response('zongheng/kindle.html',
