@@ -30,16 +30,26 @@ def set_last_updated_id(latest_id):
     wai.save()
 
 def send_tweets_to_kindle(request):
+    if request.method != POST:
+        return HttpResponse("GET is not the right way.")
+
+    COUNT_LIMIT = request.POST.get("count_limit"):
+    if not COUNT_LIMIT:
+        return HttpResponse("No Count info provided.")
+
+    STEP = 100
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
     latest_id = get_last_updated_id()
 
-    messages = api.GetHomeTimeline(count=200)
+    messages = api.GetHomeTimeline(count=STEP)
 
     min_id = messages[-1].id - 1
     while latest_id and min_id > int(latest_id):
-        messages += api.GetHomeTimeline(max_id=min_id, count=200)
+        messages += api.GetHomeTimeline(max_id=min_id, count=STEP)
         min_id = messages[-1].id - 1
+        if len(messages) >= 500:
+            break
 
     if latest_id:
         unread_number = 0
@@ -49,6 +59,10 @@ def send_tweets_to_kindle(request):
             else:
                 break
         messages = messages[:unread_number]
+
+    # Do not send if too faw tweets
+    if len(messages) < 200:
+        return HttpResponse("Too faw tweets")
 
     messages.reverse()
     for msg in messages:
@@ -66,8 +80,7 @@ def send_tweets_to_kindle(request):
     files = [file_name]
     send_mail(send_to, subject, text, files=files, fail_silently=False)
     set_last_updated_id(messages[-1].id)
-
-    return HttpResponse("200 OK.")
+    return HttpResponse("Sent %s tweets." % len(messages))
 
 @csrf_exempt
 def check_website(request):
