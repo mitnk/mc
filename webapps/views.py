@@ -33,7 +33,7 @@ def send_tweets_to_kindle(request):
     if request.method != "POST":
         return HttpResponse("GET is not the right way.")
 
-    COUNT_LIMIT = request.POST.get("count_limit"):
+    COUNT_LIMIT = request.POST.get("count_limit")
     if not COUNT_LIMIT:
         return HttpResponse("No Count info provided.")
 
