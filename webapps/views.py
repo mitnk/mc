@@ -29,6 +29,7 @@ def set_last_updated_id(latest_id):
     wai.value = str(latest_id)
     wai.save()
 
+@csrf_exempt
 def send_tweets_to_kindle(request):
     if request.method != "POST":
         return HttpResponse("GET is not the right way.")
