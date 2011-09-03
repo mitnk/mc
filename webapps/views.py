@@ -38,6 +38,11 @@ def send_tweets_to_kindle(request):
     if not COUNT_LIMIT:
         return HttpResponse("No Count info provided.")
 
+    try:
+        COUNT_LIMIT = int(COUNT_LIMIT)
+    except ValueError:
+        return HttpResponse("Numbers needed.")
+
     STEP = 100
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
@@ -62,6 +67,7 @@ def send_tweets_to_kindle(request):
         messages = messages[:unread_number]
 
     # Do not send if too faw tweets
+    try:
     if len(messages) < COUNT_LIMIT:
         return HttpResponse("Too faw tweets")
 
