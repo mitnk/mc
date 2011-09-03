@@ -30,7 +30,7 @@ def set_last_updated_id(latest_id):
     wai.save()
 
 def send_tweets_to_kindle(request):
-    if request.method != POST:
+    if request.method != "POST":
         return HttpResponse("GET is not the right way.")
 
     COUNT_LIMIT = request.POST.get("count_limit"):
