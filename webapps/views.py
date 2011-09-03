@@ -67,7 +67,6 @@ def send_tweets_to_kindle(request):
         messages = messages[:unread_number]
 
     # Do not send if too faw tweets
-    try:
     if len(messages) < COUNT_LIMIT:
         return HttpResponse("Too faw tweets")
 
