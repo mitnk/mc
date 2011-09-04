@@ -43,7 +43,7 @@ def send_tweets_to_kindle(request):
     except ValueError:
         return HttpResponse("Numbers needed.")
 
-    STEP = 100
+    STEP = 50
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
     latest_id = get_last_updated_id()
