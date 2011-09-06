@@ -14,7 +14,7 @@
     <div class="entry-content">
       {{ article.content|striptags|slice:":100"|linebreaks }}
     </div>
-    <div class="entry-meta"> {{ article.added|date:"N j, Y" }} </div>
+    <div class="entry-meta">Posted at {{ article.added|date:"N j, Y" }} </div>
   </div>
   {% endfor %}
 

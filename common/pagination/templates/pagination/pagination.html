@@ -6,7 +6,7 @@
             {% ifequal page page_obj.number %}
                 <span class="this-page">{{ page }}</span>
             {% else %}
-                <a href="?page={{ page }}{{ getvars }}" style="background-color:{% cycle 'red' 'orange' 'yellow' 'green' 'blue' 'indigo' 'purple' %}">{{ page }}</a>
+                <a href="?page={{ page }}{{ getvars }}">{{ page }}</a>
             {% endifequal %}
         {% else %}
             ...

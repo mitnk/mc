@@ -1,7 +1,7 @@
 body { font-family:"Wenquanyi Zen Hei", "Helvetica Neue", Helvetica, Arial, sans-serif; background: #dda; color: #222; padding: 0; text-align: center; }
 
 a { color:#3E423A; text-decoration:none; }
-quote { padding-left: 12px; display: block; color: #0F7332; border-left: 6px solid lightgray; }
+quote { padding-left: 12px; display: block; color: #0F7332; border-left: 6px solid #cccccc; }
 
 h1 {font-family: Georgia;}
 
