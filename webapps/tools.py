@@ -8,8 +8,6 @@ from email import Encoders
 import urllib2
 
 
-
-
 def website_is_down(url):
     try:
         page = urllib2.urlopen(url)
@@ -30,7 +28,7 @@ def website_is_down(url):
     return False, "We check page code_status and URLErrors and seems nothing wrong."
     
 
-def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[], fail_silently=True):
+def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[], fail_silently=False):
     assert type(send_to) == list
     assert type(files) == list
 
