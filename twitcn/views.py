@@ -33,7 +33,7 @@ def private(request):
 def index(request):
     api, current_user = getTwitterApi(request, True)
     if not api:
-        return render_to_response("twitcn_index_not_login.html",
+        return render_to_response("twitcn/index_not_login.html",
                                   context_instance=RequestContext(request))
     lists = []
     try:

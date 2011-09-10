@@ -1,8 +1,8 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('',
-    (r'^$', 'wiki.views.index'),
-    (r'^category/$', 'wiki.views.get_all_categories'),
-    (r'^article/(\d+)/$', 'wiki.views.get_article'),
-    (r'^category/(\d+)/$', 'wiki.views.get_category'),
+urlpatterns = patterns('wiki.views',
+    url(r'^$', 'index', name="wiki_index"),
+    url(r'^category/$', 'get_all_categories', name="wiki_all_category"),
+    url(r'^article/(\d+)/$', 'get_article', name="wiki_article"),
+    url(r'^category/(\d+)/$', 'get_category', name="wiki_category"),
 )

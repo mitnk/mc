@@ -5,7 +5,7 @@ class LatestEntriesFeed(Feed):
     title = "mitnk's blog"
     link = "http://mitnk.com"
     description = "Updates on mitnk.com"
-    description_template = "description.html"
+    description_template = "feed.html"
 
     def items(self):
         return Article.objects.order_by('-added')[:10]
