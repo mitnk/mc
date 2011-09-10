@@ -12,13 +12,12 @@ urlpatterns = patterns('',
     (r'^' + settings.URL_WIKI[1:], include('mitnkcom.wiki.urls')),
     (r'^' + settings.URL_PUBLIC[1:], include('mitnkcom.public.urls')),
     (r'^t/', include('twitcn.urls')),
-    (r'^$', 'blog.views.index'),
     (r'^admin/', include(admin.site.urls)),
     (r'^sitemap\.xml', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     (r'^links/$', include('links.urls')),
     (r'^feed/$', LatestEntriesFeed()),
-    url(r'^about/$', 'public.views.about', name="about"),
     (r'^webapps/', include('mitnkcom.webapps.urls')),
+    (r'^dc/', include('mitnkcom.dailycost.urls')),
 )
 
 if settings.DEBUG:

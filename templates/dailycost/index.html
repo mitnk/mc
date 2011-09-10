@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="robots" content="noindex">
+<title>Daily Cost</title>
+<style>
+.errorlist li {color:red;}
+.cr {color:red;}
+.cg {color:green;}
+.cb {color:blue;}
+</style>
+</head>
+
+<body>
+  <div id="">
+    <form action="." method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Cost" />
+    </form>
+  </div>
+  {% if cs %}
+  <ul>
+    {% for c in cs %}
+        <li><span class="cr">{{ c.amount }}</span> at <span class="cb">{{ c.added|date:"N j, Y" }}</span> for <span class="cg">{{ c.comment }}<span></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</body>
+</html>

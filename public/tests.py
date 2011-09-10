@@ -7,5 +7,7 @@ class TestIndex(TestCase):
         self.assertEqual(response.status_code, 200)
         response = self.client.get(reverse("public_all_category"))
         self.assertEqual(response.status_code, 200)
+        response = self.client.get(reverse("public_commands"))
+        self.assertEqual(response.status_code, 200)
         response = self.client.get(reverse("about"))
         self.assertEqual(response.status_code, 200)
