@@ -13,6 +13,9 @@
   {% get_comment_list for article as comment_list %}
   {% for comment in comment_list %}
   <div class="comment">
+    {% if forloop.last %}
+    <a name="last_comment"></a>
+    {% endif %}
     <a name="c{{ comment.id }}"></a>
     <div class="comment_header">{{ forloop.counter }}.&nbsp;&nbsp;&nbsp;
         {% if comment.url %}<a href="{{ comment.url }}" target="_blank">{% endif %}{{ comment.name }}{% if comment.url %}</a>{% endif %}
@@ -24,7 +27,22 @@
 
   <div id="comment_form">
     <form action="{% comment_form_target %}" method="post">
-    {% render_comment_form for article %}
+      {% csrf_token %}
+      {% get_comment_form for article as form %}
+      {% for field in form %}
+        {% if field.is_hidden %}
+          <div>{{ field }}</div>
+        {% else %}
+          {% if field.errors %}{{ field.errors }}{% endif %}
+          <p
+            {% if field.errors %} class="error"{% endif %}
+            {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
+            {{ field.label_tag }} {{ field }}
+          </p>
+        {% endif %}
+      {% endfor %}
+      <p><input type="hidden" name="next" value="{{ article.get_absolute_url }}#last_comment" /></p>
+      <p><input type="submit" name="submit" class="submit-post" value="Let's Post!" /></p>
     </form>
   </div>
 </div> <!-- end of comment-container -->
