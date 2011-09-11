@@ -1,0 +1,30 @@
+{% load comments %}
+
+<div id="comment_container">
+    <div id="comment_count">
+    {% get_comment_count for article as comment_count %}
+    {% if comment_count %}
+        {{ comment_count }} Responses to “{{ article.title }}”
+    {% else %}
+        Post the first Response to “{{ article.title }}”:
+    {% endif %}
+    </div>
+
+  {% get_comment_list for article as comment_list %}
+  {% for comment in comment_list %}
+  <div class="comment">
+    <a name="c{{ comment.id }}"></a>
+    <div class="comment_header">{{ forloop.counter }}.&nbsp;&nbsp;&nbsp;
+        {% if comment.url %}<a href="{{ comment.url }}" target="_blank">{% endif %}{{ comment.name }}{% if comment.url %}</a>{% endif %}
+        - <span class="comment_date">{{ comment.submit_date }}</span>
+    </div>
+    <div class="comment_content">{{ comment.comment|linebreaksbr }}</div>
+  </div>
+  {% endfor %}
+
+  <div id="comment_form">
+    <form action="{% comment_form_target %}" method="post">
+    {% render_comment_form for article %}
+    </form>
+  </div>
+</div> <!-- end of comment-container -->

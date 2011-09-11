@@ -1,8 +1,17 @@
-#comment-container { margin-top:14px; border-top:1px solid lightBlue; }
-#comment-container form p { padding-left:10px; }
-#comment-container form label { display:block; font-size:12px; }
+#comment_container { border-top:1px solid lightBlue;padding:20px;margin-top:20px;}
+#comment_container form p { padding-left:10px; }
+#comment_container form label { display:block; font-size:12px; }
 
-#comments { border-bottom:1px solid lightBlue; }
-#comments a { color: #B51C1E; }
-#comments dt { font-size:12px; color: #555555; }
-#comments dd { font-size:14px; color:darkBlue; margin-left:1em; }
+#comment_count { padding-bottom:10px;}
+
+.comment { padding-top:26px; padding-bottom:26px; border-bottom:1px solid #EFF8FB; }
+.comment a { color: #999999; }
+.comment a:hover { background-color:#999999;color:#FFFFFF; }
+.comment_header { font-size:16px; color: #555555; margin-bottom:20px; }
+.comment_date { font-size:13px; color: #555555; margin-bottom:20px; }
+.comment_content { padding-left:30px;font-size:14px; }
+
+#comment_form { padding-top:4px; }
+
+#id_honeypot {display:none;}
+.errorlist {color:red;font-size:13px;}

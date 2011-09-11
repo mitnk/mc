@@ -3,6 +3,7 @@
 
 {% block extra_css %}
     <link type="text/css" rel="stylesheet" href="/site_media/css/pygments.css" />
+    <link type="text/css" rel="stylesheet" href="/site_media/css/comments.css" />
 {% endblock %}
 
 {% block title %}{{ article.title }} - {% endblock %}
@@ -18,6 +19,6 @@
     Posted at {{ article.added|date:"N j, Y" }}
   </div>
 
+  {% include "comments/comments.html" %}
 </div>
-
 {% endblock %}

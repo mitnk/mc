@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     (r'^feed/$', LatestEntriesFeed()),
     (r'^webapps/', include('mitnkcom.webapps.urls')),
     (r'^dc/', include('mitnkcom.dailycost.urls')),
+    (r'^comments/', include('django.contrib.comments.urls')),
 )
 
 if settings.DEBUG:
