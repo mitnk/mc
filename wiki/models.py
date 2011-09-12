@@ -33,7 +33,7 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         if self.pk:
-            return APP_ROOT + "article/" + str(self.id) + "/"
+            return APP_ROOT + str(self.id) + "/"
         return ""
 
     def delete(self, *args, **kwargs):
