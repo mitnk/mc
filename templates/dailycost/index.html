@@ -19,6 +19,11 @@
         <input type="submit" value="Cost" />
     </form>
   </div>
+  <ul>
+    <li>This month cost: {{ this_month_cost }}</li>
+    <li>This month guess: {{ this_month_guess }}</li>
+    <li>Last month cost: {{ last_month_cost }}</li>
+  </ul>
   {% if cs %}
   <ul>
     {% for c in cs %}

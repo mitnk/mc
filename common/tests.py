@@ -1,7 +1,11 @@
+import datetime
+
 from django.test import TestCase
 
 from common.templatetags.common_tags import get_first_path
 from common.templatetags.common_tags import pygmentize
+from common.utils import get_1st_of_last_month
+
 
 __test__ = {'test_get_first_path': get_first_path,
             'test_pygmentize': pygmentize,}
@@ -16,3 +20,11 @@ class TestContextProcessors(TestCase):
         response = self.client.get('/')
         self.assertTrue('request' in response.context)
         self.assertEqual(response.context['request'].META['PATH_INFO'], '/')
+
+class TestUtils(TestCase):
+    def test_get_1st_of_last_month(self):
+        d = get_1st_of_last_month(date_from=datetime.date(2011, 9, 14))
+        self.assertEqual(d, datetime.date(2011, 8, 1))
+        d = get_1st_of_last_month(date_from=datetime.date(2011, 1, 14))
+        self.assertEqual(d, datetime.date(2010, 12, 1))
+

@@ -1,1 +1,1 @@
-./manage.py test public wiki blog links dailycost
+./manage.py test common public wiki blog links dailycost
