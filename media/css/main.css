@@ -27,7 +27,7 @@ h1 {font-family: Georgia;}
 .entry { margin-left: 10px; margin-top: 30px; }
 .entry h1 { font-size:22px; }
 .entry-content { line-height: 24px; font-size:16px; }
-.entry-content h2 { line-height: 20px; font-size:16px; background-color:gray; }
+.entry-content h2 { line-height: 20px; font-size:16px; background-color:gray; padding:6px;}
 .entry-content a { color: #B51C1E; } 
 .entry-content a:hover { background-color: #B51C1E; color: #FFFFFF; }
 .entry-meta { font-size: 13px; margin-top: 20px; }
