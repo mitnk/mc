@@ -4,7 +4,7 @@ from django import template
 from django.conf import settings
 
 from pygments import highlight
-from pygments.lexers import guess_lexer, get_lexer_by_name, PythonLexer
+from pygments.lexers import guess_lexer, get_lexer_by_name, BashLexer
 from pygments.formatters import HtmlFormatter
 
 register = template.Library()
@@ -26,7 +26,7 @@ def pygmentize(value):
 
         # determin lexer name by class name
         # then remove class attribute
-        lexer = PythonLexer()
+        lexer = BashLexer()
         if code_string.startswith(' class='):
             res = re.search(r'^ class="(.*?)">', code_string)
             code_string = code_string.replace(res.group(), '')
