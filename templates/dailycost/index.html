@@ -5,6 +5,7 @@
 <meta name="robots" content="noindex">
 <title>Daily Cost</title>
 <style>
+input {width:80px;}
 .errorlist li {color:red;}
 .cr {color:red;}
 .cg {color:green;}
@@ -13,23 +14,26 @@
 </head>
 
 <body>
-  <div id="">
+  <div>
     <form action="." method="post">{% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Cost" />
     </form>
   </div>
-  <ul>
-    <li><span class="cb">This month</span> cost: <span class="cr">{{ this_month_cost }}</span></li>
-    <li><span class="cb">This month</span> guess: <span class="cr">{{ this_month_guess }}</span></li>
-    <li><span class="cb">Last month</span> cost: <span class="cr">{{ last_month_cost }}</span></li>
-  </ul>
+  <hr/>
   {% if cs %}
   <ul>
     {% for c in cs %}
-        <li><span class="cr">{{ c.amount }}</span> at <span class="cb">{{ c.added|date:"N j, Y" }}</span> for <span class="cg">{{ c.comment }}<span></li>
+        <li><span class="cr">{{ c.amount }}</span> at <span class="cb">{{ c.added|date:"N j" }}</span> for <span class="cg">{{ c.comment }}<span></li>
     {% endfor %}
   </ul>
   {% endif %}
+  <hr/>
+  <ul>
+    <li>This month: <span class="cr">{{ this_month_cost }}</span></li>
+    <li>This guess: <span class="cr">{{ this_month_guess }}</span></li>
+    <li>Last month: <span class="cr">{{ last_month_cost }}</span></li>
+  </ul>
+  <hr/>
 </body>
 </html>

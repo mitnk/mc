@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from dailycost.models import Cost, CostForm
 
 def index(request):
-    cs = Cost.objects.order_by("-added")[:5]
+    cs = Cost.objects.order_by("-added")[:3]
     this_month_cost = Cost.objects.get_this_month_cost()
     this_month_guess = Cost.objects.guess_this_month_total_cost()
     last_month_cost = Cost.objects.get_last_month_cost()
