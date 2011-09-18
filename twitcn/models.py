@@ -6,5 +6,5 @@ class ShortenUrl(models.Model):
     added = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return "<URL: %s>" % self.shorten
+        return "URL: %s" % self.shorten
 

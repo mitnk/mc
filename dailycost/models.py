@@ -32,7 +32,7 @@ class Cost(models.Model):
     objects = CostManager()
 
     def __unicode__(self):
-        return "<Cost:%s at %s>" % (self.amount, self.added)
+        return "Cost:%s at %s" % (self.amount, self.added)
 
 
 class CostForm(ModelForm):
