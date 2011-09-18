@@ -34,12 +34,12 @@ def send_tweets_to_kindle(request):
     if request.method != "POST":
         return HttpResponse("GET is not the right way.")
 
-    COUNT_LIMIT = request.POST.get("count_limit")
-    if not COUNT_LIMIT:
+    count_limit = request.POST.get("count_limit")
+    if not count_limit:
         return HttpResponse("No Count info provided.")
 
     try:
-        COUNT_LIMIT = int(COUNT_LIMIT)
+        count_limit = int(count_limit)
     except ValueError:
         return HttpResponse("Numbers needed.")
 
@@ -67,8 +67,8 @@ def send_tweets_to_kindle(request):
         messages = messages[:unread_number]
 
     # Do not send if too faw tweets
-    if len(messages) < COUNT_LIMIT:
-        return HttpResponse("Too faw tweets")
+    if len(messages) < count_limit:
+        return HttpResponse("Too faw tweets (%s/%s)" %(len(messages), count_limit))
 
     messages.reverse()
     for msg in messages:
