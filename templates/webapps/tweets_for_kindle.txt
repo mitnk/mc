@@ -1,4 +1,4 @@
-{% for status in messages %}
-@{{ status.user.screen_name }}: {{ status.text|safe }}
-Sent at: {{ status.created_at|slice:":20" }}
+{% load twitcn_filters %}{% for status in messages %}
+@{{ status.user.screen_name }}: {{ status.text|ParseStatusText|safe }}
+Date: {{ status.created_at|GetShortDate }}
 {% endfor %}
