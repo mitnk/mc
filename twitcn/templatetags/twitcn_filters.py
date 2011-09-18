@@ -10,6 +10,7 @@ import time
 from django import template
 
 import requests
+from twitcn.models import ShortenUrl
 from twitcn.tools import get_root_path
 
 
@@ -27,15 +28,21 @@ def ParseReplyProc(res):
     return '<a href="%s/%s/">%s</a>' % (get_root_path(), reply[1:], reply)
 
 def ParseUrlProc(res):
-    url = res.group('url')
-    if is_shorten_url(url):
+    origin = url = res.group('url')
+    try:
+        origin = ShortenUrl.objects.get(shorten=url).origin
+    except ShortenUrl.DoesNotExist:
+        pass
+
+    if origin == url and is_shorten_url(url):
         try:
             t = time.time()
-            r_url = requests.get(url).url
-            return '<a href="%s" class="%s">%s</a>' % (r_url, time.time() - t, url)
+            origin = requests.get(url).url
+            ShortenUrl.objects.create(shorten=url, origin=origin)
+            return '<a href="%s" alt="%s">%s</a>' % (origin, time.time() - t, url)
         except:
             pass
-    return '<a href="%s">%s</a>' % (url, url)
+    return '<a href="%s">%s</a>' % (origin, url)
 
 def ParseSearchProc(res):
     search_tag = res.group('search')
