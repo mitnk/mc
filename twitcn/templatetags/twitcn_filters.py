@@ -3,12 +3,24 @@
 Created on 2009-6-12
 @author: mitnk
 '''
-from django import template
-from datetime import timedelta
+import datetime
 import re
+import time
+
+from django import template
+
+import requests
 from twitcn.tools import get_root_path
 
+
 register = template.Library()
+
+def is_shorten_url(url):
+    SHORTEN_URLS = ("bit.ly", "t.co")
+    for s in SHORTEN_URLS:
+        if s + '/' in url:
+            return True
+    return False
 
 def ParseReplyProc(res):
     reply = res.group('reply')
@@ -16,10 +28,14 @@ def ParseReplyProc(res):
 
 def ParseUrlProc(res):
     url = res.group('url')
-    if "http://bit.ly/" in url:
-        foo = url.replace('http://bit.ly/', '')
-        return '<a class="bitly-url" href="%s/bitly/%s" target="_blank">%s</a>' % (get_root_path(), foo, url)
-    return '<a href="%s" target="_blank">%s</a>' % (url, url)
+    if is_shorten_url(url):
+        try:
+            t = time.time()
+            r_url = requests.get(url).url
+            return '<a href="%s" class="%s">%s</a>' % (r_url, time.time() - t, url)
+        except:
+            pass
+    return '<a href="%s">%s</a>' % (url, url)
 
 def ParseSearchProc(res):
     search_tag = res.group('search')
@@ -45,7 +61,7 @@ def GetShortDate(value):
 @register.filter
 def addHours(value, arg=0):
     try:
-        value = value + timedelta(hours = int(arg))
+        value = value + datetime.timedelta(hours = int(arg))
     except:
         pass
     return value
