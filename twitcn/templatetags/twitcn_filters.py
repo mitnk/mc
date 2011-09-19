@@ -38,7 +38,9 @@ def ParseUrlProc(res):
         try:
             t = time.time()
             origin = requests.get(url).url
-            ShortenUrl.objects.create(shorten=url, origin=origin)
+            su = ShortenUrl.objects.get_or_create(shorten=url)
+            su.origin = origin
+            su.save()
             return '<a href="%s" alt="%s">%s</a>' % (origin, time.time() - t, url)
         except:
             pass
