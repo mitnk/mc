@@ -17,6 +17,9 @@ from twitcn.tools import get_root_path
 register = template.Library()
 
 def is_shorten_url(url):
+    if len(url) > 30:
+        return False
+
     SHORTEN_URLS = ("bit.ly", "t.co")
     for s in SHORTEN_URLS:
         if s + '/' in url:
