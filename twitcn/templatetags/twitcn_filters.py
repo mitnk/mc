@@ -30,20 +30,24 @@ def ParseReplyProc(res):
 def ParseUrlProc(res):
     origin = url = res.group('url')
     try:
-        origin = ShortenUrl.objects.get(shorten=url).origin
+        su = ShortenUrl.objects.get(shorten=url)
+        origin = su.origin
     except ShortenUrl.DoesNotExist:
-        pass
+        origin = None
 
-    if origin == url and is_shorten_url(url):
+    if origin is None and is_shorten_url(url):
         try:
             t = time.time()
             origin = requests.get(url).url
-            su = ShortenUrl.objects.get_or_create(shorten=url)
+            su, flag = ShortenUrl.objects.get_or_create(shorten=url)
             su.origin = origin
             su.save()
             return '<a href="%s" alt="%s">%s</a>' % (origin, time.time() - t, url)
         except:
             pass
+
+    if origin is None:
+        origin = url
     return '<a href="%s">%s</a>' % (origin, url)
 
 def ParseSearchProc(res):
