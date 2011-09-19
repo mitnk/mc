@@ -30,6 +30,26 @@ def ParseReplyProc(res):
     reply = res.group('reply')
     return '<a href="%s/%s/">%s</a>' % (get_root_path(), reply[1:], reply)
 
+
+def ParseUrlProcForKindle(res):
+    origin = url = res.group('url')
+    try:
+        return ShortenUrl.objects.get(shorten=url).origin
+    except ShortenUrl.DoesNotExist:
+        pass
+
+    if is_shorten_url(url):
+        try:
+            origin = requests.get(url).url
+            su, flag = ShortenUrl.objects.get_or_create(shorten=url)
+            su.origin = origin
+            su.save()
+            return origin
+        except:
+            pass
+    return origin
+
+
 def ParseUrlProc(res):
     origin = url = res.group('url')
     try:
@@ -56,6 +76,16 @@ def ParseUrlProc(res):
 def ParseSearchProc(res):
     search_tag = res.group('search')
     return '<a href="#" onclick=\'javascript:loadMoreStatus({"q": "%s", "page_name": "Real-time result for %s", "asker": "search", "first_time": true});\'>%s</a>' % (search_tag, search_tag, search_tag)
+
+
+@register.filter
+def ParseStatusTextForKindle(value):
+    if not value:
+        return value
+    p = re.compile(r'(?P<url>https?://[^ ]+)', re.VERBOSE)
+    value = p.sub(ParseUrlProcForKindle, value)
+    return value
+
 
 @register.filter
 def ParseStatusText(value):

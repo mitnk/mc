@@ -1,4 +1,4 @@
 {% load twitcn_filters %}{% for status in messages %}
-@{{ status.user.screen_name }}: {{ status.text|ParseStatusText|safe }}
+@{{ status.user.screen_name }}: {{ status.text|ParseStatusTextForKindle|safe }}
 Date: {{ status.created_at|GetShortDate }}
 {% endfor %}
