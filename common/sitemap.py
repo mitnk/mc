@@ -5,7 +5,7 @@ import datetime
 
 
 class PublicSitemap(Sitemap):
-    changefreq = 'daily'
+    changefreq = 'weekly'
 
     def items(self):
         return PublicArticle.objects.all()
@@ -14,7 +14,7 @@ class PublicSitemap(Sitemap):
         return obj.added
 
 class WikiSitemap(Sitemap):
-    changefreq = 'daily'
+    changefreq = 'weekly'
 
     def items(self):
         return WikiArticle.objects.all()
@@ -23,4 +23,3 @@ class WikiSitemap(Sitemap):
         return obj.added
 
 sitemaps = {'blog': PublicSitemap, 'wiki': WikiSitemap}
-

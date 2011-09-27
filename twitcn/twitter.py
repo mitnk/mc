@@ -157,23 +157,14 @@ class Status(object):
     Returns:
       A human readable string representing the posting time
     '''
-    fudge = 1.25
     delta  = long(self.now) - long(self.created_at_in_seconds)
 
-    if delta < (1 * fudge):
-      return 'a sec ago'
-    elif delta < (60 * (1/fudge)):
+    if delta < 60:
       return '%d sec ago' % (delta)
-    elif delta < (60 * fudge):
-      return 'a min ago'
-    elif delta < (60 * 60 * (1/fudge)):
+    elif delta < 60 * 60:
       return '%d min ago' % (delta / 60)
-    elif delta < (60 * 60 * fudge):
-      return 'an hour ago'
-    elif delta < (60 * 60 * 24 * (1/fudge)):
+    elif delta < 60 * 60 * 24:
       return '%d hours ago' % (delta / (60 * 60))
-    elif delta < (60 * 60 * 24 * fudge):
-      return 'a day ago'
     else:
       return '%d days ago' % (delta / (60 * 60 * 24))
 
