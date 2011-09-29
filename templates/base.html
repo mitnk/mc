@@ -5,6 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   {% if request.META.QUERY_STRING %}<meta name="robots" content="noindex">{% endif %}
   {% block keywords %}<meta name="keywords" content="mitnk,homepage" />{% endblock %}
+  {% block description %}<meta name="description" content="mitnk's personally blog" />{% endblock %}
   {% block canonical %}{% endblock %}
 
   <link rel="shortcut icon" href="/site_media/favicon.ico" type="image/x-icon" />
@@ -19,8 +20,8 @@
 <body>
 <div id="wrapper">
   <div id="header">
-    <h1><a href="/">K.I.S.S</a></h1>
-    <h2>mitnk's personal website</h2>
+    <h1><a href="/">mitnk's Personal Blog</a></h1>
+    <h2> </h2>
       {% include "blog/google_cse.html" %}
   </div>
 
