@@ -23,6 +23,7 @@ class Article(models.Model):
         will do a complete thing for this updating.
     """
     title = models.CharField(max_length=200)
+    slug = models.CharField(max_length=255, blank=True, null=True)
     content = models.TextField()
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -33,7 +34,11 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         if self.pk:
-            return "/%s/" % self.id
+            if self.slug:
+                slug = self.slug.strip().lower().replace('  ', ' ').replace(' ', '_')
+                return "/%s/%s/" % (self.pk, slug)
+            else:
+                return "/%s/" % self.pk
         return ""
 
     def delete(self, *args, **kwargs):

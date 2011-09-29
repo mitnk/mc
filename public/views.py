@@ -1,4 +1,4 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponsePermanentRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from models import *
@@ -17,9 +17,12 @@ def about(request):
     return render_to_response('blog/about.html', 
                               context_instance=RequestContext(request))
 
-def get_article(request, id):
+def get_article(request, id, slug=None):
     try:
         article = Article.objects.get(id=id)
+        url = article.get_absolute_url()
+        if request.META["PATH_INFO"] != url:
+            return HttpResponsePermanentRedirect(url)
         return render_to_response('blog/article.html',
                                   {'article': article, },
                                   context_instance=RequestContext(request))
