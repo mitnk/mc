@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  {% load common_tags %}
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="utf-8">
   {% if request.META.QUERY_STRING %}<meta name="robots" content="noindex">{% endif %}
   {% block keywords %}<meta name="keywords" content="mitnk,homepage" />{% endblock %}
   {% block description %}<meta name="description" content="mitnk's personally blog" />{% endblock %}
   {% block canonical %}{% endblock %}
 
   <link rel="shortcut icon" href="/site_media/favicon.ico" type="image/x-icon" />
-  <link rel="alternate" type="application/rss+xml" title="K.I.S.S - RSS Feed" href="http://mitnk.com/feed/" />
+  <link rel="alternate" type="application/rss+xml" title="Mitnk's Blog - RSS Feed" href="http://mitnk.com/feed/" />
   <link type="text/css" rel="stylesheet" href="/site_media/css/main.css" />
   <link type="text/css" rel="stylesheet" href="/site_media/css/paginator.css" />
   
   {% block extra_css %}{% endblock %}
-  <title>{% block title %}{% endblock %}K.I.S.S</title>
+  <title>{% block title %}Evil Inside{% endblock %}</title>
 
 <script type="text/javascript">
   var _gaq = _gaq || [];
