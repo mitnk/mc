@@ -1,0 +1,15 @@
+{% extends "douqian/base.html" %}
+
+{% block header %}
+    <h1>Setup Total Page</h1>
+{% endblock %}
+
+{% block content %}
+    <p>{{ read.book.title }}</p>
+    <form method="post" action="{{ read.get_edit_url }}">
+        {% csrf_token %}
+        <label for="name">Total:</label>
+        <input type="text" name="total_page" id="total_page" value="{{ read.total }}" /><br />
+        <input type="submit" value="Submit" data-inline="true" />
+    </form>
+{% endblock %}

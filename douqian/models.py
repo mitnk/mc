@@ -1,23 +1,52 @@
-from django.contrib.auth.models import User
 from django.db import models
 
+
+class User(models.Model):
+    douban_id = models.CharField(max_length=20)
+    name = models.CharField(max_length=160, blank=True, null=True)
+    added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-added"]
+
+    def __unicode__(self):
+        if self.name:
+            return self.name
+        else:
+            return self.douban_id
+
+
 class Book(models.Model):
-    title = models.CharField(max_length=40)
-    isbn = models.CharField(max_length=40, blank=True, null=True)
+    subject_id = models.CharField(max_length=20)
+    title = models.CharField(max_length=160, blank=True, null=True)
+    image = models.CharField(max_length=255, blank=True, null=True)
+    author = models.CharField(max_length=255, blank=True, null=True)
+    added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-added"]
 
     def __unicode__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return ""
-
 class Read(models.Model):
     user = models.ForeignKey(User)
     book = models.ForeignKey(Book)
-    page = models.IntegerField(blank=True, null=True)
-    mark = models.IntegerField(blank=True, null=True)
-    update = models.DateTimeField(auto_now_add=True)
+    total = models.IntegerField(default=0, blank=True, null=True)
+    current = models.IntegerField(default=0, blank=True, null=True)
+    update = models.DateTimeField(auto_now=True)
+    added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-update"]
+
+    def get_absolute_url(self):
+        return "/douqian/read/%s/" % self.id
+
+    def get_edit_url(self):
+        return "/douqian/read/%s/edit/" % self.id
 
     def __unicode__(self):
-        return u"<%s> are reading <%s> (%s/%s)" % (self.user, self.book, self.mark, self.page)
-
+        if not self.total or not self.current:
+            return u"<%s> are reading <%s>" % (self.user, self.book)
+        return u"<%s> are reading <%s> (%s)" % (self.user, self.book, self.current/self.total)

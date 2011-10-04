@@ -1,75 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  {% block keywords %}<meta name="keywords" content="mitnk,douqian">{% endblock %}
-  {% block description %}<meta name="description" content="douqian, a book mark">{% endblock %}
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+{% extends "douqian/base.html" %}
 
-  <link rel="shortcut icon" href="/site_media/favicon.ico" type="image/x-icon" />
-  <link type="text/css" rel="stylesheet" href="/site_media/css/jquery.mobile-1.0rc1.min.css" />
-  <script type="text/javascript" src="/site_media/js/jquery-1.6.3.min.js"> </script>
-  <script type="text/javascript" src="/site_media/js/jquery.mobile-1.0rc1.min.js"> </script>
+{% block header %}
+    <h1>豆签</h1>
+    {% if readings %}
+    <a href="/douqian/logout/" data-icon="delete" data-ajax="false" class="ui-btn-right">Logout</a>
+    {% endif %}
+{% endblock %}
 
-  {% block extra_css %}{% endblock %}
-  <title>{% block title %}Douqian{% endblock %}</title>
-</head>
-
-<body>
-<div data-role="page" data-title="foo" id="foo">
-    <div data-role="header">
-        <h1>Dou Qian</h1>
-    </div>
-
-    <div data-role="content" id="bar2">
-        <p>
-        {{ msg }}
-        <hr/>
-        {% if request.user.is_authenticated %}
-        Welcome {{ request.user }}.
-        {% else %}
-        Please Login.
-        {% endif %}
-        </p>
-        <a href="#bar" data-rel="dialog" data-transition="slide">Open dialog</a>
-        <p>
-        {{ msg }}
-        <hr/>
-        {% if request.user.is_authenticated %}
-        Welcome {{ request.user }}.
-        {% else %}
-        Please Login.
-        {% endif %}
-        </p>
-        <p>
-        {{ msg }}
-        <hr/>
-        {% if request.user.is_authenticated %}
-        Welcome {{ request.user }}.
-        {% else %}
-        Please Login.
-        {% endif %}
-        </p>
-    </div> <!-- /content -->
-
-    <div data-role="footer"><h4>@mitnk</h4></div>
-</div> <!-- /page -->
-
-<!-- Start of second page -->
-<div data-role="page" data-title="bar" id="bar">
-
-	<div data-role="header">
-		<h1>Bar</h1>
-	</div><!-- /header -->
-
-	<div data-role="content" data-theme="b">	
-		<p>I'm first in the source order so I'm shown as the page.</p>		
-		<p><a href="#foo">Back to foo</a></p>	
-	</div><!-- /content -->
-
-	<div data-role="footer">
-		<h4>Page Footer</h4>
-	</div><!-- /footer -->
-</div><!-- /page -->
-</body>
-</html>
+{% block content %}
+    {% if readings %}
+    <ul data-role="listview">
+        {% for read in readings %}
+        <li>
+            <a href="{{ read.get_absolute_url }}" data-transition="slide">
+              <img src="{{ read.book.image }}" /> 
+              <h3>{{ read.book.title }}</h3>
+              <p>{{ read.book.author }}</p>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <a href="/douqian/login_with_douban/" data-role="button" data-ajax="false">
+            <img src="/site_media/images/doubanicon-24-full.png"><br/>
+            Remember your Reading
+        </a>
+    {% endif %}
+{% endblock %}

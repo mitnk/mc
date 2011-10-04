@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>豆签</title>
+  <meta charset="utf-8">
+  {% block keywords %}<meta name="keywords" content="Douqian, 豆签, Douban">{% endblock %}
+  {% block description %}<meta name="description" content="Remember your reading">{% endblock %}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="shortcut icon" href="/site_media/favicon.ico" type="image/x-icon" />
+  <link type="text/css" rel="stylesheet" href="/site_media/css/jquery.mobile-1.0rc1.min.css" />
+  <script type="text/javascript" src="/site_media/js/jquery-1.6.3.min.js"> </script>
+  <script type="text/javascript" src="/site_media/js/jquery.mobile-1.0rc1.min.js"> </script>
+</head>
+
+<body>
+<div data-role="page" data-theme="e">
+    <div data-role="header" data-theme="e">
+    {% block header %}
+        <h1>豆签</h1>
+        {% if api %}<a href="/douqian/logout/" data-icon="delete" data-ajax="false" class="ui-btn-right">Logout</a>{% endif %}
+    {% endblock %}
+    </div>
+
+    <div data-role="content">
+    {% block content %}
+        {% if readings %}
+        <ul data-role="listview">
+            {% for book in readings %}
+            <li>
+                <a href="/douqian/book/{{ book.id }}/" data-transition="slide">
+                  <img src="{{ book.image }}" /> 
+                  <h3>{{ book.title }}</h3>
+                  <p>{{ book.author }}</p>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <a href="/douqian/login_with_douban/" data-role="button" data-ajax="false">
+                <img src="/site_media/images/doubanicon-24-full.png"><br/>
+                Remember your Reading
+            </a>
+        {% endif %}
+    {% endblock %}
+    </div> <!-- /content -->
+
+    <div data-role="footer" data-theme="e">
+        <h4>2011 @ mitnk</h4>
+    </div>
+</div> <!-- /page -->
+</body>
+</html>

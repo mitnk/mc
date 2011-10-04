@@ -1,0 +1,27 @@
+{% extends "douqian/base.html" %}
+
+{% block header %}
+    <a href="/douqian/" data-icon="arrow-l">Back</a>
+    <h1>{{ read.book.title }}</h1>
+{% endblock %}
+
+{% block content %}
+{% if read %}
+    <fieldset class="ui-grid-a">
+        <div class="ui-block-a">
+            {{ read.current }} / <a href="{{ read.get_edit_url }}" data-rel="dialog" data-transition="flip">{{ read.total }}</a>
+        </div>
+        <div class="ui-block-b">
+            <a href="{{ read.get_edit_url }}" data-rel="dialog" data-transition="flip"><img src="{{ read.book.image }}" /></a>
+        </div>	   
+    </fieldset>
+
+    <div id="current_form">
+    <form method="post" action="{{ read.get_edit_url }}">
+        {% csrf_token %}
+        <input type="range" name="page_current" id="page_current" value="{{ read.current }}" min="0" max="{{ read.total }}" />
+        <input type="submit" value="Submit" data-inline="true" />
+    </form>
+    </div>
+{% endif %}
+{% endblock %}
