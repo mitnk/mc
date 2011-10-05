@@ -72,7 +72,7 @@ def update_book_and_read(douban_user_id, books):
             # fetch pages form douban web
             pages = get_book_pages(book.subject_id)
             if pages:
-                read.total = b['pages']
+                read.total = pages
                 read.save()
             time.sleep(0.2) # fetching be gentle
 
