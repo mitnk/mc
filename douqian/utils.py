@@ -46,7 +46,7 @@ def update_book_and_read(douban_user_id, readings):
             book.author = r['author']
             book.save()
 
-            # Create a read for this
-            user = User.objects.get(douban_id=douban_user_id)
-            Read.objects.get_or_create(user=user, book=book)
+        # Create a read for this
+        user = User.objects.get(douban_id=douban_user_id)
+        Read.objects.get_or_create(user=user, book=book)
 
