@@ -12,7 +12,10 @@ from douqian.models import User, Book, Read
 from douqian.utils import get_api, get_reading
 
 def index(request):
-    readings = get_reading(request)
+    try:
+        readings = get_reading(request)
+    except IOError:
+        readings = []
     return render_to_response('douqian/index.html', 
                               {'readings': readings},
                               context_instance=RequestContext(request))

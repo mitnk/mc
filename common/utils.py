@@ -1,4 +1,7 @@
 import datetime
+import urllib2
+
+from webapps.BeautifulSoup import BeautifulSoup
 
 
 def get_1st_of_last_month(date_from=None):
@@ -13,3 +16,7 @@ def get_1st_of_last_month(date_from=None):
         last_month = this_month - 1
 
     return datetime.date(year, last_month, 1)
+
+def get_soup_by_url(url):
+    page = urllib2.urlopen(url)
+    return BeautifulSoup(page)

@@ -37,6 +37,8 @@ class Read(models.Model):
     update = models.DateTimeField(auto_now=True)
     added = models.DateTimeField(auto_now_add=True)
 
+    unique_together = ("user", "book")
+
     class Meta:
         ordering = ["-update"]
 

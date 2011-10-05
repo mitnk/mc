@@ -19,37 +19,15 @@ Basic Usage:
     >>> api.set_qs_oauth(key, secret, qs)
     >>> print api.get_profile()
 """
+
 '''
 The BSD License
 
 Copyright (c) 2010, Marvour <marvour@gmail.com>
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions
-are met:
-
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-      copyright notice, this list of conditions and the following
-      disclaimer in the documentation and/or other materials provided
-      with the distribution.
-    * Neither the name of the author nor the names of its contributors
-      may be used to endorse or promote products derived from this
-      software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Modified by mitnk <whgking@gmail.com>
+Copyright (c) 2011 mitnk
 '''
 
 __version__ = '1.0.0'
@@ -278,14 +256,6 @@ class Api(object):
             path = '/people/%s?alt=%s&apikey=%s' % (userID, self._alt, self._key)
         return self._get_open(API_URL+path)
 
-    def search_people(self, q):
-        q = _escape(q)
-        dic = {'q':q, 'alt':self._alt,'start-index':self._start,'max-results':self._max}
-        path = '/people?' + _dict2qs(dic)
-        if hasattr(self, '_key'):
-            path += '&apikey=' + self._key
-        return self._get_open(url=API_URL+path)
-
     def _sq(self, q, tag=None, var='movie'):
         q = _escape(q)
         path = '/%s/subjects' % var
@@ -297,12 +267,8 @@ class Api(object):
         if hasattr(self, '_key'):
             s += '&apikey=' + self._key
         return self._get_open(API_URL + path + s)
-    def search_movie(self, q, tag=None):
-        return self._sq(q, tag, var='movie')
     def search_book(self, q, tag=None):
         return self._sq(q, tag, var='book')
-    def search_music(self, q, tag=None):
-        return self._sq(q, tag, var='music')
 
     #}}}
 
@@ -318,42 +284,12 @@ class Api(object):
         if hasattr(self, '_oauth'):
             return self._get(path)
         return self._get_public(path)
-    def get_movie_byid(self, subjectID):
-        path = '/movie/subject/%s' % subjectID
-        if hasattr(self, '_oauth'):
-            return self._get(path)
-        return self._get_public(path)
-    def get_movie_byimdb(self, imdbID):
-        path = '/movie/subject/imdb/%s' % imdbID
-        if hasattr(self, '_oauth'):
-            return self._get(path)
-        return self._get_public(path)
-    def get_music_byid(self, subjectID):
-        path = '/music/subject/%s' % subjectID
-        if hasattr(self, '_oauth'):
-            return self._get(path)
-        return self._get_public(path)
 
     def get_book_tags(self, subjectID):
         path = '/book/subject/%s/tags' % subjectID
         params = {'start-index': self._start, 'max-results': self._max}
         return self._get_public(path, params)
-    def get_movie_tags(self, subjectID):
-        path = '/movie/subject/%s/tags' % subjectID
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get_public(path, params)
-    def get_music_tags(self, subjectID):
-        path = '/music/subject/%s/tags' % subjectID
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get_public(path, params)
     
-    def get_user_tags(self, userID, cat='book'):
-        path = '/people/%s/tags' % userID
-        if cat not in ('book','music','movie'):
-            cat = 'book'
-        params = {'cat': cat,'start-index': self._start, 'max-results': self._max}
-        return self._get_public(path, params)
-
     #}}}
     
     #{{{ user info
@@ -430,177 +366,6 @@ class Api(object):
 
     #}}}
 
-    #{{{ events
-    def get_events(self):
-        ''' get authed user's events'''
-        path = '/people/%40me/events'
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get(path, params)
-    def get_initiate_events(self):
-        ''' get authed user's initiate events'''
-        path = '/people/%40me/events/initiate'
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get(path, params)
-    def get_participate_events(self):
-        ''' get authed user's participate events'''
-        path = '/people/%40me/events/participate'
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get(path, params)
-    def get_wish_events(self):
-        ''' get authed user's wish events'''
-        path = '/people/%40me/events/wish'
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get(path, params)
-
-    # { no oauth needed
-
-    def get_event(self, eventID):
-        path = '/event/%s' % eventID
-        if hasattr(self, '_oauth'):
-            return self._get(path)
-        return self._get_public(path)
-    def get_event_participants(self, eventID):
-        path = '/event/%s/participants' % eventID
-        params = {'start-index': self._start, 'max-results': self._max}
-        if hasattr(self, '_oauth'):
-            return self._get(path, params)
-        return self._get_public(path, params)
-    def get_event_wishers(self, eventID):
-        path = '/event/%s/wishers' % eventID
-        params = {'start-index': self._start, 'max-results': self._max}
-        if hasattr(self, '_oauth'):
-            return self._get(path, params)
-        return self._get_public(path, params)
-    def get_user_events(self, userID):
-        path = '/people/%s/events' % userID
-        params = {'start-index': self._start, 'max-results': self._max}
-        if hasattr(self, '_oauth'):
-            return self._get(path, params)
-        return self._get_public(path, params)
-    def get_user_initiate_events(self, userID):
-        path = '/people/%s/events/initiate' % userID
-        params = {'start-index': self._start, 'max-results': self._max}
-        if hasattr(self, '_oauth'):
-            return self._get(path, params)
-        return self._get_public(path, params)
-    def get_user_participate_events(self, userID):
-        path = '/people/%s/events/participate' % userID
-        params = {'start-index': self._start, 'max-results': self._max}
-        if hasattr(self, '_oauth'):
-            return self._get(path, params)
-        return self._get_public(path, params)
-    def get_user_wish_events(self, userID):
-        path = '/people/%s/events/wish' % userID
-        params = {'start-index': self._start, 'max-results': self._max}
-        if hasattr(self, '_oauth'):
-            return self._get(path, params)
-        return self._get_public(path, params)
-    def get_location_events(self, locationID):
-        path = '/event/location/%s' % locationID
-        params = {'start-index': self._start, 'max-results': self._max}
-        if hasattr(self, '_oauth'):
-            return self._get(path, params)
-        return self._get_public(path, params)
-    def search_events(self, q, term='all', location='all'):
-        path = '/events'
-        q = _escape(q)
-        params = {'q': q, 'location': location, 'type': term,
-                  'start-index': self._start, 'max-results': self._max}
-        return self._get_public(path, params)
-    # }
-
-    def _event_atom(self, title, content, where, term, invite_only, can_invite):
-        if term not in 'commonweal,drama,exhibition,film,music,others,party,salon,sports,travel'.split(','):
-            term = 'all'
-        if invite_only not in ('yes', 'no'):
-            invite_only = 'no'
-        if can_invite not in ('yes', 'no'):
-            can_invite = 'yes'
-        atom = _atom_sq_header
-        atom += '<title>%s</title>' % _escape(title)
-        atom += '<category scheme="http://www.douban.com/2007#kind" term="http://www.douban.com/2007#event.%s"/>' % term
-        atom += '<content>%s</content>' % _escape(content)
-        atom += '<db:attribute name="invite_only">%s</db:attribute>' % invite_only
-        atom += '<db:attribute name="can_invite">%s</db:attribute>' % can_invite
-        atom += '<gd:where valueString="%s" /></entry>' % _escape(where)
-        return atom
-
-    def post_event(self, title, content, where, term='all', invite_only='no', can_invite='yes'):
-        path = '/events'
-        atom = _event_atom(title, content, where, term, invite_only, can_invite)
-        return self._post(path, atom)
-
-    def update_event(self,eventID, title, content, where, term='all', invite_only='no', can_invite='yes'):
-        path = '/event/%s' % eventID
-        atom = _event_atom(title, content, where, term, invite_only, can_invite)
-        return self._post(path, atom)
-
-    def join_event(self, eventID):
-        path = '/event/%s/participants' % eventID
-        return self._post(path, None)
-
-    def wish_event(self, eventID):
-        path = '/event/%s/wishers' % eventID
-        return self._post(path, None)
-
-    def unjoin_event(self, eventID):
-        path = '/event/%s/participants' % eventID
-        return self._del(path)
-
-    def unwish_event(self, eventID):
-        path = '/event/%s/wishers' % eventID
-        return self._del(path)
-
-    def del_event(self, eventID, content):
-        path = '/event/%s/delete' % eventID
-        atom = _atom_db_header
-        atom += '<content>%s</content></entry>' % _escape(content)
-        return self._post(path, atom) #TODO status code
-
-    #}}}
-
-    #{{{ note
-
-    def get_notes(self):
-        path = '/people/%40me/notes'
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get(path, params)
-    
-    def get_note(self, noteID):
-        path = '/note/%s' % noteID
-        return self._get(path)
-
-    def _note_atom(self, title, content, privacy, can_reply): 
-        if privacy not in ('public', 'friend', 'private'):
-            privacy = 'private'
-        if can_reply not in ('yes', 'no'):
-            can_reply = 'no'
-        if 'private' == privacy:
-            can_reply = 'no'
-        atom = _atom_db_header
-        atom += '<title>%s</title>' % _escape(title)
-        atom += '<content>%s</content>' % _escape(content)
-        atom += '<db:attribute name="privacy">%s</db:attribute>' % privacy
-        atom += '<db:attribute name="can_reply">%s</db:attribute>' % can_reply
-        atom += '</entry>'
-        return atom
-
-    def post_note(self, title, content, privacy='public', can_reply='yes'): 
-        path = '/notes'
-        atom = self._note_atom(title, content, privacy, can_reply)
-        return self._post(path, atom)
-
-    def update_note(self, noteID, title, content, privacy='public', can_reply='yes'): 
-        path = '/note/%s' % noteID
-        atom = self._note_atom(title, content, privacy, can_reply)
-        return self._put(path, atom)
-
-    def del_note(self, noteID):
-        path = '/note/%s' % noteID
-        return self._del(path)
-
-    #}}}
-
     #{{{ review
     # http://www.douban.com/service/apidoc/reference/review
 
@@ -609,12 +374,6 @@ class Api(object):
         if hasattr(self, '_oauth'):
             return self._get(path)
         return self._get_public(path)
-    def get_user_reviews(self, userID):
-        path = '/people/%s/reviews' % userID
-        params = {'start-index': self._start, 'max-results': self._max}
-        if hasattr(self, '_oauth'):
-            return self._get(path, params)
-        return self._get_public(path, params)
     def _get_subject_reviews(self, path):
         params = {'start-index': self._start, 'max-results': self._max}
         if hasattr(self, '_oauth'):
@@ -622,18 +381,6 @@ class Api(object):
         return self._get_public(path, params)
     def get_book_reviews_byid(self, subjectID):
         path = '/book/subject/%s/reviews' % subjectID
-        return self._get_subject_reviews(path)
-    def get_book_reviews_byisbn(self, isbnID):
-        path = '/book/subject/isbn/%s/reviews' % isbnID
-        return self._get_subject_reviews(path)
-    def get_movie_reviews_byid(self, subjectID):
-        path = '/movie/subject/%s/reviews' % subjectID
-        return self._get_subject_reviews(path)
-    def get_movie_reviews_byimdb(self, imdbID):
-        path = '/book/subject/imdb/%s/reviews' % imdbID
-        return self._get_subject_reviews(path)
-    def get_music_reviews_byid(self, subjectID):
-        path = '/music/subject/%s/reviews' % subjectID
         return self._get_subject_reviews(path)
 
     def post_review(self, sourceURL, title, rating, content):
@@ -663,145 +410,7 @@ class Api(object):
     def del_review(self, reviewID):
         path = '/review/%s' % reviewID
         return self._del(path)
-
     #}}}
-
-    #{{{ miniblog
-
-    def get_user_miniblog(self, userID, term=None):
-        path = '/people/%s/miniblog' % userID
-        params = {'start-index': self._start, 'max-results': self._max}
-        if term:
-            params.update({'type':term})
-        if hasattr(self, '_oauth'):
-            return self._get(path)
-        return self._get_public(path)
-
-    def get_miniblog(self, term=None):
-        path = '/people/%40me/miniblog'
-        params = {'start-index': self._start, 'max-results': self._max}
-        if term:
-            # set term='saying' to filter
-            params.update({'type':term})
-        return self._get(path, params)
-
-    def get_user_contacts_miniblog(self,userID, term=None):
-        path = '/people/%s/miniblog/contacts' % userID
-        params = {'start-index': self._start, 'max-results': self._max}
-        if term:
-            params.update({'type':term})
-        if hasattr(self, '_oauth'):
-            return self._get(path)
-        return self._get_public(path)
-
-    def get_contacts_miniblog(self, term=None):
-        path = '/people/%40me/miniblog/contacts'
-        params = {'start-index': self._start, 'max-results': self._max}
-        if term:
-            # set term='saying' to filter
-            params.update({'type':term})
-        return self._get(path, params)
-
-    def get_miniblog_replies(self, miniblogID):
-        path = '/miniblog/%s/comments' % miniblogID
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get(path, params)
-
-    def post_miniblog(self, content):
-        path = '/miniblog/saying'
-        atom = _atom_db_header
-        atom += '<content>%s</content></entry>' % _escape(content)
-        return self._post(path, atom)
-
-    def post_miniblog_reply(self, miniblogID, content):
-        path = '/miniblog/%s/comments' % miniblogID
-        atom = _atom_db_header
-        atom += '<content>%s</content></entry>' % _escape(content)
-        return self._post(path, atom)
-
-    def del_miniblog(self, miniblogID):
-        path = '/miniblog/%s' % miniblogID
-        return self._del(path)
-
-    #}}}
-
-    #{{{ recommendation
-    # http://www.douban.com/service/apidoc/reference/recommendation
-    
-    def get_recommendation(self, recommendationID):
-        path = '/recommendation/%s' % recommendationID
-        return self._get_public(path)
-    def get_user_recommendations(self, userID):
-        path = '/people/%s/recommendations' % userID
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get_public(path, params)
-    def get_recommendation_replies(self, recommendationID):
-        path = '/recommendation/%s/comments' % recommendationID
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get_public(path, params)
-
-    def post_recommendation(self, sourceURL, title, content, rel='related'):
-        path = '/recommendations'
-        atom = _atom_sq_header
-        atom += '<title>%s</title>' % _escape(title)
-        atom += '<db:attribute name="comment">%s</db:attribute>' % _escape(content)
-        atom += '<link href="%s" rel="%s" /></entry>' % (sourceURL, rel)
-        return self._post(path, atom)
-
-    def del_recommendation(self, recommendationID):
-        path = '/recommendation/%s' % recommendationID
-        return self._del(path)
-
-    def reply_recommendation(self, recommendationID, content):
-        path = '/recommendation/%s/comments' % recommendationID
-        atom = '<?xml version="1.0" encoding="UTF-8"?><entry><content>%s</content></entry>' % _escape(content)
-        return self._post(path, atom)
-
-    def del_recommendation_reply(self, recommendationID, replyID):
-        path = '/recommendation/%s/comment/%s' % (recommendationID, replyID)
-        return self._del(path)
-
-    #}}}
-
-    #{{{ douban mail
-    # http://www.douban.com/service/apidoc/reference/doumail
-
-    def get_mail(self, doumailID):
-        path = '/doumail/%s' % doumailID
-        return self._get(path)
-
-    def get_inbox_mails(self):
-        path = '/doumail/inbox'
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get(path, params)
-
-    def get_unread_mails(self):
-        path = '/doumail/inbox/unread'
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get(path, params)
-    
-    def get_outbox_mails(self):
-        path = '/doumail/outbox'
-        params = {'start-index': self._start, 'max-results': self._max}
-        return self._get(path, params)
-
-    def post_mail(self, receiverID, title, content):
-        atom = _atom_sq_header
-        atom += '<db:entity name="receiver"><uri>http://api.douban.com/people/%s</uri></db:entity>' % _escape(receiverID)
-        atom += '<content>%s</content>' % _escape(content)
-        atom += '<title>%s</title>' % _escape(title)
-        atom += '</entry>'
-        return self._post(path, atom)
-
-    def del_mail(self, doumailID):
-        path = '/doumail/%s' % doumailID
-        return self._del(path)
-
-    def mark_mail_read(self, doumailID):
-        path = '/doumail/%s' % doumailID
-        atom = _atom_sq_header
-        atom += '<db:attribute name="unread">false</db:attribute></entry>'
-        return self._put(path, atom)
 
 def _escape(s):
     try: s = s.encode('utf-8')
@@ -881,3 +490,4 @@ class _FormateData(dict):
 
     def __repr__(self):
         return dict.__repr__(self)
+
