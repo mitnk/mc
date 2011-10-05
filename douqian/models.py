@@ -42,6 +42,13 @@ class Read(models.Model):
     class Meta:
         ordering = ["-update"]
 
+    def get_douqian(self):
+        if self.current == 0 or self.total == 0:
+            return "0%% (%s/%s)" % (self.current, self.total)
+        else:
+            return "%.1f%% (%s/%s)" % (float(self.current * 100.0 / self.total), 
+                               self.current, self.total)
+
     def get_absolute_url(self):
         return "/douqian/read/%s/" % self.id
 

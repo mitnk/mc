@@ -15,7 +15,7 @@
             <a href="{{ read.get_absolute_url }}" data-transition="slide">
               <img src="{{ read.book.image }}" /> 
               <h3>{{ read.book.title }}</h3>
-              <p>{{ read.book.author }}</p>
+              <p><strong>{{ read.get_douqian }}</strong></p>
             </a>
         </li>
         {% endfor %}
@@ -23,7 +23,7 @@
     {% else %}
         <a href="/douqian/login_with_douban/" data-role="button" data-ajax="false">
             <img src="/site_media/images/doubanicon-24-full.png"><br/>
-            Remember your Reading
         </a>
+        <p><center>Remember your Reading</center></p>
     {% endif %}
 {% endblock %}
