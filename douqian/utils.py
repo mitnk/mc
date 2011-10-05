@@ -32,12 +32,12 @@ def get_reading(request):
         book['author'] = ", ".join([x['name']['t'] for x in entiry['subject']['author']])
         readings.append(book)
 
-    update_reading(request.session['douban_user_id'], readings)
+    update_book_and_read(request.session['douban_user_id'], readings)
     user = User.objects.get(douban_id=request.session['douban_user_id'])
     return Read.objects.filter(user=user)
 
 
-def update_reading(douban_user_id, readings):
+def update_book_and_read(douban_user_id, readings):
     for r in readings:
         book, created = Book.objects.get_or_create(subject_id=r['id'])
         if created:
@@ -45,3 +45,8 @@ def update_reading(douban_user_id, readings):
             book.image = r['image']
             book.author = r['author']
             book.save()
+
+            # Create a read for this
+            user = User.objects.get(douban_id=douban_user_id)
+            Read.objects.get_or_create(user=user, book=book)
+
