@@ -31,6 +31,9 @@ class Article(models.Model):
     def __unicode__(self):
         return self.title
 
+    def allow_comment(self):
+        return False
+
     def get_absolute_url(self):
         if self.pk:
             return APP_ROOT + str(self.id) + "/"

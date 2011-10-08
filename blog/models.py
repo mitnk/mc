@@ -36,6 +36,9 @@ class Article(models.Model):
             return APP_ROOT + "article/" + str(self.id) + "/"
         return ""
 
+    def allow_comment(self):
+        return False
+
     def delete(self, *args, **kwargs):
         """Update Category and Tag informations"""
         self.category.count = Article.objects.filter(category=self.category).count() - 1

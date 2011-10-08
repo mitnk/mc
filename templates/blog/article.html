@@ -23,6 +23,8 @@
     Posted at {{ article.added|date:"N j, Y" }}
   </div>
 
-  {% include "comments/comments.html" %}
+  {% if article.allow_comment %}
+    {% include "comments/comments.html" %}
+  {% endif %}
 </div>
 {% endblock %}
