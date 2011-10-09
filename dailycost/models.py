@@ -8,7 +8,7 @@ from common.utils import get_1st_of_last_month
 class CostManager(models.Manager):
     def get_last_month_cost(self, date_from=None):
         last_month = get_1st_of_last_month(date_from=date_from)
-        cs = self.filter(added__month=last_month.month)
+        cs = self.filter(added__month=last_month.month, amount__lt=1000)
         return "%.2f" % sum([x.amount for x in cs])
 
     def get_this_month_cost(self, date_from=None):
