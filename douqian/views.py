@@ -16,17 +16,17 @@ def index(request):
         readings = get_reading(request)
     except IOError:
         readings = []
-    return render_to_response('douqian/index.html', 
+    return render_to_response('douqian/reading_list.html',
                               {'readings': readings},
                               context_instance=RequestContext(request))
 
 
 def read_detail(request, read_id):
     read = Read.objects.get(pk=read_id)
-    return render_to_response('douqian/book.html', 
+    return render_to_response('douqian/book.html',
                               {'read': read},
                               context_instance=RequestContext(request))
-    
+   
 def read_edit(request, read_id):
     read = Read.objects.get(id=read_id)
     if request.method == "POST":
@@ -39,7 +39,7 @@ def read_edit(request, read_id):
             read.current = int(current)
             read.save()
         return HttpResponseRedirect(read.get_absolute_url())
-    return render_to_response('douqian/read.html', 
+    return render_to_response('douqian/set_total_page.html',
                               {'read': read,},
                               context_instance=RequestContext(request))
 
