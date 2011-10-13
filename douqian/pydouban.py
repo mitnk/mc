@@ -350,20 +350,6 @@ class Api(object):
         atom += '<db:attribute name="privacy">%s</db:attribute></entry>' % privacy
         return atom
 
-    def post_collection(self, sourceURL, status, rating=0, tags=[], comment='', privacy='public'):
-        path = 'http://api.douban.com/collection'
-        atom = self._collection_atom(sourceURL, status, rating, tags, comment, privacy)
-        return self._post(path, atom)
-
-    def update_collection(self, collectionID, sourceURL, status, rating=0, tags=[], comment='', privacy='public'):
-        path = 'http://api.douban.com/collection/%s' % collectionID
-        atom = self._collection_atom(sourceURL, status, rating, tags, comment, privacy)
-        return self._put(path, atom)
-
-    def del_collection(self, collectionID):
-        path = 'http://api.douban.com/collection/%s' % collectionID
-        return self._del(path)
-
     #}}}
 
     #{{{ review
