@@ -34,11 +34,13 @@ def read_edit(request, read_id):
         if total:
             read.total = int(total)
             read.save()
+            return HttpResponseRedirect(read.get_absolute_url())
+
         current = request.POST.get("page_current")
         if current:
             read.current = int(current)
             read.save()
-        return HttpResponseRedirect(read.get_absolute_url())
+            return HttpResponseRedirect(reverse("douqian_index"))
     return render_to_response('douqian/set_total_page.html',
                               {'read': read,},
                               context_instance=RequestContext(request))
