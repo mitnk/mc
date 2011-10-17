@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     (r'^user_agent/$', 'webapps.views.user_agent'),
     (r'^send_tweets_to_kindle/$', 'webapps.views.send_tweets_to_kindle'),
     (r'^zongheng/', include('webapps.zongheng.urls')),
+    (r'^news/', include('webapps.news.urls')),
 )
