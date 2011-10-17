@@ -17,7 +17,7 @@
     </fieldset>
 
     <div id="current_form">
-    <form method="post" action="{{ read.get_edit_url }}">
+    <form method="post" data-ajax="false" action="{{ read.get_edit_url }}">
         {% csrf_token %}
         <input type="range" name="page_current" id="page_current" value="{{ read.current }}" min="0" max="{{ read.total }}" />
         <input type="submit" value="Submit" data-inline="true" />
