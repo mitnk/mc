@@ -6,14 +6,11 @@ from common.utils import get_soup_by_url
 from webapps.news.models import News
 
 def send_url_to_kindle(url, title=""):
-    print 'fetching %s' % url
+    return
     soup = get_soup_by_url(url)
     content = soup.find("div", {"class": "entry-content"})
     if content:
-        print ''.join(content.findAll(text=True))
         return
-
-    print "Cannot find entry-content div"
 
 def index(request):
     url = 'http://news.ycombinator.com/'
