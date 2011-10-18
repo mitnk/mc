@@ -30,7 +30,7 @@ def save_to_file(url, title="untitled"):
     if not file_name:
         return
 
-    file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
+    file_name = os.path.join(settings.HACKER_NEWS_DIR, file_name)
     if os.path.exists(file_name):
         return
 
