@@ -17,6 +17,6 @@ def get_1st_of_last_month(date_from=None):
 
     return datetime.date(year, last_month, 1)
 
-def get_soup_by_url(url):
-    page = urllib2.urlopen(url)
+def get_soup_by_url(url, timeout=10):
+    page = urllib2.urlopen(url, timeout=timeout)
     return BeautifulSoup(page)
