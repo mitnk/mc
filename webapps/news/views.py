@@ -34,10 +34,15 @@ def index(request):
         if 60 < points < 70:
             send_url_to_kindle(tag['href'], title=tag.string)
 
+        # make sure string not too long to save
+        if len(tag['href']) > 512 or len(tag.string) > 512:
+            continue
+
         news, created = News.objects.get_or_create(url=tag['href'])
         if created:
             news.title = tag.string
             news.points = points
             news.save()
         count += 1
+
     return HttpResponse("Find %s news" % count)
