@@ -45,6 +45,8 @@ def save_to_file(url, title="untitled"):
             raise
 
     if content:
+        content = title + "\r\n" + "=" * 20 + '\r\n' + content \
+            + '\r\n' + url
         write_to_file(file_path, content)
         Archive.objects.create(url=url, file_name=file_name)
 
