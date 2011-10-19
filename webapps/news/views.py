@@ -3,12 +3,10 @@ import re
 from urllib2 import URLError
 
 from django.conf import settings
-from django.core.files import File
 from django.http import HttpResponse, Http404
-from django.utils.encoding import smart_str
 
-from common.utils import get_soup_by_url
-from webapps.news.models import News
+from common.utils import get_soup_by_url, write_to_file, get_page_main_content
+from webapps.news.models import News, Archive
 from webapps.tools import send_mail
 
 def send_to_kindle(request):
@@ -24,41 +22,40 @@ def send_to_kindle(request):
         os.remove(f)
     return HttpResponse(text)
 
+
 def save_to_file(url, title="untitled"):
     file_name = re.sub(r'[^0-9a-zA-Z- ]+', '', title)
-    file_name = "%s.txt" % file_name.lower().replace(' ', '_')
+    file_name = "%s.txt" % file_name.replace(' ', '_')
     if not file_name:
         return
 
-    file_name = os.path.join(settings.HACKER_NEWS_DIR, file_name)
-    if os.path.exists(file_name):
+    if Archive.objects.filter(url=url).count() > 0:
+        return
+
+    file_path = os.path.join(settings.HACKER_NEWS_DIR, file_name)
+    if os.path.exists(file_path):
         return
 
     try:
-        soup = get_soup_by_url(url, timeout=3)
-    except:
-        return
+        content = get_page_main_content(url, 3)
+        print "Fetched data!!!"
+    except Exception, e:
+        if isinstance(e, URLError) or 'timed out' in str(e):
+            content = ""
+        else:
+            raise
 
-    for kls in ("entry-content", "post", "copy", "article_inner", 
-                "articleBody", 
-                "blogbody", "realpost", "asset-body", "main"):
-        content = soup.find("div", {"class": kls})
-        if content:
-            real_content = ''.join(content.findAll(text=True))
-            if '<code' in real_content and '</code>' in real_content:
-                return
-
-            write_to_file(file_name, real_content)
-            return
-
-def write_to_file(file_name, content):
-    f = File(open(file_name, "w"))
-    f.write(smart_str(content))
-    f.close()
+    if content:
+        write_to_file(file_path, content)
+        Archive.objects.create(url=url, file_name=file_name)
 
 def index(request):
     url = 'http://news.ycombinator.com/'
-    soup = get_soup_by_url(url)
+    try:
+        soup = get_soup_by_url(url)
+    except:
+        return HttpResponse("Time Out")
+
     tags = soup.find("table").findAll("td", {"class": "title"})
     count = 0
     for t in tags:
@@ -68,16 +65,22 @@ def index(request):
         elif tag.string.lower() == "more" and '/' not in tag['href']:
             continue
 
-        points = int(t.parent.nextSibling.find('span').string.split(' ')[0])
-        if points < 37:
+        try:
+            points = int(t.parent.nextSibling.find('span').string.split(' ')[0])
+        except AttributeError, ValueError:
+            points = 0
+        if points < 20:
             continue
 
         if 'http' not in tag['href']:
             tag['href'] = "http://news.ycombinator.com/" + tag['href']
 
-        if points >= 100:
-            save_to_file(tag['href'], tag.string)
+        #test
+        if 'reuters.com' in tag['href']:
+            tag['href'] = "http://mitnk.com/58/"
 
+        print "before saving", tag['href']
+        save_to_file(tag['href'], tag.string)
         try:
             news = News.objects.get(url=tag['href'])
             news.title = tag.string

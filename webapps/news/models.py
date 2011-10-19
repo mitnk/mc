@@ -14,3 +14,10 @@ class News(models.Model):
 
     def is_home_page(self):
         return '/' not in self.url.replace('//', '').strip('/')
+
+class Archive(models.Model):
+    url = models.CharField(max_length=512)
+    file_name = models.CharField(max_length=512)
+
+    def __unicode__(self):
+        return self.file_name
