@@ -36,7 +36,7 @@ def get_page_main_content(url, timeout):
     html_parser = HTMLParser.HTMLParser()
     content = ""
     for kls in ("entry-content", "post", "copy", "article_inner", 
-                "articleBody", 
+                "articleBody", "storycontent",
                 "blogbody", "realpost", "asset-body", "main"):
         tags = soup.findAll("div", {"class": kls})
         for tag in tags:
