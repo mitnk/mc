@@ -45,8 +45,4 @@ def get_page_main_content(url, timeout):
                 continue
             text = re.sub(r'\n+', '\r\n\r\n', text)
             content += html_parser.unescape(text)
-
-    if not content:
-        print "No Content."
-
     return content

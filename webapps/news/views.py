@@ -38,7 +38,6 @@ def save_to_file(url, title="untitled"):
 
     try:
         content = get_page_main_content(url, 3)
-        print "Fetched data!!!"
     except Exception, e:
         if isinstance(e, URLError) or 'timed out' in str(e):
             content = ""
@@ -79,7 +78,6 @@ def index(request):
         if 'reuters.com' in tag['href']:
             tag['href'] = "http://mitnk.com/58/"
 
-        print "before saving", tag['href']
         save_to_file(tag['href'], tag.string)
         try:
             news = News.objects.get(url=tag['href'])

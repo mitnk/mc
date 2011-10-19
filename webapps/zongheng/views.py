@@ -90,7 +90,6 @@ def kindle(request):
         
         if request.POST.get('last_id'):
             last_id = request.POST['last_id']
-            print "god", last_id
 
         cids = get_chapter_list(request.POST.get('book_id', 0), last_id, page)
         if len(cids) < MIN_CHAPTER_COUNT:
