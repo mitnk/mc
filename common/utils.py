@@ -33,6 +33,11 @@ def write_to_file(file_name, content):
 
 def get_page_main_content(url, timeout):
     soup = get_soup_by_url(url, timeout=timeout)
+    for br in soup.findAll('br'):
+        br.replaceWith("\n")
+    for kls in ("post-bottom-area", ):
+        for tag in soup.findAll("div", {"class": kls}):
+            tag.extract()
     html_parser = HTMLParser.HTMLParser()
     content = ""
     for kls in ("entry-content", "post", "copy", "article_inner", 
@@ -41,8 +46,6 @@ def get_page_main_content(url, timeout):
         tags = soup.findAll("div", {"class": kls})
         for tag in tags:
             text = ''.join(tag.findAll(text=True))
-            if '<code' in text and '</code>' in text:
-                continue
-            text = re.sub(r'\n+', '\r\n\r\n', text)
+            text = re.sub(r'\r*\n+', '\r\n\r\n', text)
             content += html_parser.unescape(text)
     return content
