@@ -33,8 +33,19 @@ def write_to_file(file_name, content):
 
 def get_page_main_content(url, timeout):
     soup = get_soup_by_url(url, timeout=timeout)
-    for br in soup.findAll('br'):
-        br.replaceWith("\n")
+    for tag in soup.findAll('br'):
+        tag.replaceWith("\n")
+
+    #TODO: need to be improved
+    for tag in soup.findAll('blockquote'):
+        c = ""
+        for x in tag.contents:
+            if hasattr(x, 'contents'):
+                c += str(x.contents[0])
+            else:
+                c += x
+        tag.replaceWith("\n" + c + "\n")
+
     for kls in ("post-bottom-area", ):
         for tag in soup.findAll("div", {"class": kls}):
             tag.extract()
