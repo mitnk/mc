@@ -9,6 +9,8 @@ from common.utils import get_soup_by_url, write_to_file, get_page_main_content
 from webapps.news.models import News, Archive
 from webapps.tools import send_mail
 
+POINITS_LIMIT_TO_KINDLE = 100
+
 def send_to_kindle(request):
     send_to = ['whgking@free.kindle.com']
     subject = "Hacker News Update"
@@ -76,7 +78,9 @@ def index(request):
         if 'http' not in tag['href']:
             tag['href'] = "http://news.ycombinator.com/" + tag['href']
 
-        save_to_file(tag['href'], tag.string)
+        if points >= POINITS_LIMIT_TO_KINDLE:
+            save_to_file(tag['href'], tag.string)
+
         try:
             news = News.objects.get(url=tag['href'])
             news.title = tag.string

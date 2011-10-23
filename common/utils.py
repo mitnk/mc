@@ -24,7 +24,14 @@ def get_1st_of_last_month(date_from=None):
 
 def get_soup_by_url(url, timeout=10):
     page = urllib2.urlopen(url, timeout=timeout)
-    return BeautifulSoup(page)
+    try:
+        soup = BeautifulSoup(page)
+    except UnicodeEncodeError:
+        try:
+            soup = BeautifulSoup(page, fromEncoding='utf8')
+        except UnicodeEncodeError:
+            soup = BeautifulSoup(page, fromEncoding='gb18030')
+    return soup
 
 def write_to_file(file_name, content):
     f = File(open(file_name, "w"))
