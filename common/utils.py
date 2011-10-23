@@ -63,10 +63,8 @@ def get_page_main_content(url, timeout):
     content = ""
     for kls in ("entry-content", # wordpress
                 "articleContent",
-                "postBody txtWrap", # http://news.cnet.com
-                "post-body entry-content", # blogspot
+                "postBody", # http://news.cnet.com
                 "post-body", # blogspot
-                "entry-content", # blogspot
                 "article_inner",
                 "articleBody",
                 "storycontent",
@@ -77,7 +75,10 @@ def get_page_main_content(url, timeout):
                 "post",
                 "copy",
                 "main"):
-        tags = soup.findAll("div", {"class": kls})
+        if len(kls) >= 8:
+            tags = soup.findAll("div", {"class": re.compile(kls)})
+        else:
+            tags = soup.findAll("div", {"class": kls})
         if not tags:
             continue
         for tag in tags:
