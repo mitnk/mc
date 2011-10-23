@@ -43,9 +43,21 @@ def get_page_main_content(url, timeout):
     for tag in soup.findAll('br'):
         tag.replaceWith("\n")
 
-    for kls in ("post-bottom-area", ):
-        for tag in soup.findAll("div", {"class": kls}):
+    for tag in soup.findAll('p'):
+        tag.insert(0, "\n")
+
+    for tag in soup.findAll('pre'):
+        tag.replaceWith("\n[Pre Code Removed]\n")
+
+    for kls in ("post-bottom-area",
+                "wp-caption", # wordpress images
+                "entryDescription", # wired.com
+                ):
+        for tag in soup.findAll("div", {"class": re.compile(kls)}):
             tag.extract()
+
+    for style in soup.findAll("style"):
+        style.extract()
 
     html_parser = HTMLParser.HTMLParser()
     content = ""
@@ -61,6 +73,7 @@ def get_page_main_content(url, timeout):
                 "blogbody",
                 "realpost",
                 "asset-body",
+                "entry",
                 "post",
                 "copy",
                 "main"):
