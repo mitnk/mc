@@ -72,7 +72,7 @@ def index(request):
             points = int(t.parent.nextSibling.find('span').string.split(' ')[0])
         except AttributeError, ValueError:
             points = 0
-        if points < 30:
+        if points < 20:
             continue
 
         if 'http' not in tag['href']:
