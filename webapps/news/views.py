@@ -10,7 +10,7 @@ from webapps.news.models import News, Archive
 from webapps.tools import send_mail
 
 POINITS_LIMIT_TO_LOG = 30
-POINITS_LIMIT_TO_KINDLE = 100
+POINITS_LIMIT_TO_KINDLE = 70
 
 def send_to_kindle(request):
     send_to = ['whgking@free.kindle.com']
