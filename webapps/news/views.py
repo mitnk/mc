@@ -9,6 +9,7 @@ from common.utils import get_soup_by_url, write_to_file, get_page_main_content
 from webapps.news.models import News, Archive
 from webapps.tools import send_mail
 
+POINITS_LIMIT_TO_LOG = 30
 POINITS_LIMIT_TO_KINDLE = 100
 
 def send_to_kindle(request):
@@ -72,7 +73,7 @@ def index(request):
             points = int(t.parent.nextSibling.find('span').string.split(' ')[0])
         except AttributeError, ValueError:
             points = 0
-        if points < 20:
+        if points < POINITS_LIMIT_TO_LOG:
             continue
 
         if 'http' not in tag['href']:
