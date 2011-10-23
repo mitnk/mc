@@ -56,14 +56,30 @@ def get_page_main_content(url, timeout):
     for kls in ("post-bottom-area", ):
         for tag in soup.findAll("div", {"class": kls}):
             tag.extract()
+
     html_parser = HTMLParser.HTMLParser()
     content = ""
-    for kls in ("entry-content", "post", "copy", "article_inner", 
-                "articleBody", "storycontent",
-                "blogbody", "realpost", "asset-body", "main"):
+    for kls in ("entry-content", # wordpress
+                "articleContent",
+                "postBody txtWrap", # http://news.cnet.com
+                "post-body entry-content", # blogspot
+                "post-body", # blogspot
+                "entry-content", # blogspot
+                "article_inner",
+                "articleBody",
+                "storycontent",
+                "blogbody",
+                "realpost",
+                "asset-body",
+                "post",
+                "copy",
+                "main"):
         tags = soup.findAll("div", {"class": kls})
+        if not tags:
+            continue
         for tag in tags:
             text = ''.join(tag.findAll(text=True))
-            text = re.sub(r'\r*\n+', '\r\n\r\n', text)
+            text = re.sub(r'\r*\n+', '\n\n', text)
             content += html_parser.unescape(text)
-    return content
+        break
+    return content.strip()
