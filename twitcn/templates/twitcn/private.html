@@ -4,6 +4,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>pep8</title>
 <style>
+textarea {
+    width:100%;
+}
 .tweet {
     font-size:{% if veer %}5em{% else %}20px{% endif %};
     border:2px solid #AAAAAA;
@@ -20,7 +23,7 @@
     {% for status in messages %}
     <div class="tweet">
     <b style="color:red;">{{ status.user.screen_name }}</b>: {{ status.text|ParseStatusText|safe }}<br/>
-    {{ status.relative_created_at }} via {{ status.source|safe }}
+    {{ status.relative_created_at }}
     </div>
     {% endfor %}
 </body>
