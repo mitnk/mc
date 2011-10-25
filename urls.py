@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     (r'^webapps/', include('mitnkcom.webapps.urls')),
     (r'^dc/', include('mitnkcom.dailycost.urls')),
     (r'^comments/', include('django.contrib.comments.urls')),
+    (r'^ua/', "webapps.views.user_agent"),
 )
 
 if settings.DEBUG:

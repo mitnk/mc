@@ -1,8 +1,9 @@
 #coding=utf-8
-from urllib2 import HTTPError
 import datetime
-import twitter, oauth
+import re
 from oauthtwitter import OAuthApi
+from urllib2 import HTTPError
+import twitter, oauth
 
 from django.shortcuts import render_to_response
 from django.http import *
@@ -25,8 +26,11 @@ def private(request):
         return HttpResponseRedirect(url)
     else:
         messages = api.GetHomeTimeline(count=50)
+        ua = request.META.get("HTTP_USER_AGENT", '').lower()
+        veer = (re.search(r'webos.2', ua) is not None)
         return render_to_response("twitcn/private.html", 
-                                  {'messages': messages,},
+                                  {'messages': messages,
+                                   'veer': veer,},
                                   context_instance=RequestContext(request))
 
 
