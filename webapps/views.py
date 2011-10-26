@@ -5,6 +5,7 @@ from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
+from django.template import RequestContext
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
@@ -140,7 +141,6 @@ def check_website(request):
 
     return HttpResponse(content)
 
-def user_agent(request):
-    if "HTTP_USER_AGENT" in request.META:
-        return HttpResponse("-" + request.META["HTTP_USER_AGENT"] + "-\r\n")
-    return HttpResponse("User-Agent not found.")
+def http_meta(request):
+    return render_to_response('webapps/http_meta.html',
+                              context_instance=RequestContext(request))
