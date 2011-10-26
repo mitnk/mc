@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>HTTP META</title>
+<style>
+table {border: 1px solid #333333;}
+table td {border: 1px solid #333333;padding:4px;}
+</style>
+</head>
+<body>
+    <table>
+        <tr><td>HTTP_HOST</td><td>{{ request.META.HTTP_HOST }}</td></tr>
+        <tr><td>HTTP_USER_AGENT</td><td>{{ request.META.HTTP_USER_AGENT }}</td></tr>
+        <tr><td>REMOTE_ADDR</td><td>{{ request.META.REMOTE_ADDR }}</td></tr>
+    </table>
+</body>
+</html>
+
