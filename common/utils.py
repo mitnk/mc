@@ -49,6 +49,9 @@ def get_page_main_content(url, timeout):
     for tag in soup.findAll('pre'):
         tag.replaceWith("\n[Pre Code Removed]\n")
 
+    for tag in soup.findAll('img'):
+        tag.replaceWith("\n[Image]\n")
+
     for kls in ("post-bottom-area",
                 "wp-caption", # wordpress images
                 "entryDescription", # wired.com
@@ -83,7 +86,7 @@ def get_page_main_content(url, timeout):
             continue
         for tag in tags:
             text = ''.join(tag.findAll(text=True))
-            text = re.sub(r'\r*\n+', '\n\n', text)
+            text = re.sub(r'\r*\n+', '\n', text)
             content += html_parser.unescape(text)
         break
     return content.strip()
