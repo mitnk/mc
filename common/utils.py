@@ -70,6 +70,7 @@ def get_page_main_content(url, timeout):
                 "post-body", # blogspot
                 "article_inner",
                 "articleBody",
+                "articlePage", # for wsj.com
                 "storycontent",
                 "blogbody",
                 "realpost",
@@ -88,5 +89,9 @@ def get_page_main_content(url, timeout):
             text = ''.join(tag.findAll(text=True))
             text = re.sub(r'\r*\n+', '\n', text)
             content += html_parser.unescape(text)
+
+        if len(content) < 20: # content is too short
+            content = ""
+            continue
         break
     return content.strip()
