@@ -27,33 +27,43 @@ def send_to_kindle(request):
 
 
 def save_to_file(url, title="untitled"):
+    """ TODO: Add force update param """
+    if Archive.objects.filter(url=url).count() > 0:
+        return 0
+
+    try:
+        page_title, content = get_page_main_content(url, 3)
+    except Exception, e:
+        if isinstance(e, URLError) or 'timed out' in str(e):
+            return 0
+        else:
+            raise
+    if title is None:
+        title = page_title
+
     file_name = re.sub(r'[^0-9a-zA-Z- ]+', '', title)
     file_name = "%s.txt" % file_name.replace(' ', '_')
-    if not file_name:
-        return
-
-    if Archive.objects.filter(url=url).count() > 0:
-        return
 
     file_path = os.path.join(settings.HACKER_NEWS_DIR, file_name)
     if os.path.exists(file_path):
-        return
+        return 0
 
-    try:
-        content = get_page_main_content(url, 3)
-    except Exception, e:
-        if isinstance(e, URLError) or 'timed out' in str(e):
-            content = ""
-        else:
-            raise
-
+    length = len(content)
     if content:
         content = title + "\r\n" + "=" * 20 + '\r\n' + content \
             + '\r\n' + url
         write_to_file(file_path, content)
         Archive.objects.create(url=url, file_name=file_name)
+    return length
 
 def index(request):
+    if request.method == "POST":
+        url = request.POST.get('url', '')
+        if not url:
+            return HttpResponse("URL needed.")
+        length = save_to_file(url)
+        return HttpResponse("Saved! Length: %s" % length)
+
     url = 'http://news.ycombinator.com/'
     try:
         soup = get_soup_by_url(url)

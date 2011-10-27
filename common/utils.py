@@ -40,6 +40,12 @@ def write_to_file(file_name, content):
 
 def get_page_main_content(url, timeout):
     soup = get_soup_by_url(url, timeout=timeout)
+    title_tag = soup.find("title")
+    if title_tag:
+        title = re.sub(r'[^a-zA-Z0-9_ -]+', '', soup.find("title").string)
+        title = title.replace('  ', ' ').replace(' ', '_')
+    else:
+        title = "No_Title_Found"
     for tag in soup.findAll('br'):
         tag.replaceWith("\n")
 
@@ -78,6 +84,7 @@ def get_page_main_content(url, timeout):
                 "entry",
                 "post",
                 "copy",
+                "story", # techdirt.com
                 "main"):
         if len(kls) >= 8:
             tags = soup.findAll("div", {"class": re.compile(kls)})
@@ -94,4 +101,4 @@ def get_page_main_content(url, timeout):
             content = ""
             continue
         break
-    return content.strip()
+    return title, content.strip()
