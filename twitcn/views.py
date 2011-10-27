@@ -19,13 +19,19 @@ def private(request):
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
     if request.method == "POST":
-        msg = request.POST.get("tweet-text")
-        msg = shortenStatusUrls(msg)
-        api.PostUpdates(msg)
-        url = request.META.get("PATH_INFO")
+        try:
+            msg = request.POST.get("tweet-text")
+            msg = shortenStatusUrls(msg)
+            api.PostUpdates(msg)
+            url = request.META.get("PATH_INFO")
+        except HTTPError, e:
+            return HttpResponse("%s" % e)
         return HttpResponseRedirect(url)
     else:
-        messages = api.GetHomeTimeline(count=50)
+        try:
+            messages = api.GetHomeTimeline(count=50)
+        except HTTPError, e:
+            return HttpResponse("%s" % e)
         ua = request.META.get("HTTP_USER_AGENT", '').lower()
         veer = (re.search(r'webos.2', ua) is not None)
         return render_to_response("twitcn/private.html", 

@@ -1,5 +1,6 @@
 import datetime
 import os.path
+from urllib2 import HTTPError
 
 from django.conf import settings
 from django.http import HttpResponse, Http404
@@ -49,7 +50,10 @@ def send_tweets_to_kindle(request):
     api = getPrivateApi(token)
     latest_id = get_last_updated_id()
 
-    messages = api.GetHomeTimeline(count=STEP)
+    try:
+        messages = api.GetHomeTimeline(count=STEP)
+    except HTTPError, e:
+        return HttpResponse("%s" % e)
 
     min_id = messages[-1].id - 1
     while latest_id and min_id > int(latest_id):
