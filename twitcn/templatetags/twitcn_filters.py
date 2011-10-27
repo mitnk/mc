@@ -10,81 +10,20 @@ import time
 from django import template
 
 import requests
-from twitcn.models import ShortenUrl
 from twitcn.tools import get_root_path
 
 
 register = template.Library()
 
-def is_shorten_url(url):
-    if len(url) > 30:
-        return False
-
-    SHORTEN_URLS = ("bit.ly", "t.co")
-    for s in SHORTEN_URLS:
-        if s + '/' in url:
-            return True
-    return False
 
 def ParseReplyProc(res):
     reply = res.group('reply')
     return '<a href="%s/%s/">%s</a>' % (get_root_path(), reply[1:], reply)
 
 
-def ParseUrlProcForKindle(res):
-    origin = url = res.group('url')
-    try:
-        return ShortenUrl.objects.get(shorten=url).origin
-    except ShortenUrl.DoesNotExist:
-        pass
-
-    if is_shorten_url(url):
-        try:
-            origin = requests.get(url).url
-            su, flag = ShortenUrl.objects.get_or_create(shorten=url)
-            su.origin = origin
-            su.save()
-            return origin
-        except:
-            pass
-    return origin
-
-
-def ParseUrlProc(res):
-    origin = url = res.group('url')
-    try:
-        su = ShortenUrl.objects.get(shorten=url)
-        origin = su.origin
-    except ShortenUrl.DoesNotExist:
-        origin = None
-
-    if origin is None and is_shorten_url(url):
-        try:
-            t = time.time()
-            origin = requests.get(url).url
-            su, flag = ShortenUrl.objects.get_or_create(shorten=url)
-            su.origin = origin
-            su.save()
-            return '<a href="%s" alt="%s">%s</a>' % (origin, time.time() - t, url)
-        except:
-            pass
-
-    if origin is None:
-        origin = url
-    return '<a href="%s">%s</a>' % (origin, url)
-
 def ParseSearchProc(res):
     search_tag = res.group('search')
     return '<a href="#" onclick=\'javascript:loadMoreStatus({"q": "%s", "page_name": "Real-time result for %s", "asker": "search", "first_time": true});\'>%s</a>' % (search_tag, search_tag, search_tag)
-
-
-@register.filter
-def ParseStatusTextForKindle(value):
-    if not value:
-        return value
-    p = re.compile(r'(?P<url>https?://[^ ]+)', re.VERBOSE)
-    value = p.sub(ParseUrlProcForKindle, value)
-    return value
 
 
 @register.filter
@@ -96,7 +35,6 @@ def ParseStatusText(value):
     p2 = re.compile(r'(?P<url>https?://[^ ]+)', re.VERBOSE)
     p3 = re.compile(r'(?P<search>\#[a-zA-Z0-9_]+)', re.VERBOSE)
     value = p1.sub(ParseReplyProc, value)
-    value = p2.sub(ParseUrlProc, value)
     value = p3.sub(ParseSearchProc, value)
     return value
 
