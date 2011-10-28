@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     (r'^dc/', include('mitnkcom.dailycost.urls')),
     (r'^comments/', include('django.contrib.comments.urls')),
     (r'^meta/', "webapps.views.http_meta"),
+    (r'^hn/', "webapps.news.views.index"),
 )
 
 if settings.DEBUG:

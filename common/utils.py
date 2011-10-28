@@ -42,7 +42,7 @@ def get_page_main_content(url, timeout):
     soup = get_soup_by_url(url, timeout=timeout)
     title_tag = soup.find("title")
     if title_tag:
-        title = re.sub(r'[^a-zA-Z0-9_ -]+', '', soup.find("title").string)
+        title = re.sub(r'[^a-zA-Z0-9_ -]+', '', soup.find("title").string).strip()
         title = title.replace('  ', ' ').replace(' ', '_')
     else:
         title = "No_Title_Found"
@@ -61,6 +61,7 @@ def get_page_main_content(url, timeout):
     for kls in ("post-bottom-area",
                 "wp-caption", # wordpress images
                 "entryDescription", # wired.com
+                "footnotes",
                 ):
         for tag in soup.findAll("div", {"class": re.compile(kls)}):
             tag.extract()
@@ -94,7 +95,7 @@ def get_page_main_content(url, timeout):
             continue
         for tag in tags:
             text = ''.join(tag.findAll(text=True))
-            text = re.sub(r'\r*\n+', '\n', text)
+            text = re.sub(r'\r*\n+', '\r\n\r\n', text)
             content += html_parser.unescape(text)
 
         if len(content) < 20: # content is too short
