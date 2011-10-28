@@ -6,7 +6,7 @@ import HTMLParser
 from django.core.files import File
 from django.utils.encoding import smart_str
 
-from webapps.BeautifulSoup import BeautifulSoup
+from webapps.BeautifulSoup import BeautifulSoup, Comment
 
 
 def get_1st_of_last_month(date_from=None):
@@ -40,6 +40,10 @@ def write_to_file(file_name, content):
 
 def get_page_main_content(url, timeout):
     soup = get_soup_by_url(url, timeout=timeout)
+
+    for comment in soup.findAll(text=lambda text:isinstance(text, Comment)):
+        comment.extract()
+
     title_tag = soup.find("title")
     if title_tag:
         title = re.sub(r'[^a-zA-Z0-9_ -]+', '', soup.find("title").string).strip()
@@ -66,7 +70,11 @@ def get_page_main_content(url, timeout):
         for tag in soup.findAll("div", {"class": re.compile(kls)}):
             tag.extract()
 
+
     for style in soup.findAll("style"):
+        style.extract()
+
+    for style in soup.findAll("script"):
         style.extract()
 
     html_parser = HTMLParser.HTMLParser()
