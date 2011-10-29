@@ -94,6 +94,7 @@ def get_page_main_content(url, timeout):
                 "post",
                 "copy",
                 "story", # techdirt.com
+                "text",
                 "main"):
         if len(kls) >= 8:
             tags = soup.findAll("div", {"class": re.compile(kls)})
