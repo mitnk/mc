@@ -66,6 +66,7 @@ def get_page_main_content(url, timeout):
                 "wp-caption", # wordpress images
                 "entryDescription", # wired.com
                 "footnotes",
+                "addthis_toolbox",
                 ):
         for tag in soup.findAll("div", {"class": re.compile(kls)}):
             tag.extract()
@@ -111,4 +112,25 @@ def get_page_main_content(url, timeout):
             content = ""
             continue
         break
+
+    if len(content) < 20:
+        for kls in ("post",
+                    "entry",
+                    ):
+            if len(kls) >= 8:
+                tags = soup.findAll("div", {"id": re.compile(kls)})
+            else:
+                tags = soup.findAll("div", {"id": kls})
+            if not tags:
+                continue
+            for tag in tags:
+                text = ''.join(tag.findAll(text=True))
+                text = re.sub(r'\r*\n+', '\r\n\r\n', text)
+                content += html_parser.unescape(text)
+
+            if len(content) < 20: # content is too short
+                content = ""
+                continue
+            break
+
     return title, content.strip()
