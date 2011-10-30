@@ -13,6 +13,8 @@ from django.template import RequestContext
 from django.utils import simplejson as json
 from django.views.decorators.csrf import csrf_exempt
 
+import requests
+
 from tools import *
 from asker_types import *
 
@@ -431,12 +433,9 @@ def unfollow(request):
     return HttpResponse('post, no get')
     
     
-def open_bitly_url(request, bitly_url):
-    long_url = getOldUrl(bitly_url)
-    try:
-        return HttpResponseRedirect(long_url)
-    except:
-        return HttpResponseRedirect(bitly_url)
+def open_tco_url(request, url_string):
+    url = 'http://t.co/%s' % url_string
+    return requests.get(url, timeout=3).url or url
 
 def logout(request):
     if request.session.get('access_token'):
