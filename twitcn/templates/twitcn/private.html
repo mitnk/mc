@@ -5,17 +5,15 @@
 <title>twitcn</title>
 <style>
   body { font-size:{% if veer %}4em{% else %}20px{% endif %}; }
-  textarea { width:100%; display:none; }
+  textarea { width:100%; }
   .tweet { border-bottom:{% if veer %}6{% else %}2{% endif %}px solid #AAAAAA; margin-top:6px; }
   #char_count { font-weight: bold; }
 </style>
 </head>
 <body>
-    <form method="POST" action=".">
-      <input type="hidden" id="in_reply_to_status_id" value="">
-      <textarea onblur="check_char_count('blur')" onkeyup="check_char_count()" id="tweet-text" tabindex="1"></textarea>
-      <input type="button" onclick="tweet()" value="Tweet"/> <span id="char_count">140</span>
-    </form>
+    <input type="hidden" id="in_reply_to_status_id" value="">
+    <textarea onblur="check_char_count()" onkeyup="check_char_count()" id="tweet-text" tabindex="1"></textarea>
+    <input type="button" onclick="tweet()" value="Tweet"/> <span id="char_count">140</span>
     {% load twitcn_filters %}
     {% for status in messages %}
     <div id="new_tweets"></div>

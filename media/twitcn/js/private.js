@@ -1,10 +1,12 @@
-function favo(obj, id) {
-    var xmlhttp;
+function get_ajax_obj() {
     if (window.XMLHttpRequest)
-        xmlhttp=new XMLHttpRequest();
+        var xmlhttp = new XMLHttpRequest();
     else // for IE6
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-
+        var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    return xmlhttp;
+}
+function favo(obj, id) {
+    var xmlhttp = get_ajax_obj();
     if (obj.innerHTML == "Favo") {
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
@@ -35,16 +37,10 @@ function retweet(text) {
 function tweet() {
     var tweet_text = document.getElementById("tweet-text").value;
     if (tweet_text.length == 0) {
-        document.getElementById("tweet-text").style.display = 'block';
         return false;
     }
 
-    var xmlhttp;
-    if (window.XMLHttpRequest)
-        xmlhttp=new XMLHttpRequest();
-    else // for IE6
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-
+    var xmlhttp = get_ajax_obj();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             document.getElementById("new_tweets").innerHTML = xmlhttp.responseText + document.getElementById("new_tweets").innerHTML;
@@ -56,15 +52,10 @@ function tweet() {
     var in_reply_to_status_id = document.getElementById("in_reply_to_status_id").value;
     xmlhttp.send("tweet_text=" + tweet_text + "&in_reply_to_status_id=" + in_reply_to_status_id);
     document.getElementById("char_count").innerHTML = '<img style="height:1em;" src="/site_media/images/ajax-loader-bar.gif">';
-    document.getElementById("tweet-text").style.display = 'none';
 }
-function check_char_count(blur) {
+function check_char_count() {
     var tweet_text = document.getElementById("tweet-text").value;
     var tweet_length = tweet_text.length;
-    if (blur == 'blur' && tweet_length == 0) {
-        document.getElementById("tweet-text").style.display = 'none';
-        return false;
-    }
     if (tweet_length == 0 || tweet_text.indexOf("@") != 0) {
         document.getElementById("in_reply_to_status_id").value = "";
     }
