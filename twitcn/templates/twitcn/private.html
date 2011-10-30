@@ -39,7 +39,7 @@ function favo(obj, id) {
         xmlhttp.open("POST", ".", true);
         xmlhttp.send("action=unfavo&status_id=" + id);
     }
-    obj.innerHTML = '<img{% if veer %} style="height:2em;"{% endif %} src="/site_media/images/ajax-loader-bar.gif">';
+    obj.innerHTML = '<img{% if veer %} style="height:1em;"{% endif %} src="/site_media/images/ajax-loader-bar.gif">';
 }
 function reply(name, id) {
     document.getElementById("in_reply_to_status_id").value = id;
