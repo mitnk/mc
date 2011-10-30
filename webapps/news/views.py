@@ -12,8 +12,8 @@ from common.utils import get_soup_by_url, write_to_file, get_page_main_content
 from webapps.news.models import News, Archive
 from webapps.tools import send_mail
 
-POINITS_LIMIT_TO_LOG = 30
-POINITS_LIMIT_TO_KINDLE = 70
+POINITS_LIMIT_TO_LOG = 70
+POINITS_LIMIT_TO_KINDLE = 100
 
 def send_to_kindle(request):
     send_to = ['whgking@free.kindle.com']
