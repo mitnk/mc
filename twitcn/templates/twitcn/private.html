@@ -24,7 +24,7 @@ function favo(obj, id) {
     if (obj.innerHTML == "Favo") {
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-                obj.innerHTML += xmlhttp.responseText;
+                obj.innerHTML = "Favo" + xmlhttp.responseText;
         }
         xmlhttp.open("POST", ".", true);
         xmlhttp.send("action=favo&status_id=" + id);
@@ -37,7 +37,7 @@ function favo(obj, id) {
         xmlhttp.open("POST", ".", true);
         xmlhttp.send("action=unfavo&status_id=" + id);
     }
-    obj.innerHTML = '<img src="/site_media/images/ajax-loader-bar.gif">';
+    obj.innerHTML = '<img{% if veer %} style="height=4em;"{% endif %} src="/site_media/images/ajax-loader-bar.gif">';
 }
 function reply(obj, name, id) {
     document.getElementById("in_reply_to_status_id").value = id;
