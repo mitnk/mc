@@ -19,14 +19,25 @@ def private(request):
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
     if request.method == "POST":
-        try:
-            msg = request.POST.get("tweet-text")
-            msg = shortenStatusUrls(msg)
-            api.PostUpdates(msg)
-            url = request.META.get("PATH_INFO")
-        except HTTPError, e:
-            return HttpResponse("%s" % e)
-        return HttpResponseRedirect(url)
+        if request.POST.get("action") and request.POST.get("status_id"):
+            if request.POST['action'] == "favo":
+                api.CreateFavorite(request.POST["status_id"])
+                return HttpResponse("ed")
+            elif request.POST['action'] == "unfavo":
+                api.DestroyFavorite(request.POST["status_id"])
+                return HttpResponse("Favo")
+            return HttpResponse("error")
+        else:
+            try:
+                msg = request.POST.get("tweet-text")
+                if request.POST.get("in_reply_to_status_id"):
+                    in_reply_to_status_id = request.POST.get("in_reply_to_status_id")
+                msg = shortenStatusUrls(msg)
+                api.PostUpdates(msg, in_reply_to_status_id=in_reply_to_status_id)
+                url = request.META.get("PATH_INFO")
+            except HTTPError, e:
+                return HttpResponse("%s" % e)
+            return HttpResponseRedirect(url)
     else:
         try:
             messages = api.GetHomeTimeline(count=50)

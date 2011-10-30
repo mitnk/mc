@@ -8,23 +8,57 @@ textarea {
     width:100%;
 }
 .tweet {
-    font-size:{% if veer %}5em{% else %}20px{% endif %};
-    border-bottom:3px solid #AAAAAA;
+    font-size:{% if veer %}4em{% else %}20px{% endif %};
+    border-bottom:{% if veer %}6{% else %}2{% endif %}px solid #AAAAAA;
     margin-top:6px;
 }
 </style>
+<script type="text/javascript">
+function favo(obj, id) {
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+        xmlhttp=new XMLHttpRequest();
+    else // for IE6
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+
+    if (obj.innerHTML == "Favo") {
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                obj.innerHTML += xmlhttp.responseText;
+        }
+        xmlhttp.open("POST", ".", true);
+        xmlhttp.send("action=favo&status_id=" + id);
+        obj.innerHTML = '<img src="/site_media/images/ajax-loader-bar.gif">';
+    }
+    else {
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                obj.innerHTML = xmlhttp.responseText;
+        }
+        xmlhttp.open("POST", ".", true);
+        xmlhttp.send("action=unfavo&status_id=" + id);
+        obj.innerHTML = '<img src="/site_media/images/ajax-loader-bar.gif">';
+    }
+}
+function reply(obj, name, id) {
+    document.getElementById("in_reply_to_status_id").value = id;
+    document.getElementById("tweet-text").innerHTML = "@" + name + " ";
+    document.getElementById("tweet-text").focus();
+}
+</script>
 </head>
 <body>
     <form method="POST" action=".">
     {% csrf_token %}
-    <textarea name="tweet-text" tabindex="1"></textarea><br/>
+    <input type="hidden" id="in_reply_to_status_id" name="in_reply_to_status_id" value="">
+    <textarea name="tweet-text" id="tweet-text" tabindex="1"></textarea><br/>
     <input type="submit" value="Tweet"/>
     </form>
     {% load twitcn_filters %}
     {% for status in messages %}
     <div class="tweet">
     <b style="color:red;">{{ status.user.screen_name }}</b>: {{ status.text|ParseStatusText|safe }}<br/>
-    {{ status.relative_created_at }}
+    {{ status.relative_created_at }} <a  href="javascript:void(0)" onclick="favo(this, '{{ status.id }}')">Favo{% if status.favorited %}ed{% endif %}</a> <a href="javascript:void(0)" onclick="reply(this, '{{ status.user.screen_name }}', '{{ status.id }}')">Re</a>
     </div>
     {% endfor %}
 </body>
