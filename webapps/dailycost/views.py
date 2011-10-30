@@ -20,7 +20,7 @@ def index(request):
     else:
         form = CostForm()
     ua = request.META.get("HTTP_USER_AGENT", '').lower()
-    veer = (re.search(r'webos', ua) is not None)
+    veer = 'webos' in ua
     return render_to_response('webapps/dailycost/index.html', 
                               {'cs': cs,
                                'this_month_net': this_month_net,
