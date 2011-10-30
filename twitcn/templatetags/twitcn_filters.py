@@ -30,7 +30,7 @@ def ParseStatusText(value):
     if not value:
         return value
     p1 = re.compile(r'(?P<reply>@[a-zA-Z0-9_]+)', re.VERBOSE)
-    p2 = re.compile(r'(?P<url>http://t.co/[^A-Za-z0-9]+)', re.VERBOSE)
+    p2 = re.compile(r'(?P<url>http://t.co/\w+)', re.VERBOSE)
     value = p1.sub(ParseReplyProc, value)
     value = p2.sub(ParseUrlProc, value)
     return value
