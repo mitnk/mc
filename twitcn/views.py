@@ -432,18 +432,18 @@ def unfollow(request):
                 pass
     return HttpResponse('post, no get')
     
-    
+
 def open_tco_url(request, url_string):
     url = 'http://t.co/%s' % url_string
-    return requests.get(url, timeout=3).url or url
+    return HttpResponseRedirect(requests.get(url, timeout=3).url or url)
+
 
 def logout(request):
     if request.session.get('access_token'):
         del request.session["access_token"]
     if request.session.get('user_info'):
         del request.session["user_info"]
-
-    return HttpResponseRedirect(get_root_path() + "/")
+    return HttpResponsePermanentRedirect(get_root_path() + "/")
 
 def login_with_oauth(request):
     api = OAuthApi(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
