@@ -65,8 +65,10 @@ function tweet() {
         xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             document.getElementById("new_tweets").innerHTML = xmlhttp.responseText + document.getElementById("new_tweets").innerHTML;
+            document.getElementById("tweet-text").value = "";
+        }
     }
     xmlhttp.open("POST", ".", true);
     var in_reply_to_status_id = document.getElementById("in_reply_to_status_id").value;
