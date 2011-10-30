@@ -34,8 +34,10 @@ function retweet(text) {
 }
 function tweet() {
     var tweet_text = document.getElementById("tweet-text").value;
-    if (tweet_text.length == 0)
+    if (tweet_text.length == 0) {
+        show_tweet_input();
         return false;
+    }
 
     var xmlhttp;
     if (window.XMLHttpRequest)
@@ -54,6 +56,7 @@ function tweet() {
     var in_reply_to_status_id = document.getElementById("in_reply_to_status_id").value;
     xmlhttp.send("tweet_text=" + tweet_text + "&in_reply_to_status_id=" + in_reply_to_status_id);
     document.getElementById("char_count").innerHTML = '<img style="height:1em;" src="/site_media/images/ajax-loader-bar.gif">';
+    show_tweet_input("hide");
 }
 function check_char_count() {
     var tweet_text = document.getElementById("tweet-text").value;
@@ -66,4 +69,10 @@ function check_char_count() {
         document.getElementById("char_count").innerHTML = '<font color="red">' + len + '</font>';
     else
         document.getElementById("char_count").innerHTML = len;
+}
+function show_tweet_input(hide) {
+    if (hide == "hide")
+        document.getElementById("tweet-text").style.visibility = 'hidden';
+    else
+        document.getElementById("tweet-text").style.visibility = 'visible';
 }
