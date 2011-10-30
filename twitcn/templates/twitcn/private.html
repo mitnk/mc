@@ -28,7 +28,6 @@ function favo(obj, id) {
         }
         xmlhttp.open("POST", ".", true);
         xmlhttp.send("action=favo&status_id=" + id);
-        obj.innerHTML = '<img src="/site_media/images/ajax-loader-bar.gif">';
     }
     else {
         xmlhttp.onreadystatechange = function() {
@@ -37,8 +36,8 @@ function favo(obj, id) {
         }
         xmlhttp.open("POST", ".", true);
         xmlhttp.send("action=unfavo&status_id=" + id);
-        obj.innerHTML = '<img src="/site_media/images/ajax-loader-bar.gif">';
     }
+    obj.innerHTML = '<img src="/site_media/images/ajax-loader-bar.gif">';
 }
 function reply(obj, name, id) {
     document.getElementById("in_reply_to_status_id").value = id;
