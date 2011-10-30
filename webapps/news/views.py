@@ -65,19 +65,19 @@ def index(request):
     if request.method != "POST":
         return render_to_response('webapps/hacker_news.html')
 
-    #NOTE: Only POST request can get there
     url = request.POST.get('url', '')
     if not url:
         return HttpResponse("URL needed.")
-    file_path = save_to_file(url, force=True)
-    if file_path:
-        send_mail(['whgking@free.kindle.com',], file_path, "None", files=[file_path,])
-        os.remove(file_path)
-        return HttpResponse("%s Sent!" % file_path)
-    else:
-        return HttpResponse("No file sent!")
 
-    if request.POST.get('url') == "HN":
+    if request.POST.get('url') != "HN":
+        file_path = save_to_file(url, force=True)
+        if file_path:
+            send_mail(['whgking@free.kindle.com',], file_path, "None", files=[file_path,])
+            os.remove(file_path)
+            return HttpResponse("%s Sent!" % file_path)
+        else:
+            return HttpResponse("No file sent!")
+    elif request.POST.get('url') == "HN":
         url = 'http://news.ycombinator.com/'
         try:
             soup = get_soup_by_url(url)
