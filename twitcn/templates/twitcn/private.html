@@ -86,7 +86,7 @@ function check_char_count() {
 <body>
     <form method="POST" action=".">
     <input type="hidden" id="in_reply_to_status_id" name="in_reply_to_status_id" value="">
-    <textarea onchange="check_char_count();" onkeyup="check_char_count();" name="tweet-text" id="tweet-text" tabindex="1"></textarea><br/>
+    <textarea onchange="check_char_count()" onblur="check_char_count()" name="tweet-text" id="tweet-text" tabindex="1"></textarea><br/>
     <input type="button" onclick="tweet()" value="Tweet"/> <span id="char_count">140</span>
     </form>
     {% load twitcn_filters %}
