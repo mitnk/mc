@@ -48,7 +48,6 @@ function reply(obj, name, id) {
 </head>
 <body>
     <form method="POST" action=".">
-    {% csrf_token %}
     <input type="hidden" id="in_reply_to_status_id" name="in_reply_to_status_id" value="">
     <textarea name="tweet-text" id="tweet-text" tabindex="1"></textarea><br/>
     <input type="submit" value="Tweet"/>

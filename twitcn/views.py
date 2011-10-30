@@ -11,10 +11,12 @@ from django.contrib.sessions.models import Session
 from django.contrib.sessions.backends.db import SessionStore
 from django.template import RequestContext
 from django.utils import simplejson as json
+from django.views.decorators.csrf import csrf_exempt
 
 from tools import *
 from asker_types import *
 
+@csrf_exempt
 def private(request):
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
