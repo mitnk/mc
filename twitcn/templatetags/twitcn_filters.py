@@ -20,7 +20,7 @@ def ParseReplyProc(res):
 def ParseUrlProc(res):
     url = res.group('url')
     if 't.co' in url:
-        new_url = new_url.split('/')[-1]
+        new_url = url.split('/')[-1]
     else:
         new_url = url
     return '<a href="%s/tco/%s">%s</a>' % (get_root_path(), new_url, url)
