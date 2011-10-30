@@ -51,7 +51,7 @@ def private(request):
         except HTTPError, e:
             return HttpResponse("%s" % e)
         ua = request.META.get("HTTP_USER_AGENT", '').lower()
-        veer = (re.search(r'webos.2', ua) is not None)
+        veer = (re.search(r'webos', ua) is not None)
         return render_to_response("twitcn/private.html", 
                                   {'messages': messages,
                                    'veer': veer,},

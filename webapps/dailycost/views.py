@@ -19,6 +19,8 @@ def index(request):
             return HttpResponseRedirect(reverse("dailycost_index"))
     else:
         form = CostForm()
+    ua = request.META.get("HTTP_USER_AGENT", '').lower()
+    veer = (re.search(r'webos', ua) is not None)
     return render_to_response('webapps/dailycost/index.html', 
                               {'cs': cs,
                                'this_month_net': this_month_net,
@@ -26,5 +28,6 @@ def index(request):
                                'this_month_guess': this_month_guess,
                                'last_month_total': last_month_total,
                                'last_month_net': last_month_net,
+                               'veer': veer,
                                'form': form},
                               context_instance=RequestContext(request))
