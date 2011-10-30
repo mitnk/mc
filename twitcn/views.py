@@ -35,11 +35,14 @@ def private(request):
                 if request.POST.get("in_reply_to_status_id"):
                     in_reply_to_status_id = request.POST.get("in_reply_to_status_id")
                 msg = shortenStatusUrls(msg)
-                api.PostUpdates(msg, in_reply_to_status_id=in_reply_to_status_id)
-                url = request.META.get("PATH_INFO")
+                result = api.PostUpdates(msg, in_reply_to_status_id=in_reply_to_status_id)
+                if isinstance(result[0], twitter.Status):
+                    return render_to_response("twitcn/new_tweet.html", 
+                                              {'status': result[0]},
+                                              context_instance=RequestContext(request))
             except HTTPError, e:
                 return HttpResponse("%s" % e)
-            return HttpResponseRedirect(url)
+            return HttpResponse("Post tweet failed")
     else:
         try:
             messages = api.GetHomeTimeline(count=50)
