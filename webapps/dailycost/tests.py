@@ -3,7 +3,7 @@ import datetime
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from dailycost.models import Cost
+from webapps.dailycost.models import Cost
 
 
 class Test200URL(TestCase):

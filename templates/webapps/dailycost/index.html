@@ -1,0 +1,34 @@
+{% extends "webapps/base.html" %}
+
+{% block title %}Daily Cost{% endblock %}
+
+{% block css %}
+<style> .errorlist li {color:red;} .cr {color:red;} .cg {color:green;} .cb {color:blue;} </style>
+{% endblock %}
+
+{% block main %}
+  <div>
+    <form action="." method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Cost" />
+    </form>
+  </div>
+  <hr/>
+
+  {% if cs %}
+  <ul>
+    {% for c in cs %}
+        <li><span class="cr">{{ c.amount }}</span> at <span class="cb">{{ c.added|date:"N j" }}</span> for <span class="cg">{{ c.comment }}<span></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <hr/>
+
+  <ul>
+    <li>This net: <span class="cr">{{ this_month_net }}</span></li>
+    <li>This total: <span class="cr">{{ this_month_total }}</span></li>
+    <li>This guess: <span class="cr">{{ this_month_guess }}</span></li>
+    <li>Last net: <span class="cr">{{ last_month_net }}</span></li>
+    <li>Last total: <span class="cr">{{ last_month_total }}</span></li>
+  </ul>
+{% endblock %}
