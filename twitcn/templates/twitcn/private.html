@@ -46,11 +46,11 @@ function favo(obj, id) {
 }
 function reply(name, id) {
     document.getElementById("in_reply_to_status_id").value = id;
-    document.getElementById("tweet-text").innerHTML = "@" + name + " ";
+    document.getElementById("tweet-text").value = "@" + name + " ";
     document.getElementById("tweet-text").focus();
 }
 function retweet(text) {
-    document.getElementById("tweet-text").innerHTML = text;
+    document.getElementById("tweet-text").value = text;
     document.getElementById("tweet-text").focus();
 }
 function tweet() {
@@ -65,12 +65,12 @@ function tweet() {
             document.getElementById("new_tweets").innerHTML = xmlhttp.responseText + document.getElementById("new_tweets").innerHTML;
     }
     xmlhttp.open("POST", ".", true);
-    var tweet_text = document.getElementById("tweet-text").innerHTML;
+    var tweet_text = document.getElementById("tweet-text").value;
     var in_reply_to_status_id = document.getElementById("in_reply_to_status_id").value;
     xmlhttp.send("tweet_text=" + tweet_text + "&in_reply_to_status_id=" + in_reply_to_status_id);
 }
 function check_char_count() {
-    var tweet_text = document.getElementById("tweet-text").innerHTML;
+    var tweet_text = document.getElementById("tweet-text").value;
     var tweet_length = tweet_text.length;
     if (tweet_length == 0 || tweet_text.indexOf("@") == -1) {
         document.getElementById("in_reply_to_status_id").value = "";
