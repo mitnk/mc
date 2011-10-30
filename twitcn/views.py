@@ -31,7 +31,10 @@ def private(request):
             return HttpResponse("error")
         else:
             try:
-                msg = request.POST.get("tweet-text")
+                msg = request.POST.get("tweet_text")
+                if not msg:
+                    return HttpResponse("")
+
                 in_reply_to_status_id = request.POST.get("in_reply_to_status_id") or None
                 msg = shortenStatusUrls(msg)
                 result = api.PostUpdates(msg, in_reply_to_status_id=in_reply_to_status_id)
