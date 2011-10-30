@@ -4,11 +4,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>twitcn</title>
 <style>
+* {
+    font-size:{% if veer %}4em{% else %}20px{% endif %};
+}
 textarea {
     width:100%;
 }
 .tweet {
-    font-size:{% if veer %}4em{% else %}20px{% endif %};
     border-bottom:{% if veer %}6{% else %}2{% endif %}px solid #AAAAAA;
     margin-top:6px;
 }
