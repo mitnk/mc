@@ -18,7 +18,11 @@
   {% if cs %}
   <ul>
     {% for c in cs %}
-        <li><span class="cr">{{ c.amount }}</span> at <span class="cb">{{ c.added|date:"N j" }}</span> for <span class="cg">{{ c.comment }}<span></li>
+    <li><span class="cr">
+        {{ c.amount }}</span>
+        at <span class="cb">{{ c.added|date:"D, N j" }}</span>
+        for <span class="cg">{{ c.comment }}<span>
+    </li>
     {% endfor %}
   </ul>
   {% endif %}
