@@ -32,8 +32,7 @@ def private(request):
         else:
             try:
                 msg = request.POST.get("tweet-text")
-                if request.POST.get("in_reply_to_status_id"):
-                    in_reply_to_status_id = request.POST.get("in_reply_to_status_id")
+                in_reply_to_status_id = request.POST.get("in_reply_to_status_id") or None
                 msg = shortenStatusUrls(msg)
                 result = api.PostUpdates(msg, in_reply_to_status_id=in_reply_to_status_id)
                 if isinstance(result[0], twitter.Status):
@@ -223,9 +222,7 @@ def tweet(request):
         if msg:
             api, current_user = getTwitterApi(request)
             try:
-                in_reply_to_status_id = None
-                if request.POST.get("in_reply_to_status_id"):
-                    in_reply_to_status_id = request.POST.get("in_reply_to_status_id")
+                in_reply_to_status_id = request.POST.get("in_reply_to_status_id") or None
                 msg = shortenStatusUrls(msg)
                 result = api.PostUpdates(msg, in_reply_to_status_id=in_reply_to_status_id)
     

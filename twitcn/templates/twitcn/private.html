@@ -72,7 +72,7 @@ function tweet() {
 function check_char_count() {
     var tweet_text = document.getElementById("tweet-text").value;
     var tweet_length = tweet_text.length;
-    if (tweet_length == 0 || tweet_text.indexOf("@") == -1) {
+    if (tweet_length == 0 || tweet_text.indexOf("@") != 0) {
         document.getElementById("in_reply_to_status_id").value = "";
     }
     var len = 140 - tweet_length;
