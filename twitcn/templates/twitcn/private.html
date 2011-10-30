@@ -68,6 +68,7 @@ function tweet() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             document.getElementById("new_tweets").innerHTML = xmlhttp.responseText + document.getElementById("new_tweets").innerHTML;
             document.getElementById("tweet-text").value = "";
+            document.getElementById("char_count").innerHTML = "140";
         }
     }
     xmlhttp.open("POST", ".", true);
