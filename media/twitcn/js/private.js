@@ -35,7 +35,7 @@ function retweet(text) {
 function tweet() {
     var tweet_text = document.getElementById("tweet-text").value;
     if (tweet_text.length == 0) {
-        show_tweet_input();
+        document.getElementById("tweet-text").style.display = 'block';
         return false;
     }
 
@@ -56,11 +56,15 @@ function tweet() {
     var in_reply_to_status_id = document.getElementById("in_reply_to_status_id").value;
     xmlhttp.send("tweet_text=" + tweet_text + "&in_reply_to_status_id=" + in_reply_to_status_id);
     document.getElementById("char_count").innerHTML = '<img style="height:1em;" src="/site_media/images/ajax-loader-bar.gif">';
-    show_tweet_input("hide");
+    document.getElementById("tweet-text").style.display = 'none';
 }
-function check_char_count() {
+function check_char_count(blur) {
     var tweet_text = document.getElementById("tweet-text").value;
     var tweet_length = tweet_text.length;
+    if (blur == 'blur' && tweet_length == 0) {
+        document.getElementById("tweet-text").style.display = 'none';
+        return false;
+    }
     if (tweet_length == 0 || tweet_text.indexOf("@") != 0) {
         document.getElementById("in_reply_to_status_id").value = "";
     }
@@ -69,10 +73,4 @@ function check_char_count() {
         document.getElementById("char_count").innerHTML = '<font color="red">' + len + '</font>';
     else
         document.getElementById("char_count").innerHTML = len;
-}
-function show_tweet_input(hide) {
-    if (hide == "hide")
-        document.getElementById("tweet-text").style.visibility = 'hidden';
-    else
-        document.getElementById("tweet-text").style.visibility = 'visible';
 }
