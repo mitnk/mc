@@ -1,0 +1,5 @@
+{% load twitcn_filters %}
+<div class="tweet">
+  <b style="color:red;">{{ status.user.screen_name }}</b>: {{ status.text|ParseStatusText|safe }}<br/>
+  {{ status.relative_created_at }}
+</div>
