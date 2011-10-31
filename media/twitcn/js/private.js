@@ -50,7 +50,7 @@ function tweet() {
     }
     xmlhttp.open("POST", ".", true);
     var in_reply_to_status_id = document.getElementById("in_reply_to_status_id").value;
-    xmlhttp.send("tweet_text=" + tweet_text + "&in_reply_to_status_id=" + in_reply_to_status_id);
+    xmlhttp.send("tweet_text=" + encodeURIComponent(tweet_text) + "&in_reply_to_status_id=" + in_reply_to_status_id);
     document.getElementById("char_count").innerHTML = '<img style="height:1em;" src="/site_media/images/ajax-loader-bar.gif">';
 }
 function check_char_count() {
