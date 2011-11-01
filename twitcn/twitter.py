@@ -271,7 +271,6 @@ class Status(object):
       user = User.NewFromJsonDict(data['user'])
       if retweeted_by:
           retweeted_by = User.NewFromJsonDict(retweeted_by)
-          data['id'] = retweeted_id
     else:
       user = None
     return Status(created_at=data.get('created_at', None),
