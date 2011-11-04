@@ -92,6 +92,7 @@ def get_page_main_content(url, timeout):
                 "realpost",
                 "asset-body",
                 "entry",
+                "article",
                 "post",
                 "copy",
                 "story", # techdirt.com
