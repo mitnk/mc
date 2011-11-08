@@ -84,6 +84,7 @@ def get_page_main_content(url, timeout):
                 "articleContent",
                 "postBody", # http://news.cnet.com
                 "post-body", # blogspot
+                "blog-body", # economist.com/blogs
                 "article_inner",
                 "articleBody",
                 "articlePage", # for wsj.com
@@ -98,8 +99,12 @@ def get_page_main_content(url, timeout):
                 "story", # techdirt.com
                 "text",
                 "main",):
-        if len(kls) >= 8 or kls == "post":
+        if len(kls) >= 8:
             tags = soup.findAll("div", {"class": re.compile(kls)})
+        elif kls == "post":
+            tags = soup.findAll("div", {"class": kls})
+            if not tags:
+                tags = soup.findAll("div", {"class": re.compile(kls)})
         else:
             tags = soup.findAll("div", {"class": kls})
         if not tags:
