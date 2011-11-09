@@ -59,6 +59,47 @@ def private(request):
                                    'veer': veer,},
                                   context_instance=RequestContext(request))
 
+def private_mention(request):
+    token = settings.TWITCN_PRIVATE_TOKEN
+    api = getPrivateApi(token)
+    try:
+        messages = api.GetMentions()
+    except HTTPError, e:
+        return HttpResponse("%s" % e)
+    ua = request.META.get("HTTP_USER_AGENT", '').lower()
+    veer = (re.search(r'webos', ua) is not None)
+    return render_to_response("twitcn/private.html", 
+                              {'messages': messages,
+                               'veer': veer,},
+                              context_instance=RequestContext(request))
+
+def private_favorites(request):
+    token = settings.TWITCN_PRIVATE_TOKEN
+    api = getPrivateApi(token)
+    try:
+        messages = api.GetFavorites()
+    except HTTPError, e:
+        return HttpResponse("%s" % e)
+    ua = request.META.get("HTTP_USER_AGENT", '').lower()
+    veer = (re.search(r'webos', ua) is not None)
+    return render_to_response("twitcn/private.html", 
+                              {'messages': messages,
+                               'veer': veer,},
+                              context_instance=RequestContext(request))
+
+def private_dm(request):
+    token = settings.TWITCN_PRIVATE_TOKEN
+    api = getPrivateApi(token)
+    try:
+        messages = api.GetDirectMessages()
+    except HTTPError, e:
+        return HttpResponse("%s" % e)
+    ua = request.META.get("HTTP_USER_AGENT", '').lower()
+    veer = (re.search(r'webos', ua) is not None)
+    return render_to_response("twitcn/private.html", 
+                              {'messages': messages,
+                               'veer': veer,},
+                              context_instance=RequestContext(request))
 
 def index(request):
     api, current_user = getTwitterApi(request, True)

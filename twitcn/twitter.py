@@ -21,7 +21,7 @@ __author__ = 'dewitt@google.com'
 __version__ = '0.6-devel'
 
 # make sure end with '/'
-TWITTER_API = 'http://api.twitter.com/1/'
+TWITTER_API = 'https://api.twitter.com/1/'
 
 from django.utils import simplejson
 from search_from_web import searchTwitterWeb, searchBingTwitter
