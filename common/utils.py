@@ -65,8 +65,12 @@ def get_page_main_content(url, timeout):
     for kls in ("post-bottom-area",
                 "wp-caption", # wordpress images
                 "entryDescription", # wired.com
+                "post-meta",
                 "footnotes",
                 "addthis_toolbox",
+                "widget-area",
+                "sharing-",
+                "related_articles",
                 ):
         for tag in soup.findAll("div", {"class": re.compile(kls)}):
             tag.extract()
@@ -89,11 +93,13 @@ def get_page_main_content(url, timeout):
                 "articleBody",
                 "articlePage", # for wsj.com
                 "storycontent",
+                "the-content",
                 "blogbody",
                 "realpost",
                 "asset-body",
                 "entry",
                 "article",
+                "-content",
                 "post",
                 "copy",
                 "story", # techdirt.com
@@ -114,13 +120,14 @@ def get_page_main_content(url, timeout):
             text = re.sub(r'\r*\n+', '\r\n\r\n', text)
             content += html_parser.unescape(text)
 
-        if len(content) < 20: # content is too short
+        if len(content) < 10: # content is too short
             content = ""
             continue
         break
 
     if len(content) < 20:
-        for kls in ("post",
+        for kls in ("-content", # need before 'post'
+                    "post",
                     "entry",
                     ):
             if len(kls) >= 8:
