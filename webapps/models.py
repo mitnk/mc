@@ -9,3 +9,7 @@ class WebAppInfo(models.Model):
     def __unicode__(self):
         return self.category + "-" + self.name
 
+class FavoTweet(models.Model):
+    name = models.CharField(max_length=40)
+    text = models.CharField(max_length=160)
+    added = models.DateTimeField()
