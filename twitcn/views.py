@@ -93,7 +93,7 @@ def private_favorites(request):
                 text = smart_str(message.text)
                 added = datetime.datetime(*rfc822.parsedate(message.created_at)[:6])
                 FavoTweet.objects.create(name=name, text=text, added=added)
-            return "ok"
+            return HttpResponse("%s\n" % len(messages))
         else:
             return private(request)
 
