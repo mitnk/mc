@@ -7,4 +7,4 @@ class FavoTweetAdmin(admin.ModelAdmin):
 
 admin.site.register(Article)
 admin.site.register(Category)
-admin.site.register(FavoTweet)
+admin.site.register(FavoTweet, FavoTweetAdmin)
