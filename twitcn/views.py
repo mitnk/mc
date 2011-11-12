@@ -87,9 +87,9 @@ def private_favorites(request):
             import rfc822
             name = message.user.screen_name
             text = smart_str(message.text)
-            at_ = message.created_at
-            added = rfc822.parsedate(message.created_at)
-            return HttpResponse(name + "<br/>" + text + "<br/>"  + at_ + "<br/>" + added)
+            added = datetime.datetime(*rfc822.parsedate(message.created_at)[:6])
+            FavoTweet.objects.create(name=name, text=text, added=added)
+            return HttpResponse("ok")
 
     try:
         messages = api.GetFavorites()
