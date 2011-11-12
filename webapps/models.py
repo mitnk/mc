@@ -13,3 +13,6 @@ class FavoTweet(models.Model):
     name = models.CharField(max_length=40)
     text = models.CharField(max_length=160)
     added = models.DateTimeField()
+
+    class Meta:
+        ordering = ["-added"]
