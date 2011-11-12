@@ -82,14 +82,14 @@ def private_favorites(request):
     if request.method == "POST":
         messages = api.GetFavorites()
         for message in messages:
-            #api.DestroyFavorite(message.id)
+            api.DestroyFavorite(message.id)
             from webapps.models import FavoTweet
             import rfc822
             name = message.user.screen_name
             text = smart_str(message.text)
             added = datetime.datetime(*rfc822.parsedate(message.created_at)[:6])
             FavoTweet.objects.create(name=name, text=text, added=added)
-            return HttpResponse("ok")
+        return "ok"
 
     try:
         messages = api.GetFavorites()
