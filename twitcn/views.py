@@ -85,7 +85,7 @@ def private_favorites(request):
             #api.DestroyFavorite(message.id)
             from webapps.models import FavoTweet
             import rfc822
-            name = message.screen_name
+            name = message.user.screen_name
             text = smart_str(message.text)
             at_ = message.created_at
             added = rfc822.parsedate(message.created_at)
