@@ -61,6 +61,9 @@ def private(request):
                                   context_instance=RequestContext(request))
 
 def private_mention(request):
+    if request.method == "POST":
+        return private(request)
+
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
     try:
@@ -80,16 +83,19 @@ def private_favorites(request):
     api = getPrivateApi(token)
 
     if request.method == "POST":
-        messages = api.GetFavorites()
-        for message in messages:
-            api.DestroyFavorite(message.id)
-            from webapps.models import FavoTweet
-            import rfc822
-            name = message.user.screen_name
-            text = smart_str(message.text)
-            added = datetime.datetime(*rfc822.parsedate(message.created_at)[:6])
-            FavoTweet.objects.create(name=name, text=text, added=added)
-        return "ok"
+        if request.POST.get('action') == "save":
+            messages = api.GetFavorites()
+            for message in messages:
+                api.DestroyFavorite(message.id)
+                from webapps.models import FavoTweet
+                import rfc822
+                name = message.user.screen_name
+                text = smart_str(message.text)
+                added = datetime.datetime(*rfc822.parsedate(message.created_at)[:6])
+                FavoTweet.objects.create(name=name, text=text, added=added)
+            return "ok"
+        else:
+            return private(request)
 
     try:
         messages = api.GetFavorites()
@@ -103,6 +109,9 @@ def private_favorites(request):
                               context_instance=RequestContext(request))
 
 def private_dm(request):
+    if request.method == "POST":
+        return private(request)
+
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
     try:
