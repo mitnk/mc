@@ -50,7 +50,7 @@ def private(request):
             return HttpResponse("Post tweet failed")
     else:
         try:
-            messages = api.GetHomeTimeline(count=30)
+            messages = api.GetHomeTimeline(count=50)
         except HTTPError, e:
             return HttpResponse("%s" % e)
         ua = request.META.get("HTTP_USER_AGENT", '').lower()
