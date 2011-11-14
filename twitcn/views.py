@@ -60,6 +60,7 @@ def private(request):
                                    'veer': veer,},
                                   context_instance=RequestContext(request))
 
+@csrf_exempt
 def private_mention(request):
     if request.method == "POST":
         return private(request)
@@ -109,6 +110,7 @@ def private_favorites(request):
                                'veer': veer,},
                               context_instance=RequestContext(request))
 
+@csrf_exempt
 def private_dm(request):
     if request.method == "POST":
         return private(request)
