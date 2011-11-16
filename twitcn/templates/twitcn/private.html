@@ -8,6 +8,7 @@
   textarea { width:100%; }
   .tweet { border-bottom:{% if veer %}6{% else %}2{% endif %}px solid #AAAAAA; margin-top:6px; }
   #char_count { font-weight: bold; }
+  .footer { text-align:center; }
 </style>
 </head>
 <body>
@@ -36,6 +37,8 @@
       {% endif %}
     </div>
     {% endfor %}
+
+    <div class="footer">Powered by @mitnk</div>
 
     <script type="text/javascript" src="/site_media/twitcn/js/private.js"></script>
     <img style="display:none" src="/site_media/images/ajax-loader-bar.gif">
