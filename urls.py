@@ -23,9 +23,10 @@ urlpatterns = patterns('',
     (r'^meta/$', "webapps.views.http_meta"),
     (r'^hn/$', "webapps.news.views.index"),
     url(r'^twp/$', "twitcn.views.private_tweets", name="private_tweets"),
-    (r'^twp/m/$', "twitcn.views.private_mention"),
-    (r'^twp/f/$', "twitcn.views.private_favorites"),
+    (r'^twp/c/$', "twitcn.views.private_clear_session"),
     (r'^twp/d/$', "twitcn.views.private_dm"),
+    (r'^twp/f/$', "twitcn.views.private_favorites"),
+    (r'^twp/m/$', "twitcn.views.private_mention"),
 )
 
 if settings.DEBUG:
