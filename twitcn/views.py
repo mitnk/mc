@@ -9,6 +9,7 @@ from django.shortcuts import render_to_response
 from django.http import *
 from django.contrib.sessions.models import Session
 from django.contrib.sessions.backends.db import SessionStore
+from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.utils import simplejson as json
 from django.utils.encoding import smart_str
@@ -20,7 +21,7 @@ from tools import *
 from asker_types import *
 
 @csrf_exempt
-def private(request):
+def private_tweets(request):
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
     if request.method == "POST":
@@ -50,7 +51,10 @@ def private(request):
             return HttpResponse("Post tweet failed")
     else:
         try:
-            messages = api.GetHomeTimeline(count=50)
+            since_id = request.session.get('private_tweet_since_id', None)
+            messages = api.GetHomeTimeline(count=50, since_id=since_id)
+            if messages:
+                request.session['private_tweet_since_id'] = messages[0].id
         except HTTPError, e:
             return HttpResponse("%s" % e)
         ua = request.META.get("HTTP_USER_AGENT", '').lower()
@@ -60,10 +64,15 @@ def private(request):
                                    'veer': veer,},
                                   context_instance=RequestContext(request))
 
+def private_clear_session(request):
+    if 'private_tweet_since_id' in request.session:
+        del request.session['private_tweet_since_id']
+    return HttpResponseRedirect(reverse('private_tweets'))
+
 @csrf_exempt
 def private_mention(request):
     if request.method == "POST":
-        return private(request)
+        return private_tweets(request)
 
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
@@ -97,7 +106,7 @@ def private_favorites(request):
                 FavoTweet.objects.create(name=name, text=text, tweet_id=tweet_id, added=added)
             return HttpResponse("%s\n" % len(messages))
         else:
-            return private(request)
+            return private_tweets(request)
 
     try:
         messages = api.GetFavorites()
@@ -113,7 +122,7 @@ def private_favorites(request):
 @csrf_exempt
 def private_dm(request):
     if request.method == "POST":
-        return private(request)
+        return private_tweets(request)
 
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
