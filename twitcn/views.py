@@ -52,11 +52,14 @@ def private_tweets(request):
     else:
         try:
             since_id = request.session.get('private_tweet_since_id', None)
-            messages = api.GetHomeTimeline(count=200, since_id=since_id)
-            if messages:
-                request.session['private_tweet_since_id'] = messages[0].id
+            if since_id:
+                messages = api.GetHomeTimeline(count=200, since_id=since_id)
+                if not messages:
+                    messages = api.GetHomeTimeline(count=1)
             else:
-                messages = api.GetHomeTimeline(count=1)
+                messages = api.GetHomeTimeline(count=30)
+
+            request.session['private_tweet_since_id'] = messages[0].id
         except HTTPError, e:
             return HttpResponse("%s" % e)
         ua = request.META.get("HTTP_USER_AGENT", '').lower()
