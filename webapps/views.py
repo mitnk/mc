@@ -52,7 +52,7 @@ def my_tweets(request):
         info = "blank"
         if request.POST.get('action') == "save":
             max_id = request.POST.get('max_id', None)
-            messages = api.GetUserTimeline(user='mitnk', max_id=max_id)
+            messages = api.GetUserTimeline(user='mitnk', max_id=max_id, count=50)
             count = 0
             for message in messages:
                 if message.text[0] == "@" or \
@@ -67,7 +67,7 @@ def my_tweets(request):
             info = "%s\n" % count
         return HttpResponse(info)
 
-    messages = MyTweet.objects.all()
+    messages = MyTweet.objects.filter(added__year=datetime.date.today().year)
     return render_to_response("webapps/favo_tweets.html",
         {'messages': messages},
         context_instance=RequestContext(request))
