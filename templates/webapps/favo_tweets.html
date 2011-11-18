@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block canonical %}
+  <meta name="robots" content="NONE,NOARCHIVE">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .tweet_column {float:left; width:50%; font-size:14px;}
+  .tweet {padding:10px;}
+  .tweet a {color:#EE4400;}
+</style>
+{% endblock %}
+
+{% block content %}
+  {% load twitcn_filters %}
+  {% load pagination_tags %}
+  {% autopaginate messages 20 %}
+
+  <div style="float:left;width:50%;font-size:14px;">
+    {% for status in messages|slice:":10" %}
+    <div class="tweet">
+      <b style="color:red;">{{ status.name }}</b>: {{ status.text|safe }}<br/>
+      <a name="{{ status.tweet_id }}">{{  status.added|date:"N j, Y" }}</a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div style="float:left;width:50%;font-size:14px;">
+    {% for status in messages|slice:"10:" %}
+    <div class="tweet">
+      <b style="color:red;">{{ status.name }}</b>: {{ status.text|safe }}<br/>
+      <a name="{{ status.tweet_id }}">{{  status.added|date:"N j, Y" }}</a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div style="clear:both;"> </div>
+  {% paginate %}
+{% endblock %}

@@ -1,5 +1,6 @@
 import datetime
 import os.path
+import rfc822
 from urllib2 import HTTPError
 
 from django.conf import settings
@@ -10,12 +11,67 @@ from django.template import RequestContext
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
-from webapps.models import WebAppInfo
+from webapps.models import WebAppInfo, FavoTweet, MyTweet
 from webapps.tools import send_mail, website_is_down
 from twitcn.tools import getPrivateApi
 
+
 def index(request):
     return render_to_response("webapps/index.html")
+
+@csrf_exempt
+def favo_tweets(request):
+    if request.method == "POST":
+        token = settings.TWITCN_PRIVATE_TOKEN
+        api = getPrivateApi(token)
+        info = "blank"
+        if request.POST.get('action') == "save":
+            messages = api.GetFavorites()
+            count = 0
+            for message in messages:
+                api.DestroyFavorite(message.id)
+                name = message.user.screen_name
+                text = smart_str(message.text)
+                added = datetime.datetime(*rfc822.parsedate(message.created_at)[:6])
+                tweet_id = message.id
+                FavoTweet.objects.create(name=name, text=text, tweet_id=tweet_id, added=added)
+                count += 1
+            info = "%s\n" % count
+        return HttpResponse(info)
+
+    messages = FavoTweet.objects.all()
+    return render_to_response("webapps/favo_tweets.html",
+        {'messages': messages},
+        context_instance=RequestContext(request))
+
+@csrf_exempt
+def my_tweets(request):
+    if request.method == "POST":
+        token = settings.TWITCN_PRIVATE_TOKEN
+        api = getPrivateApi(token)
+        info = "blank"
+        if request.POST.get('action') == "save":
+            max_id = request.POST.get('max_id', None)
+            messages = api.GetUserTimeline(user='mitnk', max_id=max_id)
+            count = 0
+            for message in messages:
+                if message.text[0] == "@" or \
+                    MyTweet.objects.filter(tweet_id=tweet_id).count() > 0:
+                    continue
+                tweet_id = message.id
+                name = message.user.screen_name
+                text = smart_str(message.text)
+                added = datetime.datetime(*rfc822.parsedate(message.created_at)[:6])
+                MyTweet.objects.create(name=name, text=text, tweet_id=tweet_id, added=added)
+                count += 1
+            info = "%s\n" % count
+        return HttpResponse(info)
+
+    messages = MyTweet.objects.all()
+    return render_to_response("webapps/favo_tweets.html",
+        {'messages': messages},
+        context_instance=RequestContext(request))
+
 
 def ckeditor(request):
     return render_to_response("webapps/ckeditor.html")
