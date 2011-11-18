@@ -30,11 +30,11 @@ def favo_tweets(request):
             count = 0
             for message in messages:
                 api.DestroyFavorite(message.id)
-                name = message.user.screen_name
-                text = smart_str(message.text)
                 added = datetime.datetime(*rfc822.parsedate(message.created_at)[:6])
-                tweet_id = message.id
-                FavoTweet.objects.create(name=name, text=text, tweet_id=tweet_id, added=added)
+                FavoTweet.objects.create(name=message.user.screen_name, 
+                                         text=smart_str(message.text), 
+                                         tweet_id=message.id, 
+                                         added=added)
                 count += 1
             info = "%s\n" % count
         return HttpResponse(info)
@@ -56,13 +56,13 @@ def my_tweets(request):
             count = 0
             for message in messages:
                 if message.text[0] == "@" or \
-                    MyTweet.objects.filter(tweet_id=tweet_id).count() > 0:
+                    MyTweet.objects.filter(tweet_id=message.id).count() > 0:
                     continue
-                tweet_id = message.id
-                name = message.user.screen_name
-                text = smart_str(message.text)
                 added = datetime.datetime(*rfc822.parsedate(message.created_at)[:6])
-                MyTweet.objects.create(name=name, text=text, tweet_id=tweet_id, added=added)
+                MyTweet.objects.create(name=message.user.screen_name, 
+                                       text=smart_str(message.text), 
+                                       tweet_id=message.id, 
+                                       added=added)
                 count += 1
             info = "%s\n" % count
         return HttpResponse(info)
