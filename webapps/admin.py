@@ -1,3 +1,4 @@
+from django.contrib import admin
 from webapps.models import FavoTweet, MyTweet
 
 class FavoTweetAdmin(admin.ModelAdmin):
