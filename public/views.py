@@ -4,13 +4,15 @@ from django.shortcuts import render_to_response
 from models import *
 
 def index(request):
-    articles = Article.objects.order_by("-added")
+    articles = Article.objects.all()
     return render_to_response('blog/article_list.html', 
                               {'articles': articles,},
                               context_instance=RequestContext(request))
 
 def linux_commands(request):
+    command_list = UnixCommand.objects.all()
     return render_to_response('blog/linux_commands.html', 
+                              {'command_list': command_list},
                               context_instance=RequestContext(request))
 
 def about(request):

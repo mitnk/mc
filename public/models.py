@@ -29,6 +29,9 @@ class Article(models.Model):
     updated = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category)
 
+    class Meta:
+        ordering = ["-added"]
+
     def __unicode__(self):
         return self.title
 
@@ -61,4 +64,15 @@ class Article(models.Model):
             self.category.save()
 
         super(Article, self).save(*args, **kwargs)
+
+class UnixCommand(models.Model):
+    title = models.CharField(max_length=40)
+    description = models.CharField(max_length=140, blank=True, null=True)
+    url = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        ordering = ["title"]
 
