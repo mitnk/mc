@@ -1,4 +1,11 @@
-body { font-family:"Wenquanyi Zen Hei", "Helvetica Neue", Helvetica, Arial, sans-serif; background: #dda; color: #222; padding: 0; text-align: center; }
+body {
+    font-family:"Wenquanyi Zen Hei", "Helvetica Neue", Helvetica, Arial, sans-serif; 
+    background: #dda; 
+    color: #222; 
+    font-size:14px; 
+    padding: 0; 
+    text-align: center;
+}
 
 a { color:#3E423A; text-decoration:none; }
 quote { padding-left: 12px; display: block; color: #0F7332; border-left: 6px solid #cccccc; }
@@ -8,7 +15,7 @@ h1 {font-family: Georgia;}
 #wrapper { width: 800px; margin: 0 auto; background: #fff; -moz-border-radius: 1.5em; -webkit-border-radius: 1.5em; border-radius: 1.5em; text-align: center; }
 
 #header { font-family: Courier; background: #222; -moz-border-radius-topleft: 1em; -webkit-border-top-left-radius: 1em; -moz-border-radius-topright: 1em; -webkit-border-top-right-radius: 1em; border-top-left-radius: 1em; border-top-right-radius: 1em; padding: 1em; text-align: center; }
-#header h1 { font-size: 42px; font-family:"Wenquanyi Zen Hei", "Helvetica Neue", Helvetica, Arial, sans-serif;display: inline; color: #fff; font-weight: normal; }
+#header h1 { font-size: 36px; font-family:"Wenquanyi Zen Hei", "Helvetica Neue", Helvetica, Arial, sans-serif;display: inline; color: #fff; font-weight: normal; }
 #header h1 a {color:#fff; }
 #header h2 { display: inline; margin-left: 0.5em; font-size: 1.2em; font-weight: normal; color: #dd5; }
 
@@ -25,9 +32,9 @@ h1 {font-family: Georgia;}
 .entry-title {font-family:Georgia; font-size:22px;}
 
 .entry { margin-left: 10px; margin-top: 30px; }
-.entry h1 { font-size:22px; }
-.entry-content { line-height: 24px; font-size:16px; }
-.entry-content h2 { line-height: 20px; font-size:16px; background-color:gray; padding:6px;}
+.entry h1 { font-size:20px; }
+.entry-content { line-height: 20px; font-size:14px; }
+.entry-content h2 { line-height: 20px; font-size:14px; background-color:gray; padding:4px;}
 .entry-content a { color: #B51C1E; } 
 .entry-content a:hover { background-color: #B51C1E; color: #FFFFFF; }
 .entry-meta { font-size: 13px; margin-top: 20px; }
