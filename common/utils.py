@@ -86,6 +86,7 @@ def get_page_main_content(url, timeout):
     content = ""
     for kls in ("entry-content", # wordpress
                 "articleContent",
+                "KonaBody", # thenextweb.com
                 "postBody", # http://news.cnet.com
                 "post-body", # blogspot
                 "blog-body", # economist.com/blogs
