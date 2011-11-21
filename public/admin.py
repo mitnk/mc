@@ -3,6 +3,7 @@ from django.contrib import admin
 
 class ArticleAdmin(admin.ModelAdmin):
     search_fields = ['title', 'slug']
+    list_display = ("title", "added")
 
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Category)
