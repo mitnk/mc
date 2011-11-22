@@ -44,7 +44,7 @@ def save_to_file(url, title=None, force=False):
     if not title:
         title = page_title
 
-    file_name = title.replace(' ', '_')
+    file_name = re.sub(r'[^0-9a-zA-Z _-]+', '', title).replace(' ', '_')
     file_name = "%s.txt" % file_name
 
     file_path = os.path.join(settings.HACKER_NEWS_DIR, file_name)
