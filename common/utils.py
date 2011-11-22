@@ -46,7 +46,7 @@ def get_page_main_content(url, timeout):
 
     title_tag = soup.find("title")
     if title_tag:
-        title = re.sub(r'[^a-zA-Z0-9_ -]+', '', soup.find("title").string).strip()
+        title = soup.find("title").string.strip()
         title = title.replace('  ', ' ').replace(' ', '_')
     else:
         title = "No_Title_Found"
@@ -132,7 +132,6 @@ def get_page_main_content(url, timeout):
             continue
         break
 
-    print 'len:', len(content)
     if not content < 500:
         for kls in ("story",
                     "-content", # need before 'post'
