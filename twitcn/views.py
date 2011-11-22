@@ -59,7 +59,7 @@ def private_tweets(request):
             else:
                 messages = api.GetHomeTimeline(count=30)
 
-            request.session['private_tweet_since_id'] = messages[0].id
+            request.session['private_tweet_since_id'] = messages[0].retweeted_id or messages[0].id
         except HTTPError, e:
             return HttpResponse("%s" % e)
         ua = request.META.get("HTTP_USER_AGENT", '').lower()
