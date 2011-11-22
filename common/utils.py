@@ -70,6 +70,7 @@ def get_page_main_content(url, timeout):
                 "addthis_toolbox",
                 "widget-area",
                 "sharing-",
+                "author",
                 "related_articles",
                 ):
         for tag in soup.findAll("div", {"class": re.compile(kls)}):
@@ -85,7 +86,10 @@ def get_page_main_content(url, timeout):
     html_parser = HTMLParser.HTMLParser()
     content = ""
     for kls in ("entry-content", # wordpress
+                "highlightText", # only for kindle share
                 "articleContent",
+                "entry-body",
+                "entrybody",
                 "KonaBody", # thenextweb.com
                 "postBody", # http://news.cnet.com
                 "post-body", # blogspot
@@ -95,6 +99,7 @@ def get_page_main_content(url, timeout):
                 "articlePage", # for wsj.com
                 "storycontent",
                 "the-content",
+                "storyText",
                 "blogbody",
                 "realpost",
                 "asset-body",
@@ -121,17 +126,22 @@ def get_page_main_content(url, timeout):
             text = re.sub(r'\r*\n+', '\r\n\r\n', text)
             content += html_parser.unescape(text)
 
-        if len(content) < 10: # content is too short
+
+        if len(content) < 500: # content is too short
             content = ""
             continue
         break
 
-    if len(content) < 20:
-        for kls in ("-content", # need before 'post'
+    print 'len:', len(content)
+    if not content < 500:
+        for kls in ("story",
+                    "-content", # need before 'post'
+                    "entry-",
+                    "post-",
                     "post",
                     "entry",
                     ):
-            if len(kls) >= 8:
+            if '-' in kls:
                 tags = soup.findAll("div", {"id": re.compile(kls)})
             else:
                 tags = soup.findAll("div", {"id": kls})
@@ -142,7 +152,7 @@ def get_page_main_content(url, timeout):
                 text = re.sub(r'\r*\n+', '\r\n\r\n', text)
                 content += html_parser.unescape(text)
 
-            if len(content) < 20: # content is too short
+            if len(content) < 500: # content is too short
                 content = ""
                 continue
             break
