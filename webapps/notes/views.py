@@ -41,7 +41,7 @@ def check_notes(request):
 def fetch_latest_urls():
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
-    messages = api.GetUserTimeline(user='mitnk')
+    messages = api.GetUserTimeline(user='miaoju')
     info = []
     for msg in messages:
         if "#Kindle" not in msg.text or 'http' not in msg.text:
