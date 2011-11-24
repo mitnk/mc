@@ -56,8 +56,11 @@ def save_note(url, date=None):
     soup = get_soup_by_url(url)
     tag = soup.find("div", {'class': 'highlightText'})
     text = ''.join(tag.findAll(text=True)).strip()
+
+    remark = ''
     tag = soup.find("div", {'class': 'note'})
-    remark = ''.join(tag.findAll(text=True)).replace('Note:', '').replace('@zzrt', '').strip()
+    if tag:
+        remark = ''.join(tag.findAll(text=True)).replace('Note:', '').replace('@zzrt', '').strip()
 
     cover_tag = soup.find('div', {'class': 'cover'})
     tag = cover_tag.find("span", {'class': 'title'})
