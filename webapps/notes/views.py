@@ -80,7 +80,7 @@ def save_note(url, date=None):
         and len(text) <= 64:
         if Word.objects.filter(word=text).count() == 0:
             Word.objects.create(url=url, word=text)
-    else:
+    elif len(text) > 20:
         note = Note()
         note.url = url
         note.text = text
