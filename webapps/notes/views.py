@@ -76,11 +76,10 @@ def save_note(url, date=None):
 
     if ' ' not in text \
         and text[0] in ASCII_CHARS \
-        and text[-1] in ASCII_CHARS \
         and len(text) <= 64:
         if Word.objects.filter(word=text).count() == 0:
             Word.objects.create(url=url, word=text)
-    elif len(text) > 20:
+    else:
         note = Note()
         note.url = url
         note.text = text
