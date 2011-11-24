@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block canonical %}
+  <meta name="robots" content="NONE,NOARCHIVE">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .info_column {float:left; width:50%; font-size:14px;}
+  .note {padding:10px;}
+  .note .added {color:#EE4400;}
+</style>
+{% endblock %}
+
+{% block content %}
+  {% load twitcn_filters %}
+  {% load pagination_tags %}
+  {% autopaginate notes 20 %}
+
+  <div class="info_column">
+    {% for note in notes|slice:":10" %}
+    <div class="note">
+      <span class="text">{{ note.text }}</span><br/>
+      <span class="added">{{  note.added|date:"N j, Y" }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="info_column">
+    {% for note in notes|slice:"10:" %}
+    <div class="note">
+      <span class="text">{{ note.text }}</span><br/>
+      <span class="added">{{  note.added|date:"N j, Y" }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div style="clear:both;"> </div>
+  {% paginate %}
+{% endblock %}

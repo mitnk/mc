@@ -28,7 +28,9 @@ urlpatterns = patterns('',
     (r'^twp/f/$', "twitcn.views.private_favorites"),
     (r'^twp/m/$', "twitcn.views.private_mention"),
     (r'^favo/$', "webapps.views.favo_tweets"),
-    (r'^tweet/$', "webapps.views.my_tweets"),
+    (r'^tweets/$', "webapps.views.my_tweets"),
+    (r'^notes/$', include('webapps.notes.urls')),
+    (r'^check_notes/$', 'webapps.notes.views.check_notes'),
 )
 
 if settings.DEBUG:
