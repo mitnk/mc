@@ -38,7 +38,11 @@
   <div class="info_column">
     {% for note in notes|slice:"10:" %}
     <div class="note">
-      <span class="text">{{ note.text }}</span><br/>
+      <span class="openQuote"> </span>
+      <span class="text">{{ note.text }}</span>
+      <span class="closeQuote"> </span>
+      {% if note.book %}From <span class="book">"{{ note.book }}"</span>{% endif %}
+      <br/>
       <span class="added">{{  note.added|date:"N j, Y" }}</span>
     </div>
     {% endfor %}
