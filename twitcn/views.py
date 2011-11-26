@@ -75,6 +75,24 @@ def private_clear_session(request):
     return HttpResponseRedirect(reverse('private_tweets'))
 
 @csrf_exempt
+def private_retweets_of_me(request):
+    if request.method == "POST":
+        return private_tweets(request)
+
+    token = settings.TWITCN_PRIVATE_TOKEN
+    api = getPrivateApi(token)
+    try:
+        messages = api.GetRetweetsOfMe()
+    except HTTPError, e:
+        return HttpResponse("%s" % e)
+    ua = request.META.get("HTTP_USER_AGENT", '').lower()
+    veer = (re.search(r'webos', ua) is not None)
+    return render_to_response("twitcn/private.html", 
+                              {'messages': messages,
+                               'veer': veer,},
+                              context_instance=RequestContext(request))
+
+@csrf_exempt
 def private_mention(request):
     if request.method == "POST":
         return private_tweets(request)

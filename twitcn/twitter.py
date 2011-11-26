@@ -1150,6 +1150,24 @@ class Api(object):
     return [Status.NewFromJsonDict(x) for x in data]
 
 
+  def GetRetweetsOfMe(self, since_id=None, max_id=None, page=None):
+    '''Returns the 20 most recent mentions (status containing @username) for the authenticating user.'''
+    url = TWITTER_API + 'statuses/retweets_of_me.json'
+    if not self.verified:
+      raise TwitterError("The twitter.Api instance must be authenticated.")
+    parameters = {}
+    if since_id:
+      parameters['since_id'] = since_id
+    if max_id:
+      parameters['max_id'] = max_id
+    if page:
+      parameters['page'] = page
+    json = self._FetchUrl(url, parameters=parameters)
+    data = simplejson.loads(json)
+    self._CheckForTwitterError(data)
+    return [Status.NewFromJsonDict(x) for x in data]
+
+
   def GetRetweets(self, since_id=None, max_id=None, page=None):
     '''Returns the 20 most recent mentions (status containing @username) for the authenticating user.'''
     url = TWITTER_API + 'statuses/retweeted_to_me.json'
