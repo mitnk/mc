@@ -26,13 +26,17 @@
       {% endif %}
       {{ status.relative_created_at }}
 
-        <a href="javascript:void(0)" onclick="favo(this, '{{ status.id }}')">Favo{% if status.favorited %}ed{% endif %}</a>
-      {% if status.retweeted_by %}
-        <a href="javascript:void(0)" onclick="reply('{{ status.retweeted_by.screen_name }}', '{{ status.retweeted_id }}')">Re</a>
-        <a href="javascript:void(0)" onclick="retweet('RT @{{ status.retweeted_by.screen_name }}: RT @{{ status.user.screen_name }}: {{ status.text|escapejs }}')">RT</a>
+      {% if status.retweet_users %}
+        RT by {% for user in status.retweet_users %} @{{ user.screen_name }}{% endfor %}
       {% else %}
-        <a href="javascript:void(0)" onclick="reply('{{ status.user.screen_name }}', '{{ status.id }}')">Re</a>
-        <a href="javascript:void(0)" onclick="retweet('RT @{{ status.user.screen_name }}: {{ status.text|escapejs }}')">RT</a>
+          <a href="javascript:void(0)" onclick="favo(this, '{{ status.id }}')">Favo{% if status.favorited %}ed{% endif %}</a>
+        {% if status.retweeted_by %}
+          <a href="javascript:void(0)" onclick="reply('{{ status.retweeted_by.screen_name }}', '{{ status.retweeted_id }}')">Re</a>
+          <a href="javascript:void(0)" onclick="retweet('RT @{{ status.retweeted_by.screen_name }}: RT @{{ status.user.screen_name }}: {{ status.text|escapejs }}')">RT</a>
+        {% else %}
+          <a href="javascript:void(0)" onclick="reply('{{ status.user.screen_name }}', '{{ status.id }}')">Re</a>
+          <a href="javascript:void(0)" onclick="retweet('RT @{{ status.user.screen_name }}: {{ status.text|escapejs }}')">RT</a>
+        {% endif %}
       {% endif %}
     </div>
     {% endfor %}

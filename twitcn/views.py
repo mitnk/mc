@@ -82,7 +82,9 @@ def private_retweets_of_me(request):
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
     try:
-        messages = api.GetRetweetsOfMe()
+        messages = api.GetRetweetsOfMe(count=10)
+        for msg in messages:
+            msg.retweet_users = api.GetStatusRetweetsBy(msg.id)
     except HTTPError, e:
         return HttpResponse("%s" % e)
     ua = request.META.get("HTTP_USER_AGENT", '').lower()
