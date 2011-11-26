@@ -1190,7 +1190,7 @@ class Api(object):
     url = TWITTER_API + 'statuses/mentions.json'
     if not self.verified:
       raise TwitterError("The twitter.Api instance must be authenticated.")
-    parameters = {}
+    parameters = {'include_rts': 'true'}
     if since_id:
       parameters['since_id'] = since_id
     if max_id:
