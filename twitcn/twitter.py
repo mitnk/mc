@@ -1627,26 +1627,14 @@ class Api(object):
       except ValueError:
         raise TwitterError("'rpp' must be an integer")
       parameters['rpp'] = rpp
-    if page:
-      parameters['page'] = page
     if max_id:
       parameters['max_id'] = max_id
     if since_id:
       parameters['since_id'] = since_id
-    if geocode is not None:
-      parameters['geocode'] = geocode
-    if show_user is not None:
-      parameters['show_user'] = show_user
       
-    #url = 'http://search.twitter.com/search.json?' + urllib.urlencode(parameters)
-    #json = self._FetchUrl(url)
+    url = 'http://search.twitter.com/search.json?' + urllib.urlencode(parameters)
+    json = self._FetchUrl(url)
 
-    try:
-      url = 'http://search.twitter.com/search?' + urllib.urlencode(parameters)
-      json = searchTwitterWeb(url)
-    except:
-      url = 'http://www.bing.com/twitter/tweets?FROM=DTPTWO&' + urllib.urlencode(parameters)
-      json = searchBingTwitter(url)
 
     data = simplejson.loads(json)
     self._CheckForTwitterError(data)
@@ -1890,20 +1878,6 @@ class Api(object):
     data = simplejson.loads(json)
     self._CheckForTwitterError(data)
     return Status.NewFromJsonDict(data)
-
-  def GetUserByEmail(self, email):
-    '''Returns a single user by email address.
-
-    Args:
-      email: The email of the user to retrieve.
-    Returns:
-      A twitter.User instance representing that user
-    '''
-    url = TWITTER_API + 'users/show.json?email=%s' % email
-    json = self._FetchUrl(url)
-    data = simplejson.loads(json)
-    self._CheckForTwitterError(data)
-    return User.NewFromJsonDict(data)
 
   def SetUserAgent(self, user_agent):
     '''Override the default user agent

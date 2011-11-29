@@ -1,6 +1,7 @@
 import datetime
 import re
 import rfc822
+from urllib2 import URLError
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -41,7 +42,11 @@ def check_notes(request):
 def fetch_latest_urls():
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
-    messages = api.GetUserTimeline(user='miaoju')
+    try:
+        messages = api.GetUserTimeline(user='miaoju')
+    except URLError:
+        return HttpResponse("URLError occurred!")
+
     info = []
     for msg in messages:
         if "#Kindle" not in msg.text or 'http' not in msg.text:
