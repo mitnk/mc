@@ -27,7 +27,11 @@ def check_notes(request):
     if request.method != "POST" or request.POST.get("action") != "notes":
         return HttpResponse(":)")
 
-    info = fetch_latest_urls()
+    try:
+        info = fetch_latest_urls()
+    except URLError:
+        return HttpResponse("URLError occurred!")
+
     count = 0
     for url, added in info:
         notes = Note.objects.filter(url=url)
@@ -42,10 +46,7 @@ def check_notes(request):
 def fetch_latest_urls():
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
-    try:
-        messages = api.GetUserTimeline(user='miaoju')
-    except URLError:
-        return HttpResponse("URLError occurred!")
+    messages = api.GetUserTimeline(user='miaoju')
 
     info = []
     for msg in messages:
