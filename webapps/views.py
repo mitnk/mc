@@ -141,7 +141,7 @@ def send_tweets_to_kindle(request):
     f.write(smart_str(content))
     f.close()
 
-    send_to = ['whgking@free.kindle.com']
+    send_to = [settings.MY_KINDLE_MAIL,]
     subject = "Tweets Daily Update"
     text = "There are %s tweets updated." % len(messages)
     files = [file_name]

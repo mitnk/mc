@@ -16,7 +16,7 @@ POINITS_LIMIT_TO_LOG = 70
 POINITS_LIMIT_TO_KINDLE = 100
 
 def send_to_kindle(request):
-    send_to = ['whgking_fire@free.kindle.com', 'wjforstudy@free.kindle.com']
+    send_to = settings.KINDLE_SENDING_LIST
     subject = "Hacker News Update"
     files = os.listdir(settings.HACKER_NEWS_DIR)
     if not files:
@@ -72,7 +72,7 @@ def index(request):
     if request.POST.get('url') != "HN":
         file_path = save_to_file(url, force=True)
         if file_path:
-            send_mail(['whgking@free.kindle.com',], file_path, "None", files=[file_path,])
+            send_mail([settings.MY_KINDLE_MAIL,], file_path, "None", files=[file_path,])
             os.remove(file_path)
             return HttpResponse("%s Sent!" % file_path)
         else:
