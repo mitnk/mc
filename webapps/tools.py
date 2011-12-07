@@ -29,8 +29,8 @@ def website_is_down(url):
     
 
 def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[], fail_silently=False):
-    assert type(send_to) == list
-    assert type(files) == list
+    assert (type(send_to) == list or type(send_to) == tuple)
+    assert (type(files) == list or type(files) == tuple)
 
     msg = MIMEMultipart()
     msg['From'] = send_from
