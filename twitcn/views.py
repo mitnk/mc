@@ -7,18 +7,15 @@ import twitter, oauth
 
 from django.shortcuts import render_to_response
 from django.http import *
-from django.contrib.sessions.models import Session
-from django.contrib.sessions.backends.db import SessionStore
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.utils import simplejson as json
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
-import requests
-
 from tools import *
 from asker_types import *
+import requests
 
 @csrf_exempt
 def private_tweets(request):
