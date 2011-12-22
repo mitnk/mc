@@ -17,7 +17,6 @@ def pygments_markdown(content):
     # First, pull out all the <code></code> blocks, to keep them away
     # from Markdown (and preserve whitespace).
     soup = BeautifulSoup(content)
-    print soup
     code_blocks = soup.findAll('code')
     for block in code_blocks:
         block.replaceWith('<code class="removed"></code>')
