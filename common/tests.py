@@ -3,12 +3,10 @@ import datetime
 from django.test import TestCase
 
 from common.templatetags.common_tags import get_first_path
-from common.templatetags.common_tags import pygmentize
 from common.utils import get_1st_of_last_month
 
 
-__test__ = {'test_get_first_path': get_first_path,
-            'test_pygmentize': pygmentize,}
+__test__ = {'test_get_first_path': get_first_path,}
 
 class TestPreinstalledLib(TestCase):
     def test_libs(self):

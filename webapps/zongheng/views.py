@@ -22,7 +22,7 @@ def get_chapter_list(book_id, last_id, page):
     if not book_id:
         return []
 
-    url = 'http://wap.zongheng.com/chapter/list?bookid=%s&asc=0&pageNum=%s'
+    url = 'http://m.zongheng.com/chapter/list?bookid=%s&asc=0&pageNum=%s'
     page = urllib2.urlopen(url % (book_id, page))
     soup = BeautifulSoup(page)
     tag = soup.find("div", {"class": "list"})
@@ -44,13 +44,13 @@ def ParseUstringProc(res):
     return ''
 
 
-def write_content(book_id, cids, page):
+def write_content(book_id, cids):
     file_name = "zongheng_%s.txt" % datetime.datetime.now().strftime("%h-%d-%H-%M-%S")
     file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
     f = open(file_name, "w")
     pattern = re.compile(r"\[|\]|u'[^']+'", re.VERBOSE)
     for cid in cids:
-        url = 'http://wap.zongheng.com/chapter?bookid=%s&cid=%s&pageNum=%s' % (book_id, cid, page)
+        url = 'http://m.zongheng.com/chapter?bookid=%s&cid=%s' % (book_id, cid)
         opener = urllib2.build_opener()
         opener.addheaders.append(('Cookie', 'WAPPageSize=0'))
         page = opener.open(url)
@@ -95,7 +95,7 @@ def kindle(request):
         if len(cids) < MIN_CHAPTER_COUNT:
             return HttpResponse("Not have enough chapters.(%s/%s)" % (len(cids), MIN_CHAPTER_COUNT))
 
-        file_name = write_content(book_id, cids, page=page)
+        file_name = write_content(book_id, cids)
         send_to_kindle(file_name, cids)
 
         if last_id != 0:

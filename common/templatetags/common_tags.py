@@ -1,56 +1,52 @@
 import re
-
-from django import template
-from django.conf import settings
-
+import markdown
 from pygments import highlight
 from pygments.lexers import guess_lexer, get_lexer_by_name, BashLexer
 from pygments.formatters import HtmlFormatter
 
+from django import template
+from django.conf import settings
+from webapps.BeautifulSoup import BeautifulSoup
+
+
 register = template.Library()
 
 @register.filter
-def pygmentize(value):
-    """ # TODO: recode this dirty code
-    >>> pygmentize('AB<code>abc</code>CD')
-    u'AB<div class="highlight"><pre><span class="n">abc</span>\\n</pre></div>CD'
-    
-    >>> pygmentize('AB<code class="bash">abc</code>CD')
-    u'AB<div class="highlight"><pre>abc\\n</pre></div>CD'
-    """
-    regex = re.compile(r'<code(.*?)</code>', re.DOTALL)
-    last_end = 0
-    to_return = ''
-    for match_obj in regex.finditer(value):
-        code_string = match_obj.group(1)
+def pygments_markdown(content):
+    """Render this content for display."""
+    # First, pull out all the <code></code> blocks, to keep them away
+    # from Markdown (and preserve whitespace).
+    soup = BeautifulSoup(content)
+    print soup
+    code_blocks = soup.findAll('code')
+    for block in code_blocks:
+        block.replaceWith('<code class="removed"></code>')
+    markeddown = markdown.markdown(unicode(soup))
 
-        # determin lexer name by class name
-        # then remove class attribute
-        lexer = BashLexer()
-        if code_string.startswith(' class='):
-            res = re.search(r'^ class="(.*?)">', code_string)
-            code_string = code_string.replace(res.group(), '')
-            if res:
-                lexer_name = res.group(1)
-                try:
-                    lexer = get_lexer_by_name(lexer_name)
-                except:
-                    pass
+    # Replace the pulled code blocks with syntax-highlighted versions.
+    soup = BeautifulSoup(markeddown)
+    empty_code_blocks, index = soup.findAll('code', 'removed'), 0
+    formatter = HtmlFormatter(cssclass='highlight')
+    for block in code_blocks:
+        if block.has_key('class'):
+            # <code class='python'>python code</code>
+            language = block['class']
         else:
-            # remove the start charater '<'
-            code_string = code_string[1:]
-
-        pygmented_string = highlight(code_string, lexer, HtmlFormatter()).rstrip()
-        to_return = (to_return + 
-                     value[last_end:match_obj.start(1) - 5].replace('\n', '<br />') + 
-                     pygmented_string)
-
-        # remove '</code>'
-        last_end = match_obj.end(1) + 7
-
-    to_return = to_return + value[last_end:].replace('\n', '<br />')
-    return to_return
-
+            # <code>plain text, whitespace-preserved</code>
+            language = 'text'
+        try:
+            lexer = get_lexer_by_name(language, stripnl=True, encoding='UTF-8')
+        except ValueError, e:
+            try:
+                # Guess a lexer by the contents of the block.
+                lexer = guess_lexer(block.renderContents())
+            except ValueError, e:
+                # Just make it plain text.
+                lexer = get_lexer_by_name('text', stripnl=True, encoding='UTF-8')
+        empty_code_blocks[index].replaceWith(
+                highlight(block.renderContents(), lexer, formatter))
+        index = index + 1
+    return soup
 
 @register.filter
 def get_first_path(url):

@@ -16,8 +16,7 @@
 <div class="entry">
   <h1 class="entry-title">{{ article.title|safe }}</h1>
   <div class="entry-content">
-      {{ article.content|pygmentize|safe }}<br/>
-
+      {{ article.content|pygments_markdown|safe }}<br/>
   </div>
   <div class="entry-meta">
     Posted at {{ article.added|date:"N j, Y" }}

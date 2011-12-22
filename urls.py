@@ -32,6 +32,7 @@ urlpatterns = patterns('',
     (r'^tweets/$', "webapps.views.my_tweets"),
     (r'^notes/$', include('webapps.notes.urls')),
     (r'^check_notes/$', 'webapps.notes.views.check_notes'),
+    (r'^check_highlights/$', 'webapps.notes.views.check_highlights'),
     (r'^coil/$', 'webapps.views.coil'),
 )
 

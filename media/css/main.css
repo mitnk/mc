@@ -10,6 +10,9 @@ body {
 a { color:#3E423A; text-decoration:none; }
 quote { padding-left: 12px; display: block; color: #0F7332; border-left: 6px solid #cccccc; }
 
+p code {padding:1px 5px;}
+code {background-color:#EEEEEE; color:#222222; font-size: 13px; font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;}
+
 h1 {font-family: Georgia;}
 
 #wrapper { width: 800px; margin: 0 auto; background: #fff; -moz-border-radius: 1.5em; -webkit-border-radius: 1.5em; border-radius: 1.5em; text-align: center; }
