@@ -1,1 +1,2 @@
-{{ obj.content|safe|linebreaks }}
+{% load common_tags %}
+{{ obj.content|pygments_markdown|safe }}
