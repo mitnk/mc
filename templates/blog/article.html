@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load common_tags %}
 
-{% block keywords %}<meta name="keywords" content="{{ article.slug }}" />{% endblock %}
-{% block description %}<meta name="description" content="{{ article.slug }}" />{% endblock %}
+{% block keywords %}<meta name="keywords" content="{{ article.slug }}, {{ article.category }}" />{% endblock %}
+{% block description %}<meta name="description" content="{{ article.slug }}, {{ article.category }}" />{% endblock %}
 {% block canonical %}<link rel="canonical" href="http://mitnk.com{{ article.get_absolute_url }}" />{% endblock %}
 
 {% block extra_css %}
