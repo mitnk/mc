@@ -8,6 +8,8 @@ body {
 }
 
 a { color:#3E423A; text-decoration:none; }
+
+
 blockquote, quote { padding-left: 8px; display: block; color: #0F7332; border-left: 4px solid #cccccc; }
 
 p code {padding:1px 5px;}
@@ -31,6 +33,9 @@ h1 {font-family: Georgia;}
 #header-search input { height:18px; width:118px; border:medium none; margin-top:22px; background-color:#444444; }
 
 #content { margin:0 auto; width:660px; text-align:left;}
+
+#content a { color:#3E423A; }
+#content a:hover { color:#FFFFFF; background-color:#3E423A; }
 
 .entry-title {font-family:Georgia; font-size:22px;}
 

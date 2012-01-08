@@ -19,7 +19,7 @@
       {{ article.content|pygments_markdown|safe }}
   </div>
   <div class="entry-meta">
-    Posted at {{ article.added|date:"N j, Y" }}
+    Posted in <a href="{{ article.category.get_absolute_url }}">{{ article.category }}</a> at {{ article.added|date:"N j, Y" }}
   </div>
 
   {% if article.allow_comment %}
