@@ -19,13 +19,6 @@ from twitcn.tools import getPrivateApi
 def index(request):
     return render_to_response("webapps/index.html")
 
-def coil(request):
-    info = ""
-    with open("/home/mitnk/projects/stuff/coil/info.log") as f:
-        for line in f:
-            info += line + "\n"
-    return HttpResponse(info)
-
 @csrf_exempt
 def favo_tweets(request):
     if request.method == "POST":

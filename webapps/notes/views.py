@@ -21,25 +21,6 @@ def index(request):
         {'notes': notes},
         context_instance=RequestContext(request))
 
-
-def check_highlights(request):
-    url = "https://kindle.amazon.com/work/sample?asin=B001F0PYI2&pr=1&publisher=A4NLU3IKXQTBS"
-    soup = get_soup_by_url(url)
-    tags = soup.findAll("div", {"class": "sampleHighlight"})
-    count = 0
-    for tag in tags:
-        text = ''.join(tag.findAll(text=True)).strip()
-        if ' ' not in text:
-            continue
-        if Note.objects.filter(text=text).count() > 0:
-            continue
-        note = Note(text=text)
-        note.added = datetime.datetime.now()
-        note.save()
-        count += 1
-    return HttpResponse("%d notes saved\n" % count)
-
-
 @csrf_exempt
 def check_notes(request):
     if request.method != "POST" or request.POST.get("action") != "notes":
