@@ -12,8 +12,6 @@ from common.utils import get_soup_by_url, write_to_file, get_page_main_content
 from webapps.news.models import News, Archive
 from webapps.tools import send_mail
 
-POINITS_LIMIT_TO_LOG = 70
-POINITS_LIMIT_TO_KINDLE = 100
 
 def send_to_kindle(request):
     send_to = settings.KINDLE_SENDING_LIST
@@ -97,13 +95,13 @@ def index(request):
                 points = int(t.parent.nextSibling.find('span').string.split(' ')[0])
             except AttributeError, ValueError:
                 points = 0
-            if points < POINITS_LIMIT_TO_LOG:
+            if points < settings.POINTS_LIMIT_TO_LOG:
                 continue
 
             if 'http' not in tag['href']:
                 tag['href'] = "http://news.ycombinator.com/" + tag['href']
 
-            if points >= POINITS_LIMIT_TO_KINDLE:
+            if points >= settings.POINTS_LIMIT_TO_KINDLE:
                 save_to_file(tag['href'], tag.string)
 
             try:
