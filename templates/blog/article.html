@@ -14,13 +14,16 @@
 
 {% block content %}
 <div class="entry">
-  <h1 class="entry-title">{{ article.title|safe }}</h1>
-  <div class="entry-content">
-      {{ article.content|pygments_markdown|safe }}
-  </div>
-  <div class="entry-meta">
+    <article itemtype="http://schema.org/Blog">
+        <h1 class="entry-title">{{ article.title|safe }}</h1>
+        <div class="entry-content">
+            {{ article.content|pygments_markdown|safe }}
+        </div>
+    </article>
+
+    <div class="entry-meta">
     Posted in <a href="{{ article.category.get_absolute_url }}">{{ article.category }}</a> at {{ article.added|date:"N j, Y" }}
-  </div>
+    </div>
 
   {% include "comments/comments.html" %}
 </div>
