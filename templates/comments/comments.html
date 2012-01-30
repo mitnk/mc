@@ -1,6 +1,7 @@
 {% load comments %}
 
 <div id="comment_container">
+{% if article.allow_comment %}
     <div id="comment_count">
     {% get_comment_count for article as comment_count %}
     {% if comment_count %}
@@ -9,6 +10,9 @@
         Post the first Response to “{{ article.title }}”:
     {% endif %}
     </div>
+{% else %}
+    <span>Comments for old posts like this were closed.</span>
+{% endif %}
 
   {% get_comment_list for article as comment_list %}
   {% for comment in comment_list %}
@@ -25,6 +29,7 @@
   </div>
   {% endfor %}
 
+  {% if article.allow_comment %}
   <div id="comment_form">
     <form action="{% comment_form_target %}" method="post">
       {% csrf_token %}
@@ -45,4 +50,6 @@
       <p><input type="submit" name="submit" class="submit-post" value="Let's Post!" /></p>
     </form>
   </div>
+  {% endif %}
+
 </div> <!-- end of comment-container -->
