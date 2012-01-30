@@ -18,8 +18,6 @@
 
 <body>
 <div id="wrapper">
-{% if not is_ie67 %}
-
   <div id="header">
     <h1><a href="/">Evil Inside</a></h1>
 
@@ -35,13 +33,13 @@
     </div>
   </div>
 
+{% if is_ie67 %}
+    {% include "forbid_ie67.html" %}
+{% endif %}
 
   <div id="content"> {% block content %}{% endblock %} </div>
   <div style="height:20px"></div>
 
-{% else %}
-    {% include "forbid_ie67.html" %}
-{% endif %}
 </div> <!-- end #wrapper -->
 
 
