@@ -22,18 +22,19 @@
 
   <div id="header">
     <h1><a href="/">Evil Inside</a></h1>
-    <h2>mitnk's blog</h2>
-      {% include "blog/google_cse.html" %}
+
+    {% include "blog/google_cse.html" %}
+
+    <div id="menu">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/commands/">Commands</a></li>
+        <li><a href="/notes/">Notes</a></li>
+        <li><a href="/about/">About</a></li>
+      </ul>
+    </div>
   </div>
 
-  <div id="menu">
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/commands/">Commands</a></li>
-      <li><a href="/notes/">Notes</a></li>
-      <li><a href="/about/">About</a></li>
-    </ul>
-  </div>
 
   <div id="content"> {% block content %}{% endblock %} </div>
   <div style="height:20px"></div>
@@ -45,7 +46,7 @@
 
 
 <div id="footer">
-  Power by <a href="http://twitter.com/mitnk">@mitnk</a> 2010-2011 <a href="/feed/">RSS</a>
+  Power by <a href="http://twitter.com/mitnk">@mitnk</a> 2012 <a href="/feed/">RSS</a>
 </div>
 
 <script type="text/javascript" src="/site_media/js/main.js"> </script>

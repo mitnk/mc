@@ -36,6 +36,9 @@ class Article(models.Model):
         return self.title
 
     def allow_comment(self):
+        age = datetime.datetime.now() - self.added
+        if age.days > 90:
+            return False
         return True
 
     def get_absolute_url(self):
