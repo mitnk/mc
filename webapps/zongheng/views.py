@@ -22,7 +22,12 @@ def get_chapter_list(book_id, last_id, page):
         return []
 
     url = 'http://m.zongheng.com/chapter/list?bookid=%s&asc=0&pageNum=%s'
-    page = urllib2.urlopen(url % (book_id, page))
+
+    try:
+        page = urllib2.urlopen(url % (book_id, page))
+    except urllib2.HTTPError:
+        return []
+
     soup = BeautifulSoup(page)
     tag = soup.find("div", {"class": "list"})
 
