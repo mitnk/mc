@@ -16,7 +16,6 @@ from webapps.BeautifulSoup import BeautifulSoup
 from webapps.zongheng.models import Novel
 from webapps.tools import send_mail
 
-MIN_CHAPTER_COUNT = 4
 
 def get_chapter_list(book_id, last_id, page):
     if not book_id:
@@ -92,8 +91,8 @@ def kindle(request):
             last_id = request.POST['last_id']
 
         cids = get_chapter_list(request.POST.get('book_id', 0), last_id, page)
-        if len(cids) < MIN_CHAPTER_COUNT:
-            return HttpResponse("Not have enough chapters.(%s/%s)" % (len(cids), MIN_CHAPTER_COUNT))
+        if len(cids) < settings.MIN_CHAPTER_COUNT:
+            return HttpResponse("Not have enough chapters.(%s/%s)" % (len(cids), settings.MIN_CHAPTER_COUNT))
 
         file_name = write_content(book_id, cids)
         send_to_kindle(file_name, cids)
