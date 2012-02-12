@@ -1,1 +1,8 @@
 mitnk.com website
+
+Requirements (install these libs with pip):
+
+- httplib2
+- markdown
+- psycopg2
+- pygments
