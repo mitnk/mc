@@ -8,9 +8,11 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 
-from common.utils import get_soup_by_url, write_to_file, get_page_main_content
+from common.utils import get_soup_by_url, write_to_file
 from webapps.news.models import News, Archive
 from webapps.tools import send_mail
+
+from external_libs.briticle import Briticle
 
 
 def send_to_kindle(request):
@@ -33,7 +35,8 @@ def save_to_file(url, title=None, force=False):
         return
 
     try:
-        page_title, content = get_page_main_content(url, 3)
+        br = Briticle(url)
+        page_title, content = br.title, br.content
     except Exception, e:
         if isinstance(e, URLError) or 'timed out' in str(e):
             return

@@ -6,7 +6,7 @@ from pygments.formatters import HtmlFormatter
 
 from django import template
 from django.conf import settings
-from webapps.BeautifulSoup import BeautifulSoup
+from external_libs.BeautifulSoup import BeautifulSoup
 
 
 register = template.Library()
