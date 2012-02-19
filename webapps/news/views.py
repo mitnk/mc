@@ -30,15 +30,18 @@ def send_to_kindle(request):
     files = os.listdir(settings.HACKER_NEWS_DIR)
     if not files:
         return HttpResponse("No new articles")
-    files = [os.path.join(settings.HACKER_NEWS_DIR, x) for x in files]
+    files = [os.path.join(settings.HACKER_NEWS_DIR, x) for x in files if x.endswith('.mobi')]
     text = "There are %s article updated." % len(files)
     send_mail(send_to, subject, text, files=files)
     for f in files:
-        os.remove(f)
+        try:
+            os.remove(f)
+        except OSError:
+            pass
     return HttpResponse(text)
 
 
-def save_to_file(url, title=None, force=False):
+def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None, force=False):
     """ TODO: Add force update param """
     if not force and Archive.objects.filter(url=url).count() > 0:
         return
@@ -50,30 +53,39 @@ def save_to_file(url, title=None, force=False):
             return None
 
         page_title, content = br.title, br.content
+        if not title:
+            title = page_title
+        file_name = re.sub(r'[^0-9a-zA-Z _-]+', '', title).replace(' ', '_') or 'blank_name'
+        mobi_name = "%s.mobi" % file_name
+        html_name = "%s.html" % file_name
+        file_path = br._save_to_html(html_name, dir_name)
+        if not os.path.exists(file_path):
+            logger.info('File not found for URL: %s' % url)
+            return None
+
+        cmd = "kindlegen %s -o %s > /dev/null" % (file_path, mobi_name)
+        os.system(cmd)
+        mobi_file = re.sub(r'\.html$', '.mobi', file_path)
+        if not os.path.exists(mobi_file):
+            logger.info("Failed to generate mobi file. URL: %s" % url)
+
+        # Remove all middle-files except .MOBI
+        file_list = os.listdir(dir_name)
+        for f in file_list:
+            if not f.endswith(".mobi"):
+                try:
+                    os.remove(dir_name + "/" + f)
+                except OSError:
+                    pass
+        return mobi_file
+
     except Exception, e:
         if isinstance(e, URLError) or 'timed out' in str(e):
             logger.info("Exception: %s" % e)
             return None
         else:
             raise
-    if not title:
-        title = page_title
 
-    file_name = re.sub(r'[^0-9a-zA-Z _-]+', '', title).replace(' ', '_') or 'blank_name'
-    file_name = "%s.txt" % file_name
-
-    file_path = os.path.join(settings.HACKER_NEWS_DIR, file_name)
-    if not force and os.path.exists(file_path):
-        return file_path
-
-    length = len(content)
-    if content:
-        content = title + "\r\n" + "=" * 20 + '\r\n' + content \
-            + '\r\n' + url
-        write_to_file(file_path, content)
-        if not force:
-            Archive.objects.create(url=url, file_name=file_name)
-    return file_path
 
 @csrf_exempt
 def index(request):
@@ -85,11 +97,11 @@ def index(request):
         return HttpResponse("URL needed.")
 
     if request.POST.get('url') != "HN":
-        file_path = save_to_file(url, force=True)
-        if file_path:
-            send_mail([settings.MY_KINDLE_MAIL,], file_path, "None", files=[file_path,])
-            os.remove(file_path)
-            return HttpResponse("%s Sent!" % file_path)
+        mobi_file = save_to_file(url, dir_name=settings.KINDLE_LIVE_DIR, force=True)
+        if mobi_file:
+            send_mail([settings.MY_KINDLE_MAIL,], "New documentation here", "Sent from mitnk.com", files=[mobi_file,])
+            os.remove(mobi_file)
+            return HttpResponse("%s Sent!" % mobi_file)
         else:
             return HttpResponse("No file sent!")
     elif request.POST.get('url') == "HN":
@@ -119,7 +131,7 @@ def index(request):
                 tag['href'] = "http://news.ycombinator.com/" + tag['href']
 
             if points >= settings.POINTS_LIMIT_TO_KINDLE:
-                save_to_file(tag['href'], tag.string)
+                save_to_file(tag['href'], title=tag.string)
 
             try:
                 news = News.objects.get(url=tag['href'])
