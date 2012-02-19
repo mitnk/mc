@@ -14,6 +14,15 @@ from webapps.tools import send_mail
 
 from external_libs.briticle import Briticle
 
+import logging
+logger = logging.getLogger(settings.LOG_BRITICLE)
+if not logger.handlers:
+    handler = logging.FileHandler("error_info.log")
+    formatter = logging.Formatter('%(asctime)s %(levelname)s\n%(message)s\n')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+
 
 def send_to_kindle(request):
     send_to = settings.KINDLE_SENDING_LIST
@@ -36,10 +45,15 @@ def save_to_file(url, title=None, force=False):
 
     try:
         br = Briticle(url)
+        if not br.content:
+            logger.info("No content found at url: %s" % url)
+            return None
+
         page_title, content = br.title, br.content
     except Exception, e:
         if isinstance(e, URLError) or 'timed out' in str(e):
-            return
+            logger.info("Exception: %s" % e)
+            return None
         else:
             raise
     if not title:
