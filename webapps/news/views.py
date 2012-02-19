@@ -59,7 +59,8 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None, force=False
         mobi_name = "%s.mobi" % file_name
         html_name = "%s.html" % file_name
         file_path = br._save_to_html(html_name, dir_name)
-        if not os.path.exists(file_path):
+
+        if not file_path or and not os.path.exists(file_path):
             logger.info('File not found for URL: %s' % url)
             return None
 
