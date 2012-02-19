@@ -15,9 +15,9 @@ from webapps.tools import send_mail
 from external_libs.briticle import Briticle
 
 import logging
-logger = logging.getLogger(settings.LOG_BRITICLE)
+logger = logging.getLogger("BRITICLE")
 if not logger.handlers:
-    handler = logging.FileHandler("error_info.log")
+    handler = logging.FileHandler(settings.LOG_BRITICLE)
     formatter = logging.Formatter('%(asctime)s %(levelname)s\n%(message)s\n')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
