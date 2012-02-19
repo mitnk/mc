@@ -18,6 +18,7 @@ class News(models.Model):
 class Archive(models.Model):
     url = models.CharField(max_length=512)
     file_name = models.CharField(max_length=512)
+    added = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.file_name
