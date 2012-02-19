@@ -20,5 +20,8 @@ class Archive(models.Model):
     file_name = models.CharField(max_length=512)
     added = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ["-added"]
+
     def __unicode__(self):
         return self.file_name

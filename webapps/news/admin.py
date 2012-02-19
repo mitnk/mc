@@ -9,7 +9,8 @@ class NewsAdmin(admin.ModelAdmin):
 
 class ArchiveAdmin(admin.ModelAdmin):
     search_fields = ['file_name', 'url']
-    list_display = ("file_name", "url")
+    list_display = ("file_name", "url", "added")
+    list_filter = ('added',)
 
 admin.site.register(News, NewsAdmin)
 admin.site.register(Archive, ArchiveAdmin)
