@@ -108,7 +108,7 @@ def index(request):
             os.remove(mobi_file)
             return HttpResponse("%s Sent!" % mobi_file)
         else:
-            return HttpResponse("No file sent!")
+            return HttpResponse("No file generated!")
     elif request.POST.get('url') == "HN":
         url = 'http://news.ycombinator.com/'
         try:
