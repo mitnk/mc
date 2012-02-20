@@ -104,8 +104,8 @@ def index(request):
     if request.POST.get('url') != "HN":
         mobi_file = save_to_file(url, dir_name=settings.KINDLE_LIVE_DIR, force=True)
         if mobi_file:
-            #send_mail([settings.MY_KINDLE_MAIL,], "New documentation here", "Sent from mitnk.com", files=[mobi_file,])
-            #os.remove(mobi_file)
+            send_mail([settings.MY_KINDLE_MAIL,], "New documentation here", "Sent from mitnk.com", files=[mobi_file,])
+            os.remove(mobi_file)
             return HttpResponse("%s Sent!" % mobi_file)
         else:
             return HttpResponse("No file sent!")
