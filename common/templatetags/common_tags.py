@@ -8,44 +8,44 @@ from django import template
 from django.conf import settings
 from bs4 import BeautifulSoup
 
-
 register = template.Library()
 
 @register.filter
 def pygments_markdown(content):
-    """Render this content for display."""
+    """Render this content for display.
+    """
     # First, pull out all the <code></code> blocks, to keep them away
     # from Markdown (and preserve whitespace).
-    soup = BeautifulSoup(content)
-    code_blocks = soup.findAll('code')
+    soup = BeautifulSoup(content, "html.parser")
+    code_blocks = soup.find_all('code')
     for block in code_blocks:
-        block.replaceWith('<code class="removed"></code>')
+        new_tag = soup.new_tag("code")
+        new_tag['class'] = "removed"
+        block.replace_with(new_tag)
+
     markeddown = markdown.markdown(unicode(soup))
 
     # Replace the pulled code blocks with syntax-highlighted versions.
-    soup = BeautifulSoup(markeddown)
-    empty_code_blocks, index = soup.findAll('code', 'removed'), 0
+    markeddown = BeautifulSoup(markeddown, "html.parser")
+    empty_code_blocks = markeddown.find_all('code', {'class':'removed'})
+    index = 0
     formatter = HtmlFormatter(cssclass='highlight')
     for block in code_blocks:
         if block.has_key('class'):
-            # <code class='python'>python code</code>
-            language = block['class']
+            language = block['class'][0]
         else:
-            # <code>plain text, whitespace-preserved</code>
             language = 'text'
         try:
             lexer = get_lexer_by_name(language, stripnl=True, encoding='UTF-8')
         except ValueError, e:
-            try:
-                # Guess a lexer by the contents of the block.
-                lexer = guess_lexer(block.renderContents())
-            except ValueError, e:
-                # Just make it plain text.
-                lexer = get_lexer_by_name('text', stripnl=True, encoding='UTF-8')
-        empty_code_blocks[index].replaceWith(
-                highlight(block.renderContents(), lexer, formatter))
-        index = index + 1
-    return soup
+            lexer = get_lexer_by_name('text', stripnl=True, encoding='UTF-8')
+
+        code_highlight = highlight(unicode(block.string), lexer, formatter)
+        tag_highlight = BeautifulSoup(code_highlight, 'html.parser')
+        empty_code_blocks[index].replace_with(tag_highlight)
+        index += 1
+
+    return markeddown
 
 @register.filter
 def get_first_path(url):
