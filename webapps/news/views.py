@@ -86,10 +86,10 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None, force=False
 
     except Exception, e:
         if isinstance(e, URLError) or 'timed out' in str(e):
-            logger.info("Exception: %s" % e)
+            logger.info("URLError / Time out Exception: %s URL: %s" % (e, url)
             return None
         else:
-            raise
+            logger.info("Exception: %s URL: %s" % (e, url)
 
 
 @csrf_exempt
