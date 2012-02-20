@@ -61,7 +61,7 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None, force=False
         file_path = br._save_to_html(html_name, dir_name)
 
         if not Archive.objects.filter(url=url):
-            archive = Archive.objects.get(url=url, file_name=title)
+            archive = Archive(url=url, file_name=title)
             archive.save()
 
         if not file_path or not os.path.exists(file_path):
@@ -104,8 +104,8 @@ def index(request):
     if request.POST.get('url') != "HN":
         mobi_file = save_to_file(url, dir_name=settings.KINDLE_LIVE_DIR, force=True)
         if mobi_file:
-            send_mail([settings.MY_KINDLE_MAIL,], "New documentation here", "Sent from mitnk.com", files=[mobi_file,])
-            os.remove(mobi_file)
+            #send_mail([settings.MY_KINDLE_MAIL,], "New documentation here", "Sent from mitnk.com", files=[mobi_file,])
+            #os.remove(mobi_file)
             return HttpResponse("%s Sent!" % mobi_file)
         else:
             return HttpResponse("No file sent!")
