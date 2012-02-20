@@ -12,7 +12,7 @@ from common.utils import get_soup_by_url, write_to_file
 from webapps.news.models import News, Archive
 from webapps.tools import send_mail
 
-from external_libs.briticle import Briticle
+from utils.briticle import Briticle
 
 import logging
 logger = logging.getLogger("BRITICLE")
@@ -140,12 +140,11 @@ def index(request):
 
             try:
                 news = News.objects.get(url=tag['href'])
-                news.title = tag.string
                 news.points = points
                 news.save()
             except News.DoesNotExist:
                 news = News(url=tag['href'], points=points, title=tag.string)
                 news.save()
-            count += 1
+                count += 1
 
         return HttpResponse("Find %s news" % count)

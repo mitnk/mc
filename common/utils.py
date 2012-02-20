@@ -6,8 +6,7 @@ import HTMLParser
 from django.core.files import File
 from django.utils.encoding import smart_str
 
-from external_libs.BeautifulSoup import BeautifulSoup, Comment
-
+from bs4 import BeautifulSoup
 
 def get_1st_of_last_month(date_from=None):
     if not date_from:
@@ -19,7 +18,6 @@ def get_1st_of_last_month(date_from=None):
         year = year - 1
     else:
         last_month = this_month - 1
-
     return datetime.date(year, last_month, 1)
 
 def get_soup_by_url(url, timeout=10):
@@ -28,9 +26,9 @@ def get_soup_by_url(url, timeout=10):
         soup = BeautifulSoup(page)
     except UnicodeEncodeError:
         try:
-            soup = BeautifulSoup(page, fromEncoding='utf8')
+            soup = BeautifulSoup(page, from_encoding='utf8')
         except UnicodeEncodeError:
-            soup = BeautifulSoup(page, fromEncoding='gb18030')
+            soup = BeautifulSoup(page, from_encoding='gb18030')
     return soup
 
 def write_to_file(file_name, content):

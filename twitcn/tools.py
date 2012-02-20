@@ -4,7 +4,7 @@ Created on 2009-6-7
 
 @author: mitnk
 '''
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from oauthtwitter import OAuthApi
 import datetime
 import re

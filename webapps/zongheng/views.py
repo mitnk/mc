@@ -11,7 +11,7 @@ from django.utils.encoding import smart_str
 from django.template.defaultfilters import striptags
 from django.views.decorators.csrf import csrf_exempt
 
-from external_libs.BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 
 from webapps.zongheng.models import Novel
 from webapps.tools import send_mail
