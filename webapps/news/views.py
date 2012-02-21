@@ -7,12 +7,14 @@ from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.encoding import smart_str
 
 from common.utils import get_soup_by_url, write_to_file
-from webapps.news.models import News, Archive
+from webapps.news.models import News
 from webapps.tools import send_mail
 
 from utils.briticle import Briticle
+from utils.hacker_news import HackerNews
 
 import logging
 logger = logging.getLogger("BRITICLE")
@@ -41,11 +43,7 @@ def send_to_kindle(request):
     return HttpResponse(text)
 
 
-def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None, force=False):
-    """ TODO: Add force update param """
-    if not force and Archive.objects.filter(url=url).count() > 0:
-        return
-
+def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None):
     try:
         br = Briticle(url)
         if not br.content:
@@ -59,10 +57,6 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None, force=False
         mobi_name = "%s.mobi" % file_name
         html_name = "%s.html" % file_name
         file_path = br._save_to_html(html_name, dir_name)
-
-        if not Archive.objects.filter(url=url):
-            archive = Archive(url=url, file_name=title)
-            archive.save()
 
         if not file_path or not os.path.exists(file_path):
             logger.info('File not found for URL: %s' % url)
@@ -102,49 +96,35 @@ def index(request):
         return HttpResponse("URL needed.")
 
     if request.POST.get('url') != "HN":
-        mobi_file = save_to_file(url, dir_name=settings.KINDLE_LIVE_DIR, force=True)
+        mobi_file = save_to_file(url, dir_name=settings.KINDLE_LIVE_DIR)
         if mobi_file:
             send_mail([settings.MY_KINDLE_MAIL,], "New documentation here", "Sent from mitnk.com", files=[mobi_file,])
             os.remove(mobi_file)
             return HttpResponse("%s Sent!" % mobi_file)
         else:
             return HttpResponse("No file generated!")
+
     elif request.POST.get('url') == "HN":
-        url = 'http://news.ycombinator.com/'
-        try:
-            soup = get_soup_by_url(url)
-        except:
-            return HttpResponse("Time Out")
-
-        tags = soup.find("table").findAll("td", {"class": "title"})
-        count = 0
-        for t in tags:
-            tag = t.find('a')
-            if not tag:
-                continue
-            elif tag.string.lower() == "more" and '/' not in tag['href']:
-                continue
-
+        hn = HackerNews(fetch=True)
+        count = filed = 0
+        for art in hn.articles:
             try:
-                points = int(t.parent.nextSibling.find('span').string.split(' ')[0])
-            except AttributeError, ValueError:
-                points = 0
-            if points < settings.POINTS_LIMIT_TO_LOG:
-                continue
-
-            if 'http' not in tag['href']:
-                tag['href'] = "http://news.ycombinator.com/" + tag['href']
-
-            if points >= settings.POINTS_LIMIT_TO_KINDLE:
-                save_to_file(tag['href'], title=tag.string)
-
-            try:
-                news = News.objects.get(url=tag['href'])
-                news.points = points
+                news = News.objects.get(url=art['url'])
+                news.points = art['points']
                 news.save()
             except News.DoesNotExist:
-                news = News(url=tag['href'], points=points, title=tag.string)
+                news = News(url=art['url'], points=art['points'], title=smart_str(art['title']))
                 news.save()
                 count += 1
 
-        return HttpResponse("Find %s news" % count)
+            # Save article to file whose points big enough
+            if art['points'] >= settings.POINTS_LIMIT_TO_KINDLE and (not news.filed):
+                mobi = save_to_file(news.url, title=news.title)
+                if mobi:
+                    news.filed = True
+                    news.save()
+                    filed += 1
+                else:
+                    logger.error("Save file failed. URL: %s" % news.url)
+        return HttpResponse("Find %s news (filed %s).\n" % (count, filed))
+    return HttpResponse("NOT 404")
