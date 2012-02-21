@@ -58,7 +58,7 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None):
         html_name = "%s.html" % file_name
 
         try:
-            file_path = br._save_to_html(html_name, dir_name)
+            file_path = br._save_to_html(html_name, dir_name, title=title)
         except Exception, e:
             logger.error("Error in britile: %s URL: %s" % (e, url))
             return None
