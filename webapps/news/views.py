@@ -31,9 +31,9 @@ def send_to_kindle(request):
     subject = "Hacker News Update"
     files = os.listdir(settings.HACKER_NEWS_DIR)
     if not files:
-        return HttpResponse("No new articles")
+        return HttpResponse("No new articles filed")
     files = [os.path.join(settings.HACKER_NEWS_DIR, x) for x in files if x.endswith('.mobi')]
-    text = "There are %s article updated." % len(files)
+    text = "%s files sent.\n" % len(files)
     send_mail(send_to, subject, text, files=files)
     for f in files:
         try:
@@ -80,7 +80,7 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None):
 
     except Exception, e:
         if isinstance(e, URLError) or 'timed out' in str(e):
-            logger.info("URLError / Time out Exception: %s URL: %s" % (e, url))
+            logger.info("URLError or Time out Exception: %s URL: %s" % (e, url))
         else:
             logger.info("*** Exception: %s URL: %s" % (e, url))
         return None

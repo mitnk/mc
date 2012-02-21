@@ -6,3 +6,6 @@ Requirements (install these libs with pip):
 - markdown
 - psycopg2
 - pygments
+- html5lib (*)
+
+* Required by briticle
