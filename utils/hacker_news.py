@@ -41,24 +41,25 @@ class HackerNews(object):
         self.articles = []
 
         tags = soup.find("table").find_all("td", {"class": "title"})
-        for t in tags:
-            tag = t.find('a')
-            if not tag:
-                continue
-            elif tag.string.lower() == "more" and '/' not in tag['href']:
+        for tag in tags:
+            tag_a = tag.find('a')
+            if (not tag_a) or \
+                ('href' not in tag_a.attrs) or \
+                (len(tag_a.contents) > 1) or \
+                (tag_a.string.lower() == "more" and '/' not in tag_a['href']):
                 continue
 
             try:
-                points = int(t.parent.nextSibling.find('span').string.split(' ')[0])
+                points = int(tag.parent.nextSibling.find('span').string.split(' ')[0])
             except AttributeError, ValueError:
                 points = 0
 
-            if 'http' not in tag['href']:
-                tag['href'] = "http://news.ycombinator.com/" + tag['href']
+            if 'http' not in tag_a['href']:
+                tag_a['href'] = "http://news.ycombinator.com/" + tag_a['href']
 
-            if tag['href'] and points >= self.POINTS_MIN_LIMIT and (not is_home_page(tag['href'])):
+            if tag_a['href'] and points >= self.POINTS_MIN_LIMIT and (not is_home_page(tag_a['href'])):
                 self.articles.append({
-                    'url': tag['href'],
-                    'title': tag.string,
+                    'url': tag_a['href'],
+                    'title': tag_a.string,
                     'points': points,
                 })
