@@ -56,7 +56,12 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None):
         file_name = re.sub(r'[^0-9a-zA-Z _-]+', '', title).replace(' ', '_') or 'blank_name'
         mobi_name = "%s.mobi" % file_name
         html_name = "%s.html" % file_name
-        file_path = br._save_to_html(html_name, dir_name)
+
+        try:
+            file_path = br._save_to_html(html_name, dir_name)
+        except Exception, e:
+            logger.error("Error in britile: %s URL: %s" % (e, url))
+            return None
 
         if not file_path or not os.path.exists(file_path):
             logger.info('File not found for URL: %s' % url)
