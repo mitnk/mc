@@ -9,20 +9,24 @@ _formatter = formatters.HtmlFormatter(cssclass='highlight')
 register = template.Library()
 
 @register.filter
-def pygments_markdown(txt):
-    html = markdown.markdown(txt)
+def pygments_markdown(content):
+    html = markdown.markdown(content)
     # Using html.parser to prevent bs4 adding <html> tags
     soup = BeautifulSoup(html, 'html.parser')
-    for tag in soup.findAll('pre'):
-        if tag.code:
-            txt = unicode(tag.code.get_text())
-            if txt.startswith('pygments:'):
+    for pre in soup.findAll('pre'):
+        if pre.code:
+            txt = unicode(pre.code.get_text())
+            lexer_name = "text"
+            if txt.startswith(':::'):
                 lexer_name, txt = txt.split('\n', 1)
-                lexer_name = lexer_name.split(':')[1]
-                if lexer_name in _lexer_names:
-                    lexer = lexers.get_lexer_by_name(lexer_name, stripnl=True, encoding='UTF-8')
-                    hl = highlight(txt, lexer, _formatter)
-                    bhl = BeautifulSoup(hl)
-                    tag.replace_with(bhl.div)
+                lexer_name = lexer_name.split(':::')[1]
 
+            if lexer_name not in _lexer_names:
+                lexer_name = "text"
+            lexer = lexers.get_lexer_by_name(lexer_name, stripnl=True, encoding='UTF-8')
+            highlighted = highlight(txt, lexer, _formatter)
+            div_code = BeautifulSoup(highlighted).div
+            if not div_code:
+                return content
+            pre.replace_with(div_code)
     return unicode(soup)
