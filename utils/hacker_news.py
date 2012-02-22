@@ -52,8 +52,8 @@ class HackerNews(object):
             try:
                 points = int(tag.parent.nextSibling.find('span').string.split(' ')[0])
             except AttributeError, ValueError:
-                logger.error("No points found. URL: %s" % tag_a['href'])
-                points = 0
+                # I don't know why, but no points is specail, so treat it as a important info
+                points = 7777777
 
             if 'http' not in tag_a['href']:
                 tag_a['href'] = "http://news.ycombinator.com/" + tag_a['href']
