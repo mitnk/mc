@@ -1,5 +1,6 @@
 import os
 import re
+import time
 from urllib2 import URLError
 from tempfile import NamedTemporaryFile
 
