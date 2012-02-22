@@ -33,7 +33,7 @@ def send_to_kindle(request):
     files = os.listdir(settings.HACKER_NEWS_DIR)
     if not files:
         return HttpResponse("No new articles filed")
-    files = [os.path.join(settings.HACKER_NEWS_DIR, x) for x in files if x.endswith('.mobi')]
+    files = [os.path.join(settings.HACKER_NEWS_DIR, x) for x in files if (x.endswith('.mobi') or x.endswith(".txt"))]
     text = "%s files sent.\n" % len(files)
     send_mail(send_to, subject, text, files=files)
     for f in files:
@@ -56,10 +56,10 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None):
             title = page_title
         file_name = re.sub(r'[^0-9a-zA-Z _-]+', '', title).replace(' ', '_') or 'blank_name'
         mobi_name = "%s.mobi" % file_name
-        html_name = "%s.html" % file_name
 
         try:
-            file_path = br._save_to_html(html_name, dir_name, title=title)
+            file_path = br.save_to_files(file_name, dir_name, title=title)
+            time.sleep(0.3)
         except Exception, e:
             logger.error("Error in britile: %s URL: %s" % (e, url))
             return None
@@ -72,7 +72,12 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None):
         os.system(cmd)
         time.sleep(1) # Wait a second before checking the file
         mobi_file = re.sub(r'\.html$', '.mobi', file_path)
-        if not os.path.exists(mobi_file):
+        txt_file = re.sub(r'\.html$', '.txt', file_path)
+
+        # dirty ... fix me
+        if not os.path.exists(mobi_file) and os.path.exists(txt_file):
+            return txt_file
+        else:
             logger.info("Failed to generate mobi file. URL: %s" % url)
             return None
 
