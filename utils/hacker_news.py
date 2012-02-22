@@ -52,6 +52,7 @@ class HackerNews(object):
             try:
                 points = int(tag.parent.nextSibling.find('span').string.split(' ')[0])
             except AttributeError, ValueError:
+                logger.error("No points found. URL: %s" % tag_a['href'])
                 points = 0
 
             if 'http' not in tag_a['href']:
