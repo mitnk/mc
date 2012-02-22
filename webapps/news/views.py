@@ -69,9 +69,11 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None):
 
         cmd = "kindlegen %s -o %s > /dev/null" % (file_path, mobi_name)
         os.system(cmd)
+        time.sleep(1) # Wait a second before checking the file
         mobi_file = re.sub(r'\.html$', '.mobi', file_path)
         if not os.path.exists(mobi_file):
             logger.info("Failed to generate mobi file. URL: %s" % url)
+            return None
 
         # Remove all middle-files except .MOBI
         file_list = os.listdir(dir_name)
