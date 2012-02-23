@@ -45,6 +45,16 @@ def send_to_kindle(request):
 
 
 def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None):
+    def clean_dir_files(dir_name):
+        # Remove all middle-files except .MOBI
+        file_list = os.listdir(dir_name)
+        for f in file_list:
+            if not f.endswith(".mobi") and not f.endswith(".txt"):
+                try:
+                    os.remove(dir_name + "/" + f)
+                except OSError:
+                    pass
+        
     try:
         br = Briticle(url)
         if not br.content:
@@ -57,12 +67,8 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None):
         file_name = re.sub(r'[^0-9a-zA-Z _-]+', '', title).replace(' ', '_') or 'blank_name'
         mobi_name = "%s.mobi" % file_name
 
-        try:
-            file_path = br.save_to_files(file_name, dir_name, title=title)
-            time.sleep(0.3)
-        except Exception, e:
-            logger.error("Error in britile: %s URL: %s" % (e, url))
-            return None
+        file_path = br.save_to_files(file_name, dir_name, title=title)
+        time.sleep(0.3)
 
         if not file_path or not os.path.exists(file_path):
             logger.info('File not found for URL: %s' % url)
@@ -74,30 +80,25 @@ def save_to_file(url, dir_name=settings.HACKER_NEWS_DIR, title=None):
         mobi_file = re.sub(r'\.html$', '.mobi', file_path)
         txt_file = re.sub(r'\.html$', '.txt', file_path)
 
-        # dirty ... fix me
-        if not os.path.exists(mobi_file) and os.path.exists(txt_file):
-            return txt_file
-        else:
+        clean_dir_files(dir_name)
+        if not os.path.exists(mobi_file):
+            if os.path.exists(txt_file):
+                return txt_file
             logger.info("Failed to generate mobi file. URL: %s" % url)
             return None
 
-        # Remove all middle-files except .MOBI
-        file_list = os.listdir(dir_name)
-        for f in file_list:
-            if not f.endswith(".mobi"):
-                try:
-                    os.remove(dir_name + "/" + f)
-                except OSError:
-                    pass
-        return mobi_file
+        try:
+            os.remove(txt_file)
+        except OSError:
+            pass
 
+        return mobi_file
     except Exception, e:
         if isinstance(e, URLError) or 'timed out' in str(e):
             logger.info("URLError or Time out Exception: %s URL: %s" % (e, url))
         else:
             logger.info("*** Exception: %s URL: %s" % (e, url))
         return None
-
 
 @csrf_exempt
 def index(request):
