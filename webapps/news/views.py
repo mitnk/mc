@@ -17,9 +17,10 @@ def send_to_kindle(request):
     send_to = settings.KINDLE_SENDING_LIST
     subject = "Docs of HackerNews from mitnk.com"
     files = os.listdir(settings.HACKER_NEWS_DIR)
+    files = [os.path.join(settings.HACKER_NEWS_DIR, x) for x in files if (x.endswith('.mobi') or x.endswith(".txt"))]
     if not files:
         return HttpResponse("No new articles filed")
-    files = [os.path.join(settings.HACKER_NEWS_DIR, x) for x in files if (x.endswith('.mobi') or x.endswith(".txt"))]
+
     try:
         info = "%s files sent.\n" % len(files)
         send_mail(send_to, subject, info, files=files)
