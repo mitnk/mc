@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     (r'^favo/$', "webapps.views.favo_tweets"),
     (r'^notes/$', include('webapps.notes.urls')),
     (r'^check_notes/$', 'webapps.notes.views.check_notes'),
+    (r'^t/', include('twitcn.urls')),
 )
 
 if settings.DEBUG:
