@@ -79,8 +79,6 @@ def send_to_kindle(file_name, cids):
 
 @csrf_exempt
 def kindle(request):
-    latest_id = 0
-    res = 0
     if request.method == "POST":
         book_id = request.POST.get('book_id')
         page = request.POST.get('page') or 1
@@ -89,7 +87,7 @@ def kindle(request):
             novel = Novel.objects.get(book_id=book_id)
             last_id = novel.last_id
         except Novel.DoesNotExist:
-            novel = None
+            novel = Novel.objects.create(title=book_id, book_id=book_id)
             last_id = 0
         
         if request.POST.get('last_id'):
