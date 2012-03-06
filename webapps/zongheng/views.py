@@ -1,112 +1,74 @@
 import datetime
 import os.path
-import re
 import urllib2
 import time
 
 from django.conf import settings
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
-from django.template.defaultfilters import striptags
 from django.views.decorators.csrf import csrf_exempt
-
-from bs4 import BeautifulSoup
 
 from webapps.zongheng.models import Novel
 from webapps.tools import send_mail
-
-
-def get_chapter_list(book_id, last_id, page):
-    if not book_id:
-        return []
-
-    url = 'http://m.zongheng.com/chapter/list?bookid=%s&asc=0&pageNum=%s'
-
-    try:
-        page = urllib2.urlopen(url % (book_id, page))
-    except urllib2.HTTPError:
-        return []
-
-    soup = BeautifulSoup(page)
-    tag = soup.find("div", {"class": "list"})
-
-    if not tag:
-        return 0
-
-    cids = []
-    for href in [x['href'] for x in tag.findAll('a')]:
-        results = re.search(r'cid=(\d+)', href)
-        if results and int(results.group(1)) > int(last_id):
-            cids.append(int(results.group(1)))
-
-    cids.reverse() # Make cid from DESC to ASC
-    return cids
-
-
-def ParseUstringProc(res):
-    return ''
-
-
-def write_content(book_id, cids):
-    file_name = "zongheng_%s.txt" % datetime.datetime.now().strftime("%h-%d-%H-%M-%S")
-    file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
-    f = open(file_name, "w")
-    pattern = re.compile(r"\[|\]|u'[^']+'", re.VERBOSE)
-    for cid in cids:
-        url = 'http://m.zongheng.com/chapter?bookid=%s&cid=%s' % (book_id, cid)
-        opener = urllib2.build_opener()
-        opener.addheaders.append(('Cookie', 'WAPPageSize=0'))
-        page = opener.open(url)
-        soup = BeautifulSoup(page)
-        tag = soup.findAll("div", {"class": "yd"})[0]
-        content = smart_str(tag.contents).replace(", <p>", "").replace("</p>", "\r\n\r\n")
-        content = pattern.sub(ParseUstringProc, content)
-        content = smart_str(striptags(content)) + "\r\n"
-        f.write(content)
-        time.sleep(0.3) # sleep a while to be gentle
-    f.close()
-    return file_name
-
-
-def send_to_kindle(file_name, cids):
-    send_to = [settings.MY_KINDLE_MAIL,]
-    subject = "Zong Heng Novels Update"
-    text = "There are %s chapter updated." % len(cids)
-    files = [file_name]
-    send_mail(send_to, subject, text, files=files)
+from utils.zongheng import get_chapter_list, get_chapter_content, get_book_name
 
 
 @csrf_exempt
 def kindle(request):
     if request.method == "POST":
-        book_id = request.POST.get('book_id')
-        page = request.POST.get('page') or 1
+        book_id = request.POST.get('book_id', 0)
+        if not book_id:
+            return HttpResponse("Invalid book_id")
 
-        try:
+        book_name = get_book_name(book_id)
+        if not book_name:
+            return HttpResponse("Cannot get book_name, zongheng lib broken?")
+
+        if Novels.objects.filter(book_id=book_id).exists():
             novel = Novel.objects.get(book_id=book_id)
-            last_id = novel.last_id
-        except Novel.DoesNotExist:
-            novel = Novel.objects.create(title=book_id, book_id=book_id)
-            last_id = 0
+            if novel.title != book_name:
+                novel.title = book_name
+                novel.save()
+        else:
+            novel = Novel.objects.create(title=book_name, book_id=book_id)
         
-        if request.POST.get('last_id'):
-            last_id = request.POST['last_id']
+        chapter_list = get_chapter_list(book_id)
+        chapter_list = [x for x in chapter_list if int(x) > int(novel.last_id)]
+        if len(chapter_list) < settings.MIN_CHAPTER_COUNT:
+            return HttpResponse("Not have enough chapters.(%s/%s)" % (len(chapter_list), settings.MIN_CHAPTER_COUNT))
 
-        cids = get_chapter_list(request.POST.get('book_id', 0), last_id, page)
-        if len(cids) < settings.MIN_CHAPTER_COUNT:
-            return HttpResponse("Not have enough chapters.(%s/%s)" % (len(cids), settings.MIN_CHAPTER_COUNT))
-
-        file_name = write_content(book_id, cids)
-        send_to_kindle(file_name, cids)
-
-        if last_id != 0:
-            novel.last_id = cids[-1]
-            novel.save()
-        return HttpResponse("Send %s chapters to your kindle" % len(cids))
+        chapter_list.reverse()
+        file_name = write_to_file(book_id, chapter_list, book_name=book_name)
+        send_to_kindle(file_name)
+        novel.last_id = max([int(x) for x in chapter_list])
+        novel.save()
+        return HttpResponse("Send %s chapters to your kindle" % len(chapter_list))
 
 
     novels = Novel.objects.all()
     return render_to_response('zongheng/kindle.html',
                               {'novels': novels, })
+
+
+def send_to_kindle(file_name):
+    send_to = [settings.MY_KINDLE_MAIL,]
+    subject = "Zong Heng Novels Update"
+    files = [file_name]
+    send_mail(send_to, subject, "Zongheng Updated.", files=files)
+
+
+def write_to_file(book_id, cids, book_name=None):
+    if not book_name:
+        file_name = "zongheng_%s.txt" % datetime.datetime.now().strftime("%h-%d-%H-%M-%S")
+    else:
+        book_name = book_name.replace(' ', '')
+        file_name = "%s(%s-%s).txt" % (book_name, cids[0], cids[-1])
+    file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
+    with open(file_name, "w") as f:
+        for cid in cids:
+            content = get_chapter_content(book_id, cid)
+            f.write(u"\r\n" + content)
+            time.sleep(0.3) # sleep a while to be gentle
+    return file_name
 
