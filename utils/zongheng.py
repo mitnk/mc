@@ -11,7 +11,7 @@ HEADERS = [('User-agent', USER_AGENT), ("Accept", ACCEPT), ("Cookie", COOKIE)]
 
 def get_chapter_list(book_id, asc=0, page=1):
     """
-    >>> L = get_chapter_list(48552, asc=1, page=3); print len(L), L[0], L[-1]
+    >>> L = get_chapter_list(48552, asc=1, page=3); print len(L), L[0][0], L[-1][0]
     20 1215151 1232898
     """
     if not book_id:
@@ -31,10 +31,13 @@ def get_chapter_list(book_id, asc=0, page=1):
         return []
 
     chapter_id_list = []
-    for href in [x['href'] for x in tag.findAll('a')]:
+    a_tags = tag.findAll('a')
+    for a in a_tags:
+        href = a['href']
         results = re.search(r'cid=(\d+)', href)
         if results:
-            chapter_id_list.append(int(results.group(1)))
+            title = a.string.strip()
+            chapter_id_list.append((int(results.group(1)), title))
     return chapter_id_list
 
 def get_book_name(book_id):
@@ -52,7 +55,7 @@ def get_book_name(book_id):
     except (urllib2.HTTPError, urllib2.URLError):
         pass
     else:
-        name = soup.find("h2").find("a").string.strip().strip(u'\u300a\u300b')
+        name = soup.find("h2").find("a").string.strip().strip(u'\u300a\u300b').replace(' ', '')
     return name
 
 def get_chapter_content(book_id, chapter_id):

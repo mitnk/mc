@@ -34,7 +34,7 @@ def kindle(request):
             novel = Novel.objects.create(title=book_name, book_id=book_id)
         
         chapter_list = get_chapter_list(book_id)
-        chapter_list = [x for x in chapter_list if int(x) > int(novel.last_id)]
+        chapter_list = [x for x in chapter_list if int(x[0]) > int(novel.last_id)]
         if len(chapter_list) < settings.MIN_CHAPTER_COUNT:
             return HttpResponse("Not enough chapters.(%s/%s)\n" % (len(chapter_list), settings.MIN_CHAPTER_COUNT))
 
@@ -42,7 +42,7 @@ def kindle(request):
         file_name = write_to_file(book_id, chapter_list, book_name=book_name)
         if not settings.DEBUG:
             send_to_kindle(file_name)
-        novel.last_id = max([int(x) for x in chapter_list])
+        novel.last_id = max([int(x) for x, y in chapter_list])
         novel.save()
         return HttpResponse("Send %s chapters to your kindle\n" % len(chapter_list))
 
@@ -59,15 +59,19 @@ def send_to_kindle(file_name):
     send_mail(send_to, subject, "Zongheng Updated.", files=files)
 
 
-def write_to_file(book_id, cids, book_name=None):
-    if not book_name:
-        file_name = "zongheng_%s.txt" % datetime.datetime.now().strftime("%h-%d-%H-%M-%S")
+def write_to_file(book_id, chapter_list, book_name):
+    if not chapter_list:
+        return
+
+    if len(chapter_list) == 1:
+        file_name = "%s(%s).txt" % (book_name, chapter_list[0].split(' ')[0])
     else:
-        book_name = book_name.replace(' ', '')
-        file_name = "%s(%s-%s).txt" % (book_name, cids[0], cids[-1])
+        left = chapter_list[0][1].split(' ')[0]
+        right = chapter_list[-1][1].split(' ')[0]
+        file_name = "%s(%s-%s).txt" % (book_name, left, right)
     file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
     with open(file_name, "w") as f:
-        for cid in cids:
+        for cid, titile in chapter_list:
             content = "\r\n" + get_chapter_content(book_id, cid)
             f.write(smart_str(content))
             time.sleep(0.3) # sleep a while to be gentle
