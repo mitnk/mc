@@ -25,7 +25,7 @@ def kindle(request):
         if not book_name:
             return HttpResponse("Cannot get book_name, zongheng lib broken?")
 
-        if Novels.objects.filter(book_id=book_id).exists():
+        if Novel.objects.filter(book_id=book_id).exists():
             novel = Novel.objects.get(book_id=book_id)
             if novel.title != book_name:
                 novel.title = book_name
@@ -36,14 +36,15 @@ def kindle(request):
         chapter_list = get_chapter_list(book_id)
         chapter_list = [x for x in chapter_list if int(x) > int(novel.last_id)]
         if len(chapter_list) < settings.MIN_CHAPTER_COUNT:
-            return HttpResponse("Not have enough chapters.(%s/%s)" % (len(chapter_list), settings.MIN_CHAPTER_COUNT))
+            return HttpResponse("Not enough chapters.(%s/%s)\n" % (len(chapter_list), settings.MIN_CHAPTER_COUNT))
 
         chapter_list.reverse()
         file_name = write_to_file(book_id, chapter_list, book_name=book_name)
-        send_to_kindle(file_name)
+        if not settings.DEBUG:
+            send_to_kindle(file_name)
         novel.last_id = max([int(x) for x in chapter_list])
         novel.save()
-        return HttpResponse("Send %s chapters to your kindle" % len(chapter_list))
+        return HttpResponse("Send %s chapters to your kindle\n" % len(chapter_list))
 
 
     novels = Novel.objects.all()
@@ -67,8 +68,8 @@ def write_to_file(book_id, cids, book_name=None):
     file_name = os.path.join(settings.ZONGHENG_DIR, file_name)
     with open(file_name, "w") as f:
         for cid in cids:
-            content = get_chapter_content(book_id, cid)
-            f.write(u"\r\n" + content)
+            content = "\r\n" + get_chapter_content(book_id, cid)
+            f.write(smart_str(content))
             time.sleep(0.3) # sleep a while to be gentle
     return file_name
 
