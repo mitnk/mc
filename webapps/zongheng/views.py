@@ -9,9 +9,9 @@ from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
-from webapps.zongheng.models import Novel
-from webapps.tools import send_mail
+from utils.mail import GSMTP
 from utils.zongheng import get_chapter_list, get_chapter_content, get_book_name
+from webapps.zongheng.models import Novel
 
 
 @csrf_exempt
@@ -38,6 +38,7 @@ def kindle(request):
         if len(chapter_list) < settings.MIN_CHAPTER_COUNT:
             return HttpResponse("Not enough chapters.(%s/%s)\n" % (len(chapter_list), settings.MIN_CHAPTER_COUNT))
 
+        print chapter_list
         chapter_list.reverse()
         file_name = write_to_file(book_id, chapter_list, book_name=book_name)
         if not settings.DEBUG:
@@ -55,7 +56,8 @@ def kindle(request):
 def send_to_kindle(file_name):
     send_to = [settings.MY_KINDLE_MAIL,]
     subject = "Zong Heng Novels Update"
-    send_mail(send_to, subject, "Zongheng Updated.", files=[file_name,])
+    stmp = GSMTP(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+    stmp.send_mail(send_to, subject, "Zongheng Updated.", files=[file_name,])
 
 
 def write_to_file(book_id, chapter_list, book_name):

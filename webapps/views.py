@@ -12,7 +12,7 @@ from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
 from webapps.models import WebAppInfo, FavoTweet, MyTweet
-from webapps.tools import send_mail
+from utils.mail import GSMTP
 from twitcn.tools import getPrivateApi
 
 
@@ -145,7 +145,8 @@ def send_tweets_to_kindle(request):
     subject = "Tweets Daily Update"
     text = "There are %s tweets updated." % len(messages)
     files = [file_name]
-    send_mail(send_to, subject, text, files=files, fail_silently=False)
+    stmp = GSMTP(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+    stmp.send_mail(send_to, subject, text, files=files)
     set_last_updated_id(messages[-1].id)
     return HttpResponse("Sent %s tweets." % len(messages))
 
