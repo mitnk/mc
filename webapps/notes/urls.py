@@ -1,5 +1,5 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
-    (r'^$', 'webapps.notes.views.index', 'notes_index'),
+    url(r'^$', 'webapps.notes.views.index', name='notes_index'),
 )
