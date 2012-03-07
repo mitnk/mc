@@ -16,7 +16,11 @@ from webapps.notes.models import Note, Word
 ASCII_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 def index(request):
-    notes = Note.objects.all()
+    book = request.GET.get('book')
+    if book:
+        notes = Note.objects.filter(book=book)
+    else:
+        notes = Note.objects.all()
     return render_to_response("webapps/notes.html",
         {'notes': notes},
         context_instance=RequestContext(request))

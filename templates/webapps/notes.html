@@ -28,7 +28,7 @@
       <span class="openQuote">&nbsp;</span>
       <span class="text">{{ note.text }}</span>
       <span class="closeQuote">&nbsp;</span>
-      {% if note.book %}From <span class="book">{{ note.book }}</span>{% endif %}
+      {% if note.book %}From <span class="book"><a href="{% url notes_index %}?book={{ note.book }}">{{ note.book }}</a></span>{% endif %}
       <br/>
       <span class="added">{{  note.added|date:"N j, Y" }}</span>
     </div>
@@ -41,7 +41,7 @@
       <span class="openQuote">&nbsp;</span>
       <span class="text">{{ note.text }}</span>
       <span class="closeQuote">&nbsp;</span>
-      {% if note.book %}From <span class="book">{{ note.book }}</span>{% endif %}
+      {% if note.book %}From <span class="book"><a href="{% url notes_index %}?book={{ note.book }}">{{ note.book }}</a></span>{% endif %}
       <br/>
       <span class="added">{{  note.added|date:"N j, Y" }}</span>
     </div>
