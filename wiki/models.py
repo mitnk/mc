@@ -28,6 +28,9 @@ class Article(models.Model):
     updated = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category)
 
+    class Meta:
+        ordering = ["-added"]
+
     def __unicode__(self):
         return self.title
 
