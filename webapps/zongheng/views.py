@@ -55,8 +55,7 @@ def kindle(request):
 def send_to_kindle(file_name):
     send_to = [settings.MY_KINDLE_MAIL,]
     subject = "Zong Heng Novels Update"
-    files = [file_name]
-    send_mail(send_to, subject, "Zongheng Updated.", files=files)
+    send_mail(send_to, subject, "Zongheng Updated.", files=[file_name,])
 
 
 def write_to_file(book_id, chapter_list, book_name):

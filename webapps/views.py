@@ -12,7 +12,7 @@ from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
 from webapps.models import WebAppInfo, FavoTweet, MyTweet
-from webapps.tools import send_mail, website_is_down
+from webapps.tools import send_mail
 from twitcn.tools import getPrivateApi
 
 
@@ -148,58 +148,6 @@ def send_tweets_to_kindle(request):
     send_mail(send_to, subject, text, files=files, fail_silently=False)
     set_last_updated_id(messages[-1].id)
     return HttpResponse("Sent %s tweets." % len(messages))
-
-@csrf_exempt
-def check_website(request):
-    content = "not check"
-    if request.method == "POST":
-        url = request.POST.get('url_for_check')
-        site_name = request.POST.get('site_name')
-        if not site_name or not site_name:
-            return HttpResponse('params required')
-
-        wai, created = WebAppInfo.objects.get_or_create(category='check_website', name=url)
-        is_down, reason = website_is_down(url)
-        if is_down:
-            # check again to make sure it is really down
-            is_down, reason = website_is_down(url)
-
-        mail_to = ['wanghonggang@cn-acg.com']
-
-        if is_down:
-            # send means server is down and report email is sent
-            if wai.value == 'send':
-                # do nothing, just wait for rechecking
-                content = "is down (had sent report)"
-            else:
-                # If server is already down, do not save to update the time again.
-                if wai.value != 'down':
-                    wai.value = 'down'
-                    wai.save()
-
-                content = "Target url: %s" % url
-                content += "\r\nReason: %s" % reason
-                content += "\r\nDown at: %s" % datetime.datetime.now()
-                send_mail(mail_to, '%s is Down' % site_name, content, fail_silently=False)
-                wai.value = 'send'
-                wai.save()
-        else:
-            if not wai.value:
-                wai.value = 'up'
-                wai.save()
-
-            if wai.value in ['down', 'send']:
-                time_span = datetime.datetime.now() - wai.updated
-                content = "Target url: %s" % url
-                content += "\r\nReason: %s" % reason
-                content += "\r\nUp at: %s" % datetime.datetime.now()
-                content += "\r\nWas down for: %s" % time_span
-
-                send_mail(mail_to, '%s is Up' % site_name, content, fail_silently=False)
-                wai.value = 'up'
-                wai.save()
-
-    return HttpResponse(content)
 
 def http_meta(request):
     return render_to_response('webapps/http_meta.html',

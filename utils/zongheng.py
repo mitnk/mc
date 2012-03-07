@@ -73,11 +73,13 @@ def get_chapter_content(book_id, chapter_id):
     for meta in metas:
         meta.extract()
     p_tags = tag.findAll("p")
+    # Kindle needs two '\n\n' to display a line break.
+    line_break = u"\n\n"
     for p in p_tags:
         if p.string and isinstance(p.string, unicode):
-            p.string = p.string + "\r\n"
+            p.string = p.string + line_break
         else:
-            p.string = "\r\n"
+            p.string = line_break
     return tag.get_text()
 
 

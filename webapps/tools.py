@@ -5,28 +5,11 @@ from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
+from email.header import Header
 import urllib2
 
+from django.conf import settings
 
-def website_is_down(url):
-    try:
-        page = urllib2.urlopen(url)
-        if page.code >= 500:
-            return True, "HTTP Code: %s" % page.code
-        else:
-            return False, "HTTP Code: %s" % page.code
-
-    except urllib2.HTTPError, e:
-        if e.getcode() >= 500:
-            return True, "HTTP Code: %s" % e.getcode()
-        else:
-            return False, str(e)
-
-    except urllib2.URLError, e:
-        return True, str(e)
-
-    return False, "We check page code_status and URLErrors and seems nothing wrong."
-    
 
 def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[], fail_silently=False):
     assert (type(send_to) == list or type(send_to) == tuple)
@@ -36,24 +19,23 @@ def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[], fai
     msg['From'] = send_from
     msg['To'] = COMMASPACE.join(send_to)
     msg['Date'] = formatdate(localtime=True)
-    msg['Subject'] = subject
+    msg['Subject'] = Header(subject, "utf-8")
   
     msg.attach( MIMEText(text) )
 
     for f in files:
-        part = MIMEBase('application', "octet-stream")
+        basename = str(Header(os.path.basename(f), 'utf8'))
+        part = MIMEBase('application', "octet-stream", charset="utf8")
         part.set_payload( open(f, "rb").read() )
         Encoders.encode_base64(part)
-        part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(f))
+        part.add_header('Content-Disposition', 'attachment; filename="%s"' % basename)
         msg.attach(part)
 
     try:
         smtp = smtplib.SMTP("smtp.gmail.com", 587)
-
         smtpserver = 'smtp.gmail.com'
-        smtpuser = 'admin@mitnk.com'         # set SMTP username here
-        smtppass = 'writeblog'   # set SMTP password here
-
+        smtpuser = send_from
+        smtppass = settings.EMAIL_HOST_PASSWORD
         smtp.ehlo()
         smtp.starttls()
         smtp.ehlo()
@@ -63,4 +45,3 @@ def send_mail(send_to, subject, text, send_from="admin@mitnk.com", files=[], fai
     except:
         if not fail_silently:
             raise
-
