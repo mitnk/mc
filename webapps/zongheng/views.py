@@ -38,11 +38,9 @@ def kindle(request):
         if len(chapter_list) < settings.MIN_CHAPTER_COUNT:
             return HttpResponse("Not enough chapters.(%s/%s)\n" % (len(chapter_list), settings.MIN_CHAPTER_COUNT))
 
-        print chapter_list
         chapter_list.reverse()
         file_name = write_to_file(book_id, chapter_list, book_name=book_name)
-        if not settings.DEBUG:
-            send_to_kindle(file_name)
+        send_to_kindle(file_name)
         novel.last_id = max([int(x) for x, y in chapter_list])
         novel.save()
         return HttpResponse("Send %s chapters to your kindle\n" % len(chapter_list))
