@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post" action=".">
+    <input type="hidden" name="book_id" value="{{ book_id }}">
+    <input type="hidden" name="page" value="{{ page }}">
+
+    From: <select name="from">
+    {% for k, v in chapter_list %}
+        <option value="{{ k }}">{{ v }}</option>
+    {% endfor %}
+    </select>
+
+    To: <select name="to">
+    {% for k, v in chapter_list %}
+        <option value="{{ k }}">{{ v }}</option>
+    {% endfor %}
+    </select>
+    <input type="submit" value="Send to Kindle">
+</form>
+
+{% for page in pages %}
+<form method="post" action="." style="display:inline;">
+    <input type="hidden" name="page" value="{{ page }}">
+    <input type="hidden" name="book_id" value="{{ book_id }}">
+    <input type="submit" value="{{ page }}">
+</form>
+{% endfor %}
+
+<form method="post" action=".">
+    Book_id: <input type="text" name="book_id"><br><br>
+    <input type="submit">
+</form>
+{% endblock %}

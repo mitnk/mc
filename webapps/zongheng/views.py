@@ -4,14 +4,52 @@ import urllib2
 import time
 
 from django.conf import settings
-from django.http import HttpResponse
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
 from utils.mail import GSMTP
-from utils.zongheng import get_chapter_list, get_chapter_content, get_book_name
+from utils.zongheng import (get_chapter_list, get_chapter_content, 
+    get_book_name, get_book_pages)
 from webapps.zongheng.models import Novel
+
+
+@csrf_exempt
+def index(request):
+    book_id = request.POST.get('book_id')
+    from_ = int(request.POST.get('from', 0))
+    to_ = int(request.POST.get('to', 0))
+    page = request.POST.get('page')
+    if from_ and to_:
+        if from_ > to_:
+            from_, to_ = to_, from_
+        book_name = get_book_name(book_id)
+        chapter_list = get_chapter_list(book_id, page=page)
+        chapter_list = [x for x in chapter_list if from_ <= x[0] <= to_]
+        print from_, to_
+        print chapter_list
+        #file_name = write_to_file(book_id, chapter_list, book_name=book_name)
+        #send_to_kindle(file_name)
+        return HttpResponseRedirect(reverse("zongheng_index"))
+    else:
+        chapter_list = []
+        pages = []
+        if page:
+            pages = get_book_pages(book_id, page=page)
+        elif book_id:
+            pages = get_book_pages(book_id)
+        if book_id:
+            if not page:
+                page = 1
+            chapter_list = get_chapter_list(book_id, page=page)
+    return render_to_response('zongheng/index.html',
+                              {'pages': pages,
+                               'page': page,
+                               'book_id': book_id,
+                               'chapter_list': chapter_list, }
+                             )
 
 
 @csrf_exempt

@@ -18,35 +18,34 @@
 </head>
 
 <body>
-<div id="wrapper">
-  <div id="header">
-    <h1><a href="/">Evil Inside</a></h1>
-
-    {% include "blog/google_cse.html" %}
-
-    <div id="menu">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/commands/">Commands</a></li>
-        <li><a href="http://kindle.io">Kindle.io</a></li>
-        <li><a href="/about/">About</a></li>
-      </ul>
+<div id="header">
+    <div class="wrapper">
+        <p class="title">Mitnk's Blog</p>
+        <p>Critically Analyze What You Read and Hear</p>
     </div>
-  </div>
-
-{% if is_ie67 %}
-    {% include "forbid_ie67.html" %}
-{% endif %}
-
-  <div id="content"> {% block content %}{% endblock %} </div>
-  <div style="height:20px"></div>
-
-</div> <!-- end #wrapper -->
-
-
-<div id="footer">
-  Power by <a href="http://twitter.com/mitnk">@mitnk</a> 2012 <a href="/feed/">RSS</a>
 </div>
+
+<div id="wrapper">
+    <div id="menu">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/commands/">Commands</a></li>
+            <li><a href="http://kindle.io">Kindle.io</a></li>
+            <li><a href="/about/">About Me</a></li>
+            <li> {% include "blog/google_cse.html" %} </li>
+        </ul>
+    </div>
+
+    {% if is_ie67 %}
+        {% include "forbid_ie67.html" %}
+    {% endif %}
+
+    <div id="content"> {% block content %}{% endblock %} </div>
+
+    <div id="footer">
+      Power by <a href="http://twitter.com/mitnk">@mitnk</a> 2012 <a href="/feed/">RSS</a>
+    </div>
+</div> <!-- end #wrapper -->
 
 <script type="text/javascript" src="/site_media/js/main.js"> </script>
 <script type="text/javascript">
