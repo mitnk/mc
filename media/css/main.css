@@ -74,7 +74,7 @@ h6 {font-size: 1em;}
 .entry {  margin-left: 10px; }
 .entry h1 { font-family:Georgia; font-size:20px; }
 .entry-content { line-height: 22px; font-size:16px; }
-.entry-content h2 { line-height: 20px; font-size:14px; background-color:gray; padding:4px;}
+.entry-content h2 { font-size:1.1em; }
 .entry-content a { color: #B51C1E; } 
 .entry-content a:hover { background-color: #B51C1E; color: #FFFFFF; }
 .entry-meta { font-size: 13px; margin-top: 20px; }
