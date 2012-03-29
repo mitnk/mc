@@ -4,21 +4,22 @@
 
 {% block content %}
   {% load pagination_tags %}
-  {% autopaginate articles 5 %}
+  {% autopaginate articles 6 %}
 
-  {% if not articles.count %}
+    {% if not articles.count %}
     <h1>No available data.</h1>
-  {% endif %}
+    {% endif %}
 
-  {% for article in articles %}
-  <div class="entry">
-    <h2 class="entry-title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
-    <div class="entry-content">
-      {{ article.content|striptags|slice:":100"|linebreaks }}
+
+    {% for article in articles %}
+    <div class="entry">
+        <h2 class="entry-title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
+        <div class="entry-meta">
+        Posted in <a href="{{ article.category.get_absolute_url }}">{{ article.category }}</a> at {{ article.added|date:"N j, Y" }}
+        </div>
     </div>
-    <div class="entry-meta">Posted at {{ article.added|date:"N j, Y" }} </div>
-  </div>
-  {% endfor %}
+    {% endfor %}
 
-  {% paginate %}
+    {% paginate %}
+
 {% endblock %}
