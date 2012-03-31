@@ -1,9 +1,17 @@
 #coding=utf-8
+from django.conf import settings
 from django.conf.urls.defaults import *
 from views import *
 
+_P = settings.PRIVATE_URL
+
 urlpatterns = patterns('',
     (r'^$', index),
+    (_P + r'$', private_tweet),
+    (_P + r'm/$', private_mention),
+    (_P + r're/$', private_retweets_of_me),
+    (_P + r'dm/$', private_dm),
+    (_P + r'f/$', private_favorites),
     (r'^create_favorite/', create_favorite),
     (r'^destroy_favorite/', destroy_favorite),
     (r'^destroy_tweet/', destroy_tweet),
