@@ -5,13 +5,15 @@ from views import *
 
 _P = settings.PRIVATE_URL
 
+
 urlpatterns = patterns('',
     (r'^$', index),
-    (_P + r'$', private_tweet),
-    (_P + r'm/$', private_mention),
-    (_P + r're/$', private_retweets_of_me),
-    (_P + r'dm/$', private_dm),
-    (_P + r'f/$', private_favorites),
+    url(r'^' + _P + '/$', private_tweets, name="private_tweets"),
+    (r'^' + _P + '/c/$', private_clear_session),
+    (r'^' + _P + '/m/$', private_mention),
+    (r'^' + _P + '/f/$', private_favorites),
+    (r'^' + _P + '/re/$', private_retweets_of_me),
+    (r'^' + _P + '/dm/$', private_dm),
     (r'^create_favorite/', create_favorite),
     (r'^destroy_favorite/', destroy_favorite),
     (r'^destroy_tweet/', destroy_tweet),
