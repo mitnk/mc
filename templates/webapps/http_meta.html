@@ -11,6 +11,7 @@ table td {border: 1px solid #333333;padding:4px;}
         <tr><td>HTTP_HOST</td><td>{{ request.META.HTTP_HOST }}</td></tr>
         <tr><td>HTTP_USER_AGENT</td><td>{{ request.META.HTTP_USER_AGENT }}</td></tr>
         <tr><td>REMOTE_ADDR</td><td>{{ request.META.REMOTE_ADDR }}</td></tr>
+        <tr><td>Upload</td><td><input type="file" name="files" multiple=""></td></tr>
     </table>
 </body>
 </html>
