@@ -1,8 +1,8 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('',
-    (r'^$', 'webapps.views.index'),
-    (r'^ckeditor/$', 'webapps.views.ckeditor'),
-    (r'^send_tweets_to_kindle/$', 'webapps.views.send_tweets_to_kindle'),
-    (r'^zongheng/', include('webapps.zongheng.urls')),
+urlpatterns = patterns('mitnkcom.webapps.views',
+    (r'^$', 'index'),
+    (r'^ckeditor/$', 'ckeditor'),
+    (r'^send_tweets_to_kindle/$', 'send_tweets_to_kindle'),
+    (r'^zongheng/', include('mitnkcom.webapps.zongheng.urls')),
 )

@@ -1,6 +1,6 @@
 from django.contrib.sitemaps import Sitemap
-from public.models import Article as PublicArticle
-from wiki.models import Article as WikiArticle
+from mitnkcom.public.models import Article as PublicArticle
+from mitnkcom.wiki.models import Article as WikiArticle
 import datetime
 
 

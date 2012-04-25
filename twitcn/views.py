@@ -119,7 +119,7 @@ def private_favorites(request):
             messages = api.GetFavorites()
             for message in messages:
                 api.DestroyFavorite(message.id)
-                from webapps.models import FavoTweet
+                from mitnkcom.webapps.models import FavoTweet
                 import rfc822
                 name = message.user.screen_name
                 text = smart_str(message.text)

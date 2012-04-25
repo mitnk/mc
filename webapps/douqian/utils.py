@@ -4,9 +4,9 @@ import time
 
 from django.conf import settings
 
-from common.utils import get_soup_by_url
-from webapps.douqian import pydouban
-from webapps.douqian.models import Book, Read, User
+from mitnkcom.common.utils import get_soup_by_url
+from mitnkcom.webapps.douqian import pydouban
+from mitnkcom.webapps.douqian.models import Book, Read, User
 
 def get_api(request):
     if "oauth_token" not in request.session or \

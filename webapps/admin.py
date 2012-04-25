@@ -1,5 +1,5 @@
 from django.contrib import admin
-from webapps.models import FavoTweet, MyTweet
+from mitnkcom.webapps.models import FavoTweet, MyTweet
 
 class FavoTweetAdmin(admin.ModelAdmin):
     list_display = ('name', 'text')

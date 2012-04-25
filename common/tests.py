@@ -2,7 +2,7 @@ import datetime
 
 from django.test import TestCase
 
-from common.utils import get_1st_of_last_month
+from mitnkcom.common.utils import get_1st_of_last_month
 
 
 class TestPreinstalledLib(TestCase):

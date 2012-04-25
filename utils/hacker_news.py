@@ -1,7 +1,7 @@
 import settings
 import logging
 
-from common.utils import get_soup_by_url
+from mitnkcom.common.utils import get_soup_by_url
 
 logger = logging.getLogger("HackerNews")
 if not logger.handlers:

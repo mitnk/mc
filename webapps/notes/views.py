@@ -9,9 +9,9 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 
-from common.utils import get_soup_by_url
-from twitcn.tools import getPrivateApi
-from webapps.notes.models import Note, Word
+from mitnkcom.common.utils import get_soup_by_url
+from mitnkcom.twitcn.tools import getPrivateApi
+from mitnkcom.webapps.notes.models import Note, Word
 
 ASCII_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 

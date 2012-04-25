@@ -10,10 +10,10 @@ from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
-from utils.mail import GSMTP
-from utils.zongheng import (get_chapter_list, get_chapter_content, 
+from mitnkcom.utils.mail import GSMTP
+from mitnkcom.utils.zongheng import (get_chapter_list, get_chapter_content, 
     get_book_name, get_book_pages)
-from webapps.zongheng.models import Novel
+from mitnkcom.webapps.zongheng.models import Novel
 
 
 @csrf_exempt

@@ -1,1 +1,1 @@
-../../briticle/briticle.py
+/home/mitnk/projects/briticle/briticle.py

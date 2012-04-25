@@ -7,9 +7,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from webapps.douqian import pydouban
-from webapps.douqian.models import User, Book, Read
-from webapps.douqian.utils import get_api, get_reading
+from mitnkcom.webapps.douqian import pydouban
+from mitnkcom.webapps.douqian.models import User, Book, Read
+from mitnkcom.webapps.douqian.utils import get_api, get_reading
 
 def index(request):
     try:

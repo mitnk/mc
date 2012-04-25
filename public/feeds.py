@@ -1,5 +1,5 @@
 from django.contrib.syndication.views import Feed
-from public.models import Article
+from mitnkcom.public.models import Article
 
 class LatestEntriesFeed(Feed):
     title = "mitnk's blog"

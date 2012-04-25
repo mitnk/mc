@@ -11,9 +11,9 @@ from django.template import RequestContext
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
 
-from webapps.models import WebAppInfo, FavoTweet, MyTweet
-from utils.mail import GSMTP
-from twitcn.tools import getPrivateApi
+from mitnkcom.webapps.models import WebAppInfo, FavoTweet, MyTweet
+from mitnkcom.utils.mail import GSMTP
+from mitnkcom.twitcn.tools import getPrivateApi
 
 
 def index(request):

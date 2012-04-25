@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from webapps.dailycost.models import Cost, CostForm
+from mitnkcom.webapps.dailycost.models import Cost, CostForm
 
 def index(request):
     cs = Cost.objects.order_by("-added")[:10]

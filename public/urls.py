@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('public.views',
+urlpatterns = patterns('mitnkcom.public.views',
     url(r'^$', 'index', name="public_index"),
     url(r'^(\d+)/$', 'get_article', name="public_article"),
     url(r'^(\d+)/(.+)/$', 'get_article', name="public_article"),

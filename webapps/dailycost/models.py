@@ -1,7 +1,7 @@
 import datetime
 from django.db import models
 from django.forms import ModelForm
-from common.utils import get_1st_of_last_month
+from mitnkcom.common.utils import get_1st_of_last_month
 
 BIG_AMOUNT = 360
 

@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('webapps.douqian.views',
+urlpatterns = patterns('mitnkcom.webapps.douqian.views',
     url(r'^$', 'index', name="douqian_index"),
     url(r'^read/(\d+)/$', 'read_detail', name="read_detail"),
     url(r'^read/(\d+)/edit/$', 'read_edit', name="read_edit"),
