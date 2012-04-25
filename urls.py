@@ -28,4 +28,4 @@ urlpatterns = patterns('',
 if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': '/Users/mitnk/projects/mitnkcom/media/'}),)
+        {'document_root': '/Users/mitnk/projects/mitnkcom/mitnkcom/media/'}),)

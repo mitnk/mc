@@ -7,7 +7,7 @@ import datetime
 import re
 import time
 from django import template
-from twitcn.tools import get_root_path
+from mitnkcom.twitcn.tools import get_root_path
 
 
 register = template.Library()
