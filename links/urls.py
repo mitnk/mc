@@ -1,5 +1,5 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 
-urlpatterns = patterns('',
-    url(r'^$', 'links.views.index', name="links"),
+urlpatterns = patterns('mitnkcom.links.views',
+    url(r'^$', 'index', name="links"),
 )

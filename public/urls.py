@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('mitnkcom.public.views',
     url(r'^$', 'index', name="public_index"),

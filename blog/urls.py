@@ -1,4 +1,5 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
+
 
 urlpatterns = patterns('mitnkcom.blog.views',
     url(r'^$', 'index', name="blog_index"),
