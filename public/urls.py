@@ -7,6 +7,7 @@ urlpatterns = patterns('mitnkcom.public.views',
     url(r'^category/$', 'get_all_categories', name="public_all_category"),
     url(r'^commands/$', 'linux_commands', name="public_commands"),
     url(r'^category/(\d+)/$', 'get_category', name="public_category"),
+    url(r'^tag/(\d+)/$', 'get_tag', name="public_tag"),
     url(r'^about/$', 'about', name="about"),
 
 

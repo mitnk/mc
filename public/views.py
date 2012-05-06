@@ -32,6 +32,17 @@ def get_article(request, id, slug=None):
     except Article.DoesNotExist:
         raise Http404
 
+@cache_page
+def get_tag(request, id):
+    try:
+        tag = Tag.objects.get(id=id)
+        articles = tag.article_set.order_by("-added")
+        return render_to_response('blog/article_list.html',
+                                  {'tag': tag,
+                                   'articles': articles,},
+                                  context_instance=RequestContext(request))
+    except Tag.DoesNotExist:
+        raise Http404
 
 @cache_page
 def get_category(request, id):

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{% if category %}Category: {{ category }}{% else %}Evil Inside{% endif %}{% endblock %}
+{% block title %}{% if tag %}Tag: {{ tag.title }}{% else %}Evil Inside{% endif %}{% endblock %}
 
 {% block content %}
   {% load pagination_tags %}
@@ -15,7 +15,10 @@
     <div class="entry">
         <h2 class="entry-title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
         <div class="entry-meta">
-        Posted in <a href="{{ article.category.get_absolute_url }}">{{ article.category }}</a> at {{ article.added|date:"N j, Y" }}
+            Posted at {{ article.added|date:"N j, Y" }} Tags: 
+            {% for tag in article.tags.all %}
+                <a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
+            {% endfor %}
         </div>
     </div>
     {% endfor %}

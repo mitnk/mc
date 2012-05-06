@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load common_tags %}
 
-{% block keywords %}<meta name="keywords" content="{{ article.title }}, {{ article.slug }}, {{ article.category }}" />{% endblock %}
-{% block description %}<meta name="description" content="{{ article.title }}, {{ article.slug }}, {{ article.category }}" />{% endblock %}
+{% block keywords %}<meta name="keywords" content="{{ article.title }}, {{ article.slug }}, {{ article.tags }}" />{% endblock %}
+{% block description %}<meta name="description" content="{{ article.title }}, {{ article.slug }}, {{ article.tags }}" />{% endblock %}
 {% block canonical %}<link rel="canonical" href="http://mitnk.com{{ article.get_absolute_url }}" />{% endblock %}
 
 {% block extra_css %}
@@ -22,7 +22,10 @@
     </article>
 
     <div class="entry-meta">
-    Posted in <a href="{{ article.category.get_absolute_url }}">{{ article.category }}</a> at {{ article.added|date:"N j, Y" }}
+        Posted at {{ article.added|date:"N j, Y" }} Tags: 
+        {% for tag in article.tags.all %}
+            <a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
+        {% endfor %}
     </div>
 
   {% include "comments/comments.html" %}
