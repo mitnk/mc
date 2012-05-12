@@ -18,7 +18,7 @@ a { color:#AA0000; text-decoration:none; }
 blockquote, quote { padding-left: 8px; display: block; color: #0F7332; border-left: 4px solid #cccccc; }
 
 p code {padding:1px 5px;}
-code {background-color:#EEEEEE; color:#222222; font-size: 13px; font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;}
+code {background-color:#EEEEEE; color:#222222; margin:0 2px; padding:0 6px; font-size:14px; font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;}
 
 h6 {font-size: 1em;}
 
