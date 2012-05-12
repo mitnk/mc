@@ -23,7 +23,7 @@ urlpatterns = patterns('',
     (r'^favo/$', "mitnkcom.webapps.views.favo_tweets"),
     (r'^notes/$', include('mitnkcom.webapps.notes.urls')),
     (r'^check_notes/$', 'mitnkcom.webapps.notes.views.check_notes'),
-    (r'^%s/$' % settings.TWITCN_ROOT_PATH.strip('/'), include('mitnkcom.twitcn.urls')),
+    (r'^%s/' % settings.TWITCN_ROOT_PATH.strip('/'), include('mitnkcom.twitcn.urls')),
 )
 
 if settings.DEBUG:
