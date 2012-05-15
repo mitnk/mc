@@ -26,6 +26,9 @@ def private_tweets(request):
             if request.POST['action'] == "favo":
                 api.CreateFavorite(request.POST["status_id"])
                 return HttpResponse("ed")
+            elif request.POST['action'] == "newretweet":
+                api.Retweet(request.POST["status_id"])
+                return HttpResponse("NewRTed")
             elif request.POST['action'] == "unfavo":
                 api.DestroyFavorite(request.POST["status_id"])
                 return HttpResponse("Favo")

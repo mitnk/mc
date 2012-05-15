@@ -37,6 +37,7 @@
           <a href="javascript:void(0)" onclick="reply('{{ status.user.screen_name }}', '{{ status.id }}')">Re</a>
           <a href="javascript:void(0)" onclick="retweet('RT @{{ status.user.screen_name }}: {{ status.text|escapejs }}')">RT</a>
         {% endif %}
+          <a href="javascript:void(0)" onclick="new_retweet(this, '{{ status.id }}')">NewRT</a>
       {% endif %}
     </div>
     {% endfor %}

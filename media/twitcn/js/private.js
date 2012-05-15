@@ -5,6 +5,21 @@ function get_ajax_obj() {
         var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     return xmlhttp;
 }
+function new_retweet(obj, id) {
+    var xmlhttp = get_ajax_obj();
+    if (obj.innerHTML == "NewRT") {
+        obj.innerHTML = "Click to RT";
+    }
+    else if (obj.innerHTML == "Click to RT") {
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                obj.innerHTML = xmlhttp.responseText;
+        }
+        xmlhttp.open("POST", ".", true);
+        xmlhttp.send("action=newretweet&status_id=" + id);
+        obj.innerHTML = '<img style="height:1em;" src="/site_media/images/ajax-loader-bar.gif">';
+    }
+}
 function favo(obj, id) {
     var xmlhttp = get_ajax_obj();
     if (obj.innerHTML == "Favo") {
