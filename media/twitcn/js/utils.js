@@ -4,7 +4,7 @@ var LIMIT_AUTO_UPDATE = 200;
 var pid_auto_update = 0;
 
 // "" if root path else not ends up with a '/', should be "/path_like_this"
-var TWITCN_ROOT_PATH = "/t";
+var TWITCN_ROOT_PATH = "/tt";
 
 String.prototype.count = function(char){
     return this.split(char).length-1;
