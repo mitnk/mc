@@ -35,22 +35,73 @@ def normalize_words(words):
     return new_words
 
 def normalize(word):
+    ## TODO: make this function nicer (UT, shorter).
+
+    ## all verb to present
     try:
-        word = en.verb.present(word)
-        if en.is_verb(word):
-            return word
-        word = en.noun.singular(word)
-        if en.is_noun(word):
-            return word
+        new_word = en.verb.present(word)
+        if new_word != word and en.is_verb(new_word):
+            return new_word
     except KeyError:
         pass
+
+    ## noun plural to singular
+    try:
+        if en.is_noun(word):
+            new_word = en.noun.singular(word)
+            if new_word != word and en.is_noun(new_word):
+                return new_word
+    except KeyError:
+        pass
+
+    ## noun, convert "er, or" to verb
+    try:
+        if en.is_noun(word):
+            new_word = re.sub(r'er$', '', word)
+            if new_word != word and en.is_verb(new_word):
+                return new_word
+    except KeyError:
+        pass
+
+    try:
+        if en.is_noun(word):
+            new_word = re.sub(r'r$', '', word)
+            if new_word != word and en.is_verb(new_word):
+                return new_word
+    except KeyError:
+        pass
+
+    ## adv to adj
+    ## TODO: is there a quick way to do this in "en" libs
+    try:
+        new_word = re.sub(r'ly$', '', word)
+        if new_word != word and en.is_adjective(new_word):
+            return new_word
+    except KeyError:
+        pass
+
+    try:
+        new_word = re.sub(r'ly$', '', word) + 'e'
+        if new_word != word and en.is_adjective(new_word):
+            return new_word
+    except KeyError:
+        pass
+
+    try:
+        new_word = re.sub(r'y$', '', word)
+        if new_word != word and en.is_adjective(new_word):
+            return new_word
+    except KeyError:
+        pass
+
     return word
+
 
 def rank_words(f):
     words = {}
     for line in f:
         for word in line.strip().lower().split(' '):
-            if not word.strip() or  not is_ascii(word):
+            if len(word) <= 2 or not word.strip() or  not is_ascii(word):
                 continue
             if word in words:
                 words[word] += 1
