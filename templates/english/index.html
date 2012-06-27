@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}English is an important and powerful tool!{% endblock %}
+
+{% block content %}
+<h1>Find the most frequent words</h1>
+
+{% if words %}
+    {{ words }}
+{% else %}
+    <form enctype="multipart/form-data" method="post" action=".">
+        {% csrf_token %}
+        <input name="file" type="file">
+        <select name="count_limit">
+            <option value="2" selected="selected">2</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        <input type="submit">
+    </form>
+{% endif %}
+
+{% endblock %}
