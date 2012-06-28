@@ -1,10 +1,32 @@
+from bs4 import BeautifulSoup
 import en
 import re
 import string
 import time
+import urllib
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from mitnkcom.english.basic import BASIC
+from mitnkcom.english.models import Acceptation
+
+
+def get_acceptation(word):
+    try:
+        acceptation = Acceptation.objects.get(word=word)
+        acceptation = acceptation.acceptation
+        if acceptation:
+            return acceptation
+    except Acceptation.DoesNotExist:
+        pass
+    url = 'http://dict-co.iciba.com/api/dictionary.php?w=%s' % word
+    page = urllib.urlopen(url)
+    content = page.read()
+    soup = BeautifulSoup(page)
+    acceptation = soup.dict.acceptation.text
+    if acceptation:
+    	Acceptation.objects.create(word=word, acceptation=acceptation)
+    return acceptation
 
 def is_basic_word(word):
     return word.lower() in en.basic.words
@@ -49,10 +71,11 @@ def normalize(word):
 
     ## noun plural to singular
     try:
-        if en.is_noun(word):
-            new_word = en.noun.singular(word)
-            if new_word != word and en.is_noun(new_word):
-                return new_word
+        # FIXME: "his" -> "hi"
+        # But "books" is not an noun
+        new_word = en.noun.singular(word)
+        if new_word != word and en.is_noun(new_word):
+            return new_word
     except KeyError:
         pass
 
@@ -97,6 +120,17 @@ def normalize(word):
     except KeyError:
         pass
 
+    try:
+        if en.is_adjective(word):
+            new_word = re.sub(r'er$', '', word)
+            if new_word != word and en.is_adjective(new_word):
+                return new_word
+            new_word = re.sub(r'r$', '', word)
+            if new_word != word and en.is_adjective(new_word):
+                return new_word
+    except KeyError:
+        pass
+
     return word
 
 
@@ -114,6 +148,24 @@ def rank_words(f):
     words = [(x, words[x]) for x in words]
     return sorted(words, key=lambda x: -x[1])
 
+def gloss(word):
+    try:
+        acceptation = get_acceptation(word)
+        if acceptation:
+            return acceptation
+    except:
+        pass
+    if en.is_verb(word):
+        return en.verb.gloss(word)
+    elif en.is_adjective(word):
+        return en.adjective.gloss(word)
+    elif en.is_adverb(word):
+        return en.adverb.gloss(word)
+    elif en.is_noun(word):
+        return en.noun.gloss(word)
+    else:
+        return en.wordnet.gloss(word)
+
 def index(request):
     result = {}
     if request.method == 'POST':
@@ -125,7 +177,7 @@ def index(request):
         words = rank_words(f)
         words = basic_filter(words)
         words = count_filter(words, request.POST.get('count_limit', 2))
-        result = "\n".join(['%s%4s' % (x[0].ljust(30), x[1]) for x in words])
+        result = "\n".join(['%s%4s    %s' % (x[0].ljust(20), x[1], gloss(x[0])) for x in words])
         title = "=" * 40 + '\n'
         title += 'Run time: %.3f seconds\n' % (time.time() - t)
         result += '\n' + title
