@@ -4,6 +4,7 @@ import string
 import time
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from mitnkcom.english.basic import BASIC
 
 def is_basic_word(word):
     return word.lower() in en.basic.words
@@ -15,6 +16,7 @@ def is_ascii(s):
     return True
 
 def basic_filter(words):
+    words = [x for x in words if x[0] not in BASIC]
     return [x for x in words if not is_basic_word(x[0])]
 
 def count_filter(words, count_limit):
