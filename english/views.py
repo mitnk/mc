@@ -81,9 +81,10 @@ def normalize(word):
         pass
 
     try:
-        new_word = re.sub(r'ly$', '', word) + 'e'
-        if new_word != word and en.is_adjective(new_word):
-            return new_word
+        if word.endswith('ly'):
+            new_word = re.sub(r'ly$', '', word) + 'e'
+            if new_word != word and en.is_adjective(new_word):
+                return new_word
     except KeyError:
         pass
 
