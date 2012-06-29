@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 import en
 import re
+import random
+import json
 import string
 import time
 import urllib
@@ -8,25 +10,42 @@ import urllib
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from mitnkcom.english.basic import BASIC
-from mitnkcom.english.models import Acceptation
+from mitnkcom.english.models import Dict
 
-
-def get_acceptation(word):
-    try:
-        acceptation = Acceptation.objects.get(word=word)
-        acceptation = acceptation.acceptation
-        if acceptation:
-            return acceptation
-    except Acceptation.DoesNotExist:
-        pass
+def get_acceptation_from_web(word):
     url = 'http://dict-co.iciba.com/api/dictionary.php?w=%s' % word
     page = urllib.urlopen(url)
     content = page.read()
-    soup = BeautifulSoup(page)
-    acceptation = soup.dict.acceptation.text
-    if acceptation:
-    	Acceptation.objects.create(word=word, acceptation=acceptation)
+    soup = BeautifulSoup(content)
+    if not soup.dict.find_all('pron') or not soup.dict.find_all('pron'):
+        return ''
+    acceptation = soup.dict.acceptation.text.strip()
+    pron = soup.dict.ps.text.strip()
+    pos = soup.dict.pos.text.strip()
+    poses = soup.dict.find_all('pos')
+    acceptations = soup.dict.find_all('acceptation')
+    define = {}
+    i = 0
+    for p in poses:
+        define[p.text.strip()] = acceptations[i].text.strip()
+        i += 1
+
+    if not Dict.objects.filter(word=word).exists():
+        define = json.dumps(define, indent=4)
+        Dict.objects.create(word=word, acceptation=acceptation, pron=pron, define=define)
+    t = random.random()
+    time.sleep(t * 0.2)
     return acceptation
+
+def get_acceptation(word):
+    try:
+        acceptation = Dict.objects.get(word=word)
+        acceptation = acceptation.acceptation
+        if acceptation:
+            return acceptation
+    except Dict.DoesNotExist:
+        pass
+    return get_acceptation_from_web(word)
 
 def is_basic_word(word):
     return word.lower() in en.basic.words
