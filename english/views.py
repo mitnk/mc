@@ -42,6 +42,8 @@ def api_lookup(request, w):
     if request.GET.has_key('api'):
         return HttpResponseJson(result)
     else:
+        ua = request.META.get("HTTP_USER_AGENT", '').lower()
+        result['veer'] = (re.search(r'webos', ua) is not None)
         return render(request, 'english/word.html', result)
 
 def get_acceptation_from_web(word):
