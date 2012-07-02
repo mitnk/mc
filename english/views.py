@@ -31,6 +31,7 @@ def api_lookup(request, w):
         define = {'word': word}
         define['pos'] = record.pos
         define['pron'] = record.pron
+        define['gloss'] = record.gloss
         define['acceptation'] = record.acceptation
         define['define'] = json.loads(record.define)
         result['result'] = define
@@ -67,15 +68,12 @@ def get_acceptation_from_web(word):
     time.sleep(t * 0.2)
     return acceptation
 
-def get_acceptation(word):
+def get_define(word):
     try:
-        acceptation = Dict.objects.get(word=word)
-        acceptation = acceptation.acceptation
-        if acceptation:
-            return acceptation
+        w = Dict.objects.get(word=word)
+        return u'[%s] %s %s' % (w.pron, w.pos, w.acceptation)
     except Dict.DoesNotExist:
-        pass
-    return get_acceptation_from_web(word)
+        return ''
 
 def is_basic_word(word):
     return word.lower() in en.basic.words
@@ -220,7 +218,7 @@ def index(request):
         words = rank_words(f)
         words = basic_filter(words)
         words = count_filter(words, request.POST.get('count_limit', 2))
-        result = "\n".join(['%s%4s    %s' % (x[0].ljust(20), x[1], get_acceptation(x[0])) for x in words])
+        result = "\n".join(['%s%4s    %s' % (x[0].ljust(20), x[1], get_define(x[0])) for x in words])
         title = "=" * 40 + '\n'
         title += 'Run time: %.3f seconds\n' % (time.time() - t)
         result += '\n' + title
