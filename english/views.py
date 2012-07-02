@@ -9,7 +9,7 @@ import urllib
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from mitnkcom.english.basic import BASIC
+from mitnkcom.english.basic import basic_words
 from mitnkcom.english.models import Dict
 
 def HttpResponseJson(result):
@@ -37,6 +37,7 @@ def api_lookup(request, w):
         result['result'] = define
         result['status'] = 'ok'
     except Dict.DoesNotExist:
+        get_acceptation_from_web(word)
         result['status'] = 'not found'
     if request.GET.has_key('api'):
         return HttpResponseJson(result)
@@ -75,9 +76,6 @@ def get_define(word):
     except Dict.DoesNotExist:
         return ''
 
-def is_basic_word(word):
-    return word.lower() in en.basic.words
-
 def is_ascii(s):
     for c in s:
         if c not in string.ascii_letters:
@@ -85,8 +83,7 @@ def is_ascii(s):
     return True
 
 def basic_filter(words):
-    words = [x for x in words if x[0] not in BASIC]
-    return [x for x in words if not is_basic_word(x[0])]
+    return [x for x in words if not basic_words.has_key(x[0])]
 
 def count_filter(words, count_limit):
     return [x for x in words if x[1] >= int(count_limit)]
@@ -116,67 +113,48 @@ def normalize(word):
     except KeyError:
         pass
 
-    ## noun plural to singular
-    try:
-        # FIXME: "his" -> "hi"
-        # But "books" is not an noun
-        new_word = en.noun.singular(word)
-        if new_word != word and en.is_noun(new_word):
+    new_word = en.noun.singular(word)
+    if new_word != word and en.is_noun(new_word):
+        return new_word
+
+    if en.is_noun(word):
+        new_word = re.sub(r'er$', '', word)
+        if new_word != word and en.is_verb(new_word):
             return new_word
-    except KeyError:
-        pass
-
-    ## noun, convert "er, or" to verb
-    try:
-        if en.is_noun(word):
-            new_word = re.sub(r'er$', '', word)
-            if new_word != word and en.is_verb(new_word):
-                return new_word
-    except KeyError:
-        pass
-
-    try:
-        if en.is_noun(word):
-            new_word = re.sub(r'r$', '', word)
-            if new_word != word and en.is_verb(new_word):
-                return new_word
-    except KeyError:
-        pass
+        new_word = re.sub(r'r$', '', word)
+        if new_word != word and en.is_verb(new_word):
+            return new_word
+        new_word = re.sub(r'ness', '', word)
+        if new_word != word and en.is_adjective(new_word):
+            return new_word
 
     ## adv to adj
     ## TODO: is there a quick way to do this in "en" libs
-    try:
-        new_word = re.sub(r'ly$', '', word)
+    new_word = re.sub(r'ly$', '', word)
+    if new_word != word and en.is_adjective(new_word):
+        return new_word
+
+    if word.endswith('ly'):
+        new_word = re.sub(r'ly$', '', word) + 'e'
         if new_word != word and en.is_adjective(new_word):
             return new_word
-    except KeyError:
-        pass
 
-    try:
-        if word.endswith('ly'):
-            new_word = re.sub(r'ly$', '', word) + 'e'
-            if new_word != word and en.is_adjective(new_word):
-                return new_word
-    except KeyError:
-        pass
-
-    try:
-        new_word = re.sub(r'y$', '', word)
+    if en.is_adjective(word):
+        new_word = re.sub(r'ory$', '', word) + 'e'
+        if new_word != word and en.is_verb(new_word):
+            return new_word
+        new_word = re.sub(r'ive$', '', word) + 'e'
+        if new_word != word and en.is_verb(new_word):
+            return new_word
+        new_word = re.sub(r'ive$', '', word)
+        if new_word != word and en.is_verb(new_word):
+            return new_word
+        new_word = re.sub(r'er$', '', word)
         if new_word != word and en.is_adjective(new_word):
             return new_word
-    except KeyError:
-        pass
-
-    try:
-        if en.is_adjective(word):
-            new_word = re.sub(r'er$', '', word)
-            if new_word != word and en.is_adjective(new_word):
-                return new_word
-            new_word = re.sub(r'r$', '', word)
-            if new_word != word and en.is_adjective(new_word):
-                return new_word
-    except KeyError:
-        pass
+        new_word = re.sub(r'r$', '', word)
+        if new_word != word and en.is_adjective(new_word):
+            return new_word
 
     return word
 
