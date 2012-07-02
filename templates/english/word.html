@@ -1,0 +1,10 @@
+<span style="color:red;">{{ result.word }}</span>
+[<span style="color:green;">{{ result.pron }}</span>]
+{{ result.pos }}
+<span style="color:blue;">{{ result.acceptation }}</span><br><br>
+
+{% for pos, define in result.define.items %}
+    {{ pos }} {{ define }}<br>
+{% endfor %}<br>
+
+{{ result.gloss }}

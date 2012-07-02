@@ -12,6 +12,36 @@ from django.shortcuts import render
 from mitnkcom.english.basic import BASIC
 from mitnkcom.english.models import Dict
 
+def HttpResponseJson(result):
+    status_code = 200
+    if not isinstance(result, dict):
+        status_code = 400
+        result = {'status': 'failed', 'reason': result}
+    return HttpResponse(json.dumps(result, indent=4),
+                        status=status_code,
+                        mimetype='application/json',
+                        content_type = 'application/json; charset=utf8')
+
+
+def api_lookup(request, w):
+    result = {'key': w}
+    word = normalize(w)
+    try:
+        record = Dict.objects.get(word=word)
+        define = {'word': word}
+        define['pos'] = record.pos
+        define['pron'] = record.pron
+        define['acceptation'] = record.acceptation
+        define['define'] = json.loads(record.define)
+        result['result'] = define
+        result['status'] = 'ok'
+    except Dict.DoesNotExist:
+        result['status'] = 'not found'
+    if request.GET.has_key('api'):
+        return HttpResponseJson(result)
+    else:
+        return render(request, 'english/word.html', result)
+
 def get_acceptation_from_web(word):
     url = 'http://dict-co.iciba.com/api/dictionary.php?w=%s' % word
     page = urllib.urlopen(url)
@@ -167,13 +197,7 @@ def rank_words(f):
     words = [(x, words[x]) for x in words]
     return sorted(words, key=lambda x: -x[1])
 
-def gloss(word):
-    try:
-        acceptation = get_acceptation(word)
-        if acceptation:
-            return acceptation
-    except:
-        pass
+def get_gloss(word):
     if en.is_verb(word):
         return en.verb.gloss(word)
     elif en.is_adjective(word):
@@ -196,7 +220,7 @@ def index(request):
         words = rank_words(f)
         words = basic_filter(words)
         words = count_filter(words, request.POST.get('count_limit', 2))
-        result = "\n".join(['%s%4s    %s' % (x[0].ljust(20), x[1], gloss(x[0])) for x in words])
+        result = "\n".join(['%s%4s    %s' % (x[0].ljust(20), x[1], get_acceptation(x[0])) for x in words])
         title = "=" * 40 + '\n'
         title += 'Run time: %.3f seconds\n' % (time.time() - t)
         result += '\n' + title
