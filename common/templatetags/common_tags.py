@@ -1,7 +1,10 @@
+import re
 from bs4 import BeautifulSoup
 import markdown
 from pygments import lexers, formatters, formatters, highlight
 from django import template
+
+from mitnkcom.english.basic import basic_words
 
 _lexer_names = reduce(lambda a,b: a + b[2], lexers.LEXERS.itervalues(), ())
 _formatter = formatters.HtmlFormatter(cssclass='highlight')
@@ -30,3 +33,15 @@ def pygments_markdown(content):
                 return content
             pre.replace_with(div_code)
     return unicode(soup)
+
+def ParseWordProc(res):
+    reply = res.group('word')
+    if reply in basic_words:
+    	return reply
+    return '<a href="/dict/%s/">%s</a>' % (reply, reply)
+
+@register.filter
+def lookup_words(text):
+    p = re.compile(r'(?P<word>\w{4,})', re.VERBOSE)
+    text = p.sub(ParseWordProc, text)
+    return text
