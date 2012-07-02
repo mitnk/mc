@@ -43,7 +43,7 @@ def api_lookup(request, w):
         return HttpResponseJson(result)
     else:
         ua = request.META.get("HTTP_USER_AGENT", '').lower()
-        result['veer'] = (re.search(r'webos', ua) is not None)
+        result['veer'] = (re.search(r'webos|iphone', ua) is not None)
         return render(request, 'english/word.html', result)
 
 def get_acceptation_from_web(word):
@@ -66,7 +66,7 @@ def get_acceptation_from_web(word):
 
     if not Dict.objects.filter(word=word).exists():
         define = json.dumps(define, indent=4)
-        Dict.objects.create(word=word, acceptation=acceptation, pron=pron, define=define)
+        Dict.objects.create(word=word, pos=pos, acceptation=acceptation, pron=pron, define=define, gloss=get_gloss(word))
     t = random.random()
     time.sleep(t * 0.2)
     return acceptation
