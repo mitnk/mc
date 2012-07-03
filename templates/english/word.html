@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Define of {{ key }}</title>
 <style>
 .main { color: black; font-size:{% if veer %}4em{% else %}20px{% endif %}; width:100%; }
 a { color:black; text-decoration:none; }
@@ -9,7 +10,9 @@ a { color:black; text-decoration:none; }
 
 <body>
 <div class="main">
-
+{% if not result.word %}
+    Not Found.
+{% else %}
     <span style="color:red;">{{ result.word }}</span>
     [<span style="color:green;">{{ result.pron }}</span>]
     {{ result.pos }}
@@ -21,6 +24,7 @@ a { color:black; text-decoration:none; }
 
     {% load common_tags %}
     {{ result.gloss|lookup_words|safe }}
+{% endif %}
 </div>
 </body>
 </html>

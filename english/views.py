@@ -126,6 +126,9 @@ def normalize(word):
         new_word = re.sub(r'r$', '', word)
         if new_word != word and en.is_verb(new_word):
             return new_word
+        new_word = re.sub(r'ment$', '', word)
+        if new_word != word and en.is_verb(new_word):
+            return new_word
         new_word = re.sub(r'ness', '', word)
         if new_word != word and en.is_adjective(new_word):
             return new_word
