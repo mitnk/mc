@@ -31,20 +31,42 @@ def api_lookup(request, w):
         define = {'word': word}
         define['pos'] = record.pos
         define['pron'] = record.pron
+        define['orig'] = record.orig
+        define['trans'] = record.trans
         define['gloss'] = record.gloss
         define['acceptation'] = record.acceptation
         define['define'] = json.loads(record.define)
         result['result'] = define
         result['status'] = 'ok'
     except Dict.DoesNotExist:
-        get_acceptation_from_web(word)
         result['status'] = 'not found'
     if request.GET.has_key('api'):
         return HttpResponseJson(result)
+    elif request.GET.has_key('text'):
+        return render(request, 'english/word.txt', result)
     else:
         ua = request.META.get("HTTP_USER_AGENT", '').lower()
         result['veer'] = (re.search(r'webos|iphone', ua) is not None)
         return render(request, 'english/word.html', result)
+
+def get_orin(word):
+    w = Dict.objects.get(word=word)
+    if w.orig:
+        return
+    url = 'http://dict-co.iciba.com/api/dictionary.php?w=%s' % word
+    page = urllib.urlopen(url)
+    content = page.read()
+    soup = BeautifulSoup(content)
+    if not soup.dict.find_all('pron') or not soup.dict.find_all('pron'):
+        return ''
+    if not soup.dict.find_all('orig'):
+        return ''
+    orig = soup.dict.orig.text.strip()[:512]
+    trans = soup.dict.trans.text.strip()[:512]
+    w.orig = orig
+    w.trans = trans
+    w.save()
+
 
 def get_acceptation_from_web(word):
     url = 'http://dict-co.iciba.com/api/dictionary.php?w=%s' % word

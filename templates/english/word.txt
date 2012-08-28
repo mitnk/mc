@@ -1,0 +1,6 @@
+{% if not result.word %}Not Found.{% else %}{% for pos, define in result.define.items %}{{ pos }} {{ define }}
+{% endfor %}
+{% if result.orig %}{{ result.orig|safe }}
+{{ result.trans|safe }}{% endif %}
+
+{{ result.gloss|safe }}{% endif %}

@@ -8,3 +8,5 @@ class Dict(models.Model):
     define = models.TextField(blank=True)
     gloss = models.CharField(max_length=512, blank=True)
     added = models.DateTimeField(auto_now_add=True)
+    orig = models.CharField(max_length=512, blank=True)
+    trans = models.CharField(max_length=512, blank=True)

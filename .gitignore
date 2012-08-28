@@ -2,3 +2,5 @@ settings.py
 *.pyc
 *.pid
 *.log
+mdict*.crx
+mdict*.xpi

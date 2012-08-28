@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="robots" content="noindex,NOARCHIVE">
 <title>Define of {{ key }}</title>
 <style>
 .main { color: black; font-size:{% if veer %}4em{% else %}20px{% endif %}; width:100%; }
@@ -21,6 +22,10 @@ a { color:black; text-decoration:none; }
     {% for pos, define in result.define.items %}
         {{ pos }} {{ define }}<br>
     {% endfor %}<br>
+
+    {{ result.orig }}<br>
+    {{ result.trans }}
+    <br><br>
 
     {% load common_tags %}
     {{ result.gloss|lookup_words|safe }}
