@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     (r'^' + settings.URL_PUBLIC[1:], include('mitnkcom.public.urls')),
     (r'^douqian/', include('mitnkcom.webapps.douqian.urls')),
     (r'^admin/', include(admin.site.urls)),
+    (r'^t/', include('mitnkcom.twitter.urls')),
     (r'^sitemap\.xml', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     (r'^links/$', include('mitnkcom.links.urls')),
     (r'^feed/$', LatestEntriesFeed()),
@@ -30,5 +31,5 @@ urlpatterns = patterns('',
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-        (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': '/Users/mitnk/projects/mitnkcom/mitnkcom/media/'}),)

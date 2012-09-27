@@ -17,7 +17,7 @@ function new_retweet(obj, id) {
         }
         xmlhttp.open("POST", ".", true);
         xmlhttp.send("action=newretweet&status_id=" + id);
-        obj.innerHTML = '<img style="height:1em;" src="/site_media/images/ajax-loader-bar.gif">';
+        obj.innerHTML = '<img style="height:1em;" src="/media/images/ajax-loader-bar.gif">';
     }
 }
 function favo(obj, id) {
@@ -38,7 +38,7 @@ function favo(obj, id) {
         xmlhttp.open("POST", ".", true);
         xmlhttp.send("action=unfavo&status_id=" + id);
     }
-    obj.innerHTML = '<img style="height:1em;" src="/site_media/images/ajax-loader-bar.gif">';
+    obj.innerHTML = '<img style="height:1em;" src="/media/images/ajax-loader-bar.gif">';
 }
 function reply(name, id) {
     document.getElementById("in_reply_to_status_id").value = id;
@@ -66,7 +66,7 @@ function tweet() {
     xmlhttp.open("POST", ".", true);
     var in_reply_to_status_id = document.getElementById("in_reply_to_status_id").value;
     xmlhttp.send("tweet_text=" + encodeURIComponent(tweet_text) + "&in_reply_to_status_id=" + in_reply_to_status_id);
-    document.getElementById("char_count").innerHTML = '<img style="height:1em;" src="/site_media/images/ajax-loader-bar.gif">';
+    document.getElementById("char_count").innerHTML = '<img style="height:1em;" src="/media/images/ajax-loader-bar.gif">';
 }
 function check_char_count() {
     var tweet_text = document.getElementById("tweet-text").value;

@@ -4,3 +4,4 @@ settings.py
 *.log
 mdict*.crx
 mdict*.xpi
+twitter/
