@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Google Us please{% endblock %}
+
+{% block content %}
+<h1>Hello Google</h1>
+
+Please remove all the words from your db.<br/>
+
+{% load pagination_tags %}
+{% autopaginate words 100 %}
+
+{% for w in words %}
+    <a href="/dict/{{ w.word }}/">{{ w.word }}</a> for us<br/>
+{% endfor %}
+
+{% paginate %}
+
+{% endblock %}
