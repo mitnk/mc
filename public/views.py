@@ -1,7 +1,6 @@
 from django.http import HttpResponse, Http404, HttpResponsePermanentRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from django.views.decorators.cache import cache_page
 from models import *
 
 def index(request):
@@ -32,7 +31,6 @@ def get_article(request, id, slug=None):
     except Article.DoesNotExist:
         raise Http404
 
-@cache_page
 def get_tag(request, id):
     try:
         tag = Tag.objects.get(id=id)
@@ -44,7 +42,6 @@ def get_tag(request, id):
     except Tag.DoesNotExist:
         raise Http404
 
-@cache_page
 def get_category(request, id):
     try:
         category = Category.objects.get(id=id)
@@ -57,7 +54,6 @@ def get_category(request, id):
         raise Http404
 
 
-@cache_page
 def get_all_categories(request):
     categories = Category.objects.all()
     for category in categories:

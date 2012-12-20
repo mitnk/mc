@@ -230,3 +230,6 @@ def index(request):
         return HttpResponse(result, mimetype="text/plain")
     return render(request, 'english/index.html', result)
 
+def google_us(request):
+    result = {'words': Dict.objects.all()}
+    return render(request, 'english/google_us.html', result)

@@ -10,7 +10,7 @@
     {% if category.articles.count %}
       <ul>
       {% for article in category.articles %}
-        <li class='entry-title'><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+        <li class="entry-title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
       {% endfor %}
       </ul>
     {% endif %}
