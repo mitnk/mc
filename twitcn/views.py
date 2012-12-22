@@ -79,7 +79,7 @@ def private_user(request, user_id):
         return private_tweets(request)
     token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
-    messages = api.GetUserTimeline(user=aim_user_name, count=50)
+    messages = api.GetUserTimeline(user=user_id, count=50)
     return render_to_response("twitcn/private.html", 
                               {'messages': messages,},
                               context_instance=RequestContext(request))
