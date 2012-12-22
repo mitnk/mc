@@ -18,8 +18,8 @@
     <input id="tweet-btn" type="button" onclick="tweet()" value="Tweet"/> <span id="char_count">140</span>
     <br> <br>
     {% load twitcn_filters %}
-    {% for status in messages %}
     <div id="new_tweets"></div>
+    {% for status in messages %}
     <div class="tweet">
       {% if status.retweeted_by %}
         <b style="color:red;">{{ status.retweeted_by.screen_name }}</b>: RT @{{ status.user.screen_name }}: {{ status.text|ParseStatusText|safe }}<br/>
