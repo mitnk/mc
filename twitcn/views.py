@@ -77,6 +77,7 @@ def private_clear_session(request):
 def private_user(request, user_id):
     if request.method == "POST":
         return private_tweets(request)
+    token = settings.TWITCN_PRIVATE_TOKEN
     api = getPrivateApi(token)
     messages = api.GetUserTimeline(user=aim_user_name, count=50)
     return render_to_response("twitcn/private.html", 
