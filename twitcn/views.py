@@ -63,16 +63,31 @@ def private_tweets(request):
         except HTTPError, e:
             return HttpResponse("%s" % e)
         ua = request.META.get("HTTP_USER_AGENT", '').lower()
-        veer = (re.search(r'webos', ua) is not None)
         return render_to_response("twitcn/private.html", 
-                                  {'messages': messages,
-                                   'veer': veer,},
+                                  {'messages': messages, },
                                   context_instance=RequestContext(request))
 
 def private_clear_session(request):
     if 'private_tweet_since_id' in request.session:
         del request.session['private_tweet_since_id']
     return HttpResponseRedirect(reverse('private_tweets'))
+
+
+@csrf_exempt
+def private_user(request, user_id):
+    if request.method == "POST":
+        return private_tweets(request)
+    api = getPrivateApi(token)
+    messages = api.GetUserTimeline(user=aim_user_name, count=50)
+    return render_to_response("twitcn/private.html", 
+                              {'messages': messages,},
+                              context_instance=RequestContext(request))
+
+@csrf_exempt
+def private_just_tweet(request):
+    if request.method == "POST":
+        return private_tweets(request)
+    return render_to_response("twitcn/private.html", context_instance=RequestContext(request))
 
 @csrf_exempt
 def private_retweets_of_me(request):
@@ -88,10 +103,8 @@ def private_retweets_of_me(request):
     except HTTPError, e:
         return HttpResponse("%s" % e)
     ua = request.META.get("HTTP_USER_AGENT", '').lower()
-    veer = (re.search(r'webos', ua) is not None)
     return render_to_response("twitcn/private.html", 
-                              {'messages': messages,
-                               'veer': veer,},
+                              {'messages': messages,},
                               context_instance=RequestContext(request))
 
 @csrf_exempt
@@ -106,10 +119,8 @@ def private_mention(request):
     except HTTPError, e:
         return HttpResponse("%s" % e)
     ua = request.META.get("HTTP_USER_AGENT", '').lower()
-    veer = (re.search(r'webos', ua) is not None)
     return render_to_response("twitcn/private.html", 
-                              {'messages': messages,
-                               'veer': veer,},
+                              {'messages': messages,},
                               context_instance=RequestContext(request))
 
 @csrf_exempt
@@ -138,10 +149,8 @@ def private_favorites(request):
     except HTTPError, e:
         return HttpResponse("%s" % e)
     ua = request.META.get("HTTP_USER_AGENT", '').lower()
-    veer = (re.search(r'webos', ua) is not None)
     return render_to_response("twitcn/private.html", 
-                              {'messages': messages,
-                               'veer': veer,},
+                              {'messages': messages,},
                               context_instance=RequestContext(request))
 
 @csrf_exempt
@@ -156,10 +165,8 @@ def private_dm(request):
     except HTTPError, e:
         return HttpResponse("%s" % e)
     ua = request.META.get("HTTP_USER_AGENT", '').lower()
-    veer = (re.search(r'webos', ua) is not None)
     return render_to_response("twitcn/private.html", 
-                              {'messages': messages,
-                               'veer': veer,},
+                              {'messages': messages, },
                               context_instance=RequestContext(request))
 
 def index(request):

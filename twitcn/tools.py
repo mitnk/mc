@@ -76,10 +76,7 @@ def getTwitterApi(request, update=False):
     return api, user
 
 def get_root_path():
-    if settings.TWITCN_ROOT_PATH == "/":
-        return ""
-    else:
-        return "/" + settings.TWITCN_ROOT_PATH.strip("/")
+    return settings.TWITCN_ROOT_PATH + "/" + settings.TWITCN_PRIVATE_URL
 
 def twitcn_path(request):
     """Return root path of twitcn app."""

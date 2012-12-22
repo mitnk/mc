@@ -4,17 +4,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>twitcn</title>
 <style>
-  body { font-size:{% if veer %}4em{% else %}20px{% endif %}; }
-  textarea { width:100%; }
-  .tweet { border-bottom:{% if veer %}6{% else %}2{% endif %}px solid #AAAAAA; margin-top:6px; }
-  #char_count { font-weight: bold; }
+  body { font-size: 3em; }
+  textarea { width:94%; font-size:1.2em; padding:0.2em;margin:0.3em;height:3.3em; }
+  .tweet { border-bottom:2px solid #AAAAAA; margin-top:6px; }
   .footer { text-align:center; }
+  #char_count { font-weight: bold; font-size:1.6em; }
+  #tweet-btn {font-size:1em; }
 </style>
 </head>
 <body>
     <input type="hidden" id="in_reply_to_status_id" value="">
     <textarea onblur="check_char_count()" onkeyup="check_char_count()" id="tweet-text" tabindex="1"></textarea>
-    <input type="button" onclick="tweet()" value="Tweet"/> <span id="char_count">140</span>
+    <input id="tweet-btn" type="button" onclick="tweet()" value="Tweet"/> <span id="char_count">140</span>
+    <br> <br>
     {% load twitcn_filters %}
     {% for status in messages %}
     <div id="new_tweets"></div>

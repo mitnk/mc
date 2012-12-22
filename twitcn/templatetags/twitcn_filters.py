@@ -16,7 +16,6 @@ def ParseReplyProc(res):
     reply = res.group('reply')
     return '<a href="%s/%s/">%s</a>' % (get_root_path(), reply[1:], reply)
 
-
 def ParseUrlProc(res):
     url = res.group('url')
     if 't.co' in url:
