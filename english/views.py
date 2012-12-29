@@ -7,7 +7,7 @@ import string
 import time
 import urllib
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from mitnkcom.english.basic import basic_words
 from mitnkcom.english.models import Dict
@@ -45,9 +45,7 @@ def api_lookup(request, w):
     elif request.GET.has_key('text'):
         return render(request, 'english/word.txt', result)
     else:
-        ua = request.META.get("HTTP_USER_AGENT", '').lower()
-        result['veer'] = (re.search(r'webos|iphone', ua) is not None)
-        return render(request, 'english/word.html', result)
+        raise Http404
 
 def get_orin(word):
     w = Dict.objects.get(word=word)
