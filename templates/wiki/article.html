@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load common_tags %}
+
+{% block keywords %}<meta name="keywords" content="{{ article.title }}" />{% endblock %}
+{% block description %}<meta name="description" content="{{ article.title }}" />{% endblock %}
+{% block canonical %}<link rel="canonical" href="http://mitnk.com{{ article.get_absolute_url }}" />{% endblock %}
+
+{% block extra_css %}
+    <link type="text/css" rel="stylesheet" href="/media/css/pygments.css" />
+{% endblock %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+<div class="entry">
+    <article itemtype="http://schema.org/Blog">
+        <h1 class="entry-title">{{ article.title|safe }}</h1>
+        <div class="entry-content">
+            {{ article.content|pygments_markdown|safe }}
+        </div>
+    </article>
+
+    <div class="entry-meta">
+        Posted at {{ article.added|date:"N j, Y" }}
+    </div>
+
+</div>
+{% endblock %}

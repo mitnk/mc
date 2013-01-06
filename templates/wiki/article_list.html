@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Mitnk's Wiki{% endblock %}
+
+{% block content %}
+  {% load pagination_tags %}
+  {% autopaginate articles 6 %}
+
+    {% if not articles.count %}
+    <h1>No available data.</h1>
+    {% endif %}
+
+    {% for article in articles %}
+    <div class="entry">
+        <h2 class="entry-title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
+        <div class="entry-meta">
+            Posted at {{ article.added|date:"N j, Y" }}
+        </div>
+    </div>
+    {% endfor %}
+
+    {% paginate %}
+
+{% endblock %}
