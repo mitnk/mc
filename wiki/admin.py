@@ -1,10 +1,8 @@
-from models import *
+from mitnkcom.wiki.models import Article
 from django.contrib import admin
 
 class ArticleAdmin(admin.ModelAdmin):
-    fields = ('title', 'content', 'category')
-    list_display = ('title', 'added', 'category')
-    list_filter = ('category', )
+    search_fields = ['title']
+    list_display = ('title', 'added')
 
 admin.site.register(Article, ArticleAdmin)
-admin.site.register(Category)

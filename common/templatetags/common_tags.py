@@ -1,8 +1,9 @@
-import re
-from bs4 import BeautifulSoup
 import markdown
-from pygments import lexers, formatters, formatters, highlight
+import re
+
+from bs4 import BeautifulSoup
 from django import template
+from pygments import lexers, formatters, formatters, highlight
 
 from mitnkcom.english.basic import basic_words
 
@@ -37,7 +38,7 @@ def pygments_markdown(content):
 def ParseWordProc(res):
     reply = res.group('word')
     if reply in basic_words:
-    	return reply
+        return reply
     return '<a href="/dict/%s/">%s</a>' % (reply, reply)
 
 @register.filter
