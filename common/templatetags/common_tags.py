@@ -1,4 +1,5 @@
 import markdown
+import random
 import re
 
 from bs4 import BeautifulSoup
@@ -35,14 +36,90 @@ def pygments_markdown(content):
             pre.replace_with(div_code)
     return unicode(soup)
 
-def ParseWordProc(res):
-    reply = res.group('word')
-    if reply in basic_words:
-        return reply
-    return '<a href="/dict/%s/">%s</a>' % (reply, reply)
+@register.tag('remember_this')
+def remember_this(parser, token):
+    return RememberThis()
 
-@register.filter
-def lookup_words(text):
-    p = re.compile(r'(?P<word>\w{4,})', re.VERBOSE)
-    text = p.sub(ParseWordProc, text)
-    return text
+class RememberThis(template.Node):
+    def render(self, context):
+        count = len(QUOTES)
+        return QUOTES[random.randint(0, count-1)]
+
+QUOTES = (
+    "Care About Your Craft",
+    "Think! About Your Work",
+    "Provide Options, Don't Make Lame Excuses",
+    "Don't Live with Broken Windows",
+    "Be a Catalyst for Change",
+    "Remember the Big Pictrue",
+    "Make Quality a Requirements Issue",
+    "Invest Regularly in Your Knowledge Protfolio",
+    "Critically Analyze What You Read and Hear",
+    "DRY",
+    "It's Both What You Say and the Way You Say It",
+    "Make It Easy to Reuse",
+    "Eliminate Effects Between Unrelated Things",
+    "There Are No Final Decisions",
+    "Use Tracer Bullets to Find the Target",
+    "Prototype to Learn",
+    "Program Close to the Problem domain",
+    "Estimate to Avoid Surprises",
+    "Iterate the Schedule with the Code",
+    "Keep Knowledge in Plain Text",
+    "Use the Power of Command  Effects Between Unrelated Things",
+    "There Are No Final Decisions",
+    "Use Tracer Bullets to Find the Target",
+    "Prototype to Learn",
+    "Program Close to the Problem domain",
+    "Estimate to Avoid Surprises",
+    "Iterate the Schedule with the Code",
+    "Keep Knowledge in Plain Text",
+    "Use the Power of Command  Effects Between Unrelated Things",
+    "There Are No Final Decisions",
+    "Use Tracer Bullets to Find the Target",
+    "Prototype to Learn",
+    "Program Close to the Problem domain",
+    "Estimate to Avoid Surprises",
+    "Iterate the Schedule with the Code",
+    "Keep Knowledge in Plain Text",
+    "Fix the Problem, Not the Blame",
+    "Don't Panic When Debuging",
+    '"SELECT" Isn\'t Broken',
+    "Don't Assume It - Prove It",
+    "Wirte Code that Write code",
+    "You Can't Write Perfect Software",
+    "Design with Contracts",
+    "Crash Early",
+    "Use Assertions to Prevent the Impossible",
+    "Use Exceptions for Exceptions Problems",
+    "Finish What You Start",
+    "Minimize Coupling Between Modules",
+    "Configure, Don't Integrate",
+    "Put Abstractions in Code, Details in Metadata",
+    "Analyze Workflow to Improve Concurrency",
+    "Design Using Service",
+    "Always Design for Concurrency",
+    "Separate Views from Models",
+    "Use Blackboards to Coordinate Workflow",
+    "Test Your Estimates",
+    "Refactor Early, Refactor Often",
+    "Design to Test",
+    "Test Your Software, or Your Users Will",
+    "Don't Gather Requirements - Dig for Them",
+    "Work with a User to Think Like a User",
+    "Abstractions Live Longer than Details",
+    "Use a Project Gloosary",
+    "Don't Think Outside the Box - Find the Box",
+    "Start When You're Ready",
+    "Some Things Are Better Done than Described",
+    "Don't Be a Slave to Formal Methods",
+    "Costly Tools Don't Produce Better Designs",
+    "Organize Teams Around Functionality",
+    "Don't Use Manual Procedures",
+    "Test Early. Test Often. Test Automatically",
+    "Coding Ain't Done 'Til All the Tests Run",
+    "Find Bugs Once",
+    "English is Just a Programming Language",
+    "Build Documentation In, Don't Bolt It On",
+    "Gently Exceed Your Users' Expectations",
+)

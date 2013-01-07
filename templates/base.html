@@ -21,7 +21,8 @@
 <div id="header">
     <div class="wrapper">
         <p class="title">Mitnk's Blog</p>
-        <p>Critically Analyze What You Read and Hear</p>
+        {% load common_tags %}
+        <p>{% remember_this %}</p>
     </div>
 </div>
 
@@ -34,10 +35,6 @@
             <li> {% include "blog/google_cse.html" %} </li>
         </ul>
     </div>
-
-    {% if is_ie67 %}
-        {% include "forbid_ie67.html" %}
-    {% endif %}
 
     <div id="content"> {% block content %}{% endblock %} </div>
 
