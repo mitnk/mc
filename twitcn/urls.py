@@ -6,15 +6,6 @@ from views import *
 _P = settings.TWITCN_PRIVATE_URL
 
 urlpatterns = patterns('',
-    url(r'^$', index),
-    url(r'^' + _P + '/$', private_tweets, name="private_tweets"),
-    url(r'^' + _P + '/c/$', private_clear_session),
-    url(r'^' + _P + '/m/$', private_mention),
-    url(r'^' + _P + '/f/$', private_favorites),
-    url(r'^' + _P + '/re/$', private_retweets_of_me),
-    url(r'^' + _P + '/dm/$', private_dm),
-    url(r'^' + _P + '/jtt/$', private_just_tweet),
-    url(r'^' + _P + '/(\w+)/$', private_user),
     url(r'^create_favorite/', create_favorite),
     url(r'^destroy_favorite/', destroy_favorite),
     url(r'^destroy_tweet/', destroy_tweet),
@@ -33,6 +24,17 @@ urlpatterns = patterns('',
     url(r'^oauth/', login_with_oauth),
     url(r'^callback/', callback),
     url(r'^get_trends/', get_trends),
+
+    # personal twitter
+    url(r'^$', index),
+    url(r'^' + _P + '/$', private_tweets, name="private_tweets"),
+    url(r'^' + _P + '/c/$', private_clear_session),
+    url(r'^' + _P + '/m/$', private_mention),
+    url(r'^' + _P + '/f/$', private_favorites),
+    url(r'^' + _P + '/re/$', private_retweets_of_me),
+    url(r'^' + _P + '/dm/$', private_dm),
+    url(r'^' + _P + '/jtt/$', private_just_tweet),
+    url(r'^' + _P + '/(\w+)/$', private_user),
 
     # make sure user-page-url be the last one
     url(r'^([0-9a-zA-Z_]+)/$', user_page),
