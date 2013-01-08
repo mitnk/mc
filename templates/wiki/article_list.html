@@ -4,7 +4,7 @@
 
 {% block content %}
   {% load pagination_tags %}
-  {% autopaginate articles 6 %}
+  {% autopaginate articles 10 %}
 
     {% if not articles.count %}
     <h1>No available data.</h1>
